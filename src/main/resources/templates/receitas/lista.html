@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Livro Digital de Receitas da Andry</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Livro Digital de Receitas da Andry</h1>
+        <p>Encontre receitas para todos os momentos.</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Receitas públicas</h2>
+
+            <p th:if="${#lists.isEmpty(receitas)}">
+                Nenhuma receita pública foi cadastrada.
+            </p>
+
+            <div th:unless="${#lists.isEmpty(receitas)}">
+                <article th:each="receita : ${receitas}">
+
+                    <h3 th:text="${receita.nome}">
+                        Nome da receita
+                    </h3>
+
+                    <p>
+                        <strong>Categoria:</strong>
+                        <span th:text="${receita.categoria}">
+                            Categoria
+                        </span>
+                    </p>
+
+                    <p th:if="${receita.tempoPreparoMinutos != null}">
+                        <strong>Tempo de preparo:</strong>
+
+                        <span th:text="${receita.tempoPreparoMinutos}">
+                            0
+                        </span>
+
+                        minutos
+                    </p>
+
+                    <p th:if="${receita.rendimento != null and !receita.rendimento.isBlank()}">
+                        <strong>Rendimento:</strong>
+
+                        <span th:text="${receita.rendimento}">
+                            Rendimento
+                        </span>
+                    </p>
+
+                    <p th:if="${receita.dificuldade != null}">
+                        <strong>Dificuldade:</strong>
+
+                        <span th:text="${receita.dificuldade}">
+                            Dificuldade
+                        </span>
+                    </p>
+
+                    <hr>
+                </article>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
