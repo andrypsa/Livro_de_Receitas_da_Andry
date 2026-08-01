@@ -1,64 +1,154 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { ReceitaCard } from '../components/ReceitaCard'
 import { listarReceitas } from '../services/receitaService'
-import type { Receita } from '../types/Receita'
+import type { Categoria, Receita } from '../types/Receita'
+
+import './ListaReceitasPage.css'
+
+type CategoriaSelecionada = 'TODAS' | Categoria
 
 export function ListaReceitasPage() {
     const [receitas, setReceitas] = useState<Receita[]>([])
+    const [busca, setBusca] = useState('')
+    const [categoriaSelecionada, setCategoriaSelecionada] =
+        useState<CategoriaSelecionada>('TODAS')
     const [carregando, setCarregando] = useState(true)
-    const [mensagemErro, setMensagemErro] = useState('')
+    const [erro, setErro] = useState(false)
 
     useEffect(() => {
-        listarReceitas()
-            .then((resultado) => {
-                setReceitas(resultado)
-            })
-            .catch(() => {
-                setMensagemErro(
-                    'Não foi possível carregar as receitas. Tente novamente.',
-                )
-            })
-            .finally(() => {
+        async function carregarReceitas() {
+            try {
+                const receitasCarregadas = await listarReceitas()
+                setReceitas(receitasCarregadas)
+            } catch {
+                setErro(true)
+            } finally {
                 setCarregando(false)
-            })
+            }
+        }
+
+        carregarReceitas()
     }, [])
 
+    const receitasFiltradas = useMemo(() => {
+        const termoPesquisado = busca.trim().toLowerCase()
+
+        return receitas.filter((receita) => {
+            const correspondeAoNome = receita.nome
+                .toLowerCase()
+                .includes(termoPesquisado)
+
+            const correspondeACategoria =
+                categoriaSelecionada === 'TODAS' ||
+                receita.categoria === categoriaSelecionada
+
+            return correspondeAoNome && correspondeACategoria
+        })
+    }, [busca, categoriaSelecionada, receitas])
+
+    const paginaSemReceitas =
+        carregando || erro || receitasFiltradas.length === 0
+
     return (
-        <>
-            <header className="cabecalho">
-                <div className="container">
-                    <h1>Livro Digital de Receitas da Andry</h1>
-                    <p>Receitas para guardar, preparar e compartilhar.</p>
-                </div>
-            </header>
+        <main
+            className={`pagina-receitas ${paginaSemReceitas ? 'pagina-receitas--centralizada' : ''
+                }`}
+        >
+            <section className="receitas-painel">
+                <Link className="link-voltar" to="/">
+                    ← Voltar ao início
+                </Link>
 
-            <main className="container">
-                <section>
-                    <h2>Receitas</h2>
+                <header className="receitas-cabecalho">
+                    <h1>Receitas</h1>
 
-                    {carregando && <p>Carregando receitas...</p>}
+                    <input
+                        className="campo-busca"
+                        type="search"
+                        value={busca}
+                        onChange={(evento) => setBusca(evento.target.value)}
+                        placeholder="Qual receita gostaria de fazer hoje?"
+                        aria-label="Pesquisar receitas pelo nome"
+                    />
 
-                    {mensagemErro && (
-                        <p className="mensagem-erro">{mensagemErro}</p>
-                    )}
+                    <nav
+                        className="filtros-categoria"
+                        aria-label="Filtrar receitas por categoria"
+                    >
+                        <button
+                            className={`filtro-categoria ${categoriaSelecionada === 'TODAS'
+                                    ? 'filtro-categoria--ativo'
+                                    : ''
+                                }`}
+                            type="button"
+                            onClick={() => setCategoriaSelecionada('TODAS')}
+                        >
+                            Todas
+                        </button>
 
-                    {!carregando &&
-                        !mensagemErro &&
-                        receitas.length === 0 && (
-                            <p>Nenhuma receita foi cadastrada.</p>
-                        )}
+                        <button
+                            className={`filtro-categoria ${categoriaSelecionada === 'SALGADO'
+                                    ? 'filtro-categoria--ativo'
+                                    : ''
+                                }`}
+                            type="button"
+                            onClick={() => setCategoriaSelecionada('SALGADO')}
+                        >
+                            Salgadas
+                        </button>
 
+                        <button
+                            className={`filtro-categoria ${categoriaSelecionada === 'DOCE'
+                                    ? 'filtro-categoria--ativo'
+                                    : ''
+                                }`}
+                            type="button"
+                            onClick={() => setCategoriaSelecionada('DOCE')}
+                        >
+                            Doces
+                        </button>
+
+                        <button
+                            className={`filtro-categoria ${categoriaSelecionada === 'MISTO'
+                                    ? 'filtro-categoria--ativo'
+                                    : ''
+                                }`}
+                            type="button"
+                            onClick={() => setCategoriaSelecionada('MISTO')}
+                        >
+                            Mistas
+                        </button>
+                    </nav>
+                </header>
+
+                {carregando && (
+                    <p className="mensagem-centralizada">
+                        Carregando receitas...
+                    </p>
+                )}
+
+                {erro && (
+                    <p className="mensagem-erro">
+                        Não foi possível carregar as receitas neste momento.
+                    </p>
+                )}
+
+                {!carregando && !erro && receitasFiltradas.length === 0 && (
+                    <p className="mensagem-centralizada">
+                        Nenhuma receita encontrada.
+                    </p>
+                )}
+
+                {!carregando && !erro && receitasFiltradas.length > 0 && (
                     <div className="grade-receitas">
-                        {receitas.map((receita) => (
-                            <ReceitaCard
-                                key={receita.id}
-                                receita={receita}
-                            />
+                        {receitasFiltradas.map((receita) => (
+                            <ReceitaCard key={receita.id} receita={receita} />
                         ))}
                     </div>
-                </section>
-            </main>
-        </>
+                )}
+            </section>
+        </main>
     )
 }

@@ -1,0 +1,40 @@
+.filtros-categoria {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.filtro-categoria {
+    min-height: 38px;
+    padding: 8px 18px;
+    border: 1px solid rgba(185, 112, 145, 0.38);
+    border-radius: 999px;
+    color: #925c75;
+    background: rgba(255, 250, 252, 0.76);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.filtro-categoria:hover {
+    color: #ffffff;
+    border-color: #8f4f6d;
+    background: #8f4f6d;
+    box-shadow: 0 8px 18px rgba(143, 79, 109, 0.22);
+    transform: translateY(-2px);
+}
+
+.filtro-categoria--ativo {
+    color: #ffffff;
+    border-color: #9e5d7a;
+    background: linear-gradient(135deg, #b66f8e, #8f4f6d);
+    box-shadow: 0 8px 18px rgba(143, 79, 109, 0.22);
+}
