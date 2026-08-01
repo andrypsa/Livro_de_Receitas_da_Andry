@@ -1,6 +1,6 @@
 import type { Receita } from '../types/Receita'
 
-export async function listarReceitasPublicas(): Promise<Receita[]> {
+export async function listarReceitas(): Promise<Receita[]> {
     const resposta = await fetch('/api/receitas', {
         headers: {
             Accept: 'application/json',

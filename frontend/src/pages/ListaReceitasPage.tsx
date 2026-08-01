@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { ReceitaCard } from '../components/ReceitaCard'
-import { listarReceitasPublicas } from '../services/receitaService'
+import { listarReceitas } from '../services/receitaService'
 import type { Receita } from '../types/Receita'
 
 export function ListaReceitasPage() {
@@ -10,7 +10,7 @@ export function ListaReceitasPage() {
     const [mensagemErro, setMensagemErro] = useState('')
 
     useEffect(() => {
-        listarReceitasPublicas()
+        listarReceitas()
             .then((resultado) => {
                 setReceitas(resultado)
             })
@@ -35,7 +35,7 @@ export function ListaReceitasPage() {
 
             <main className="container">
                 <section>
-                    <h2>Receitas públicas</h2>
+                    <h2>Receitas</h2>
 
                     {carregando && <p>Carregando receitas...</p>}
 
@@ -46,7 +46,7 @@ export function ListaReceitasPage() {
                     {!carregando &&
                         !mensagemErro &&
                         receitas.length === 0 && (
-                            <p>Nenhuma receita pública foi cadastrada.</p>
+                            <p>Nenhuma receita foi cadastrada.</p>
                         )}
 
                     <div className="grade-receitas">
