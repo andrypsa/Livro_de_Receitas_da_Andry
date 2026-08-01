@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import type { Receita } from '../types/Receita'
 
 interface ReceitaCardProps {
@@ -48,7 +50,12 @@ export function ReceitaCard({ receita }: ReceitaCardProps) {
                     </p>
                 )}
 
-                <button type="button">Ver receita</button>
+                <Link
+                    className="botao"
+                    to={`/receitas/${receita.id}`}
+                >
+                    Ver receita
+                </Link>
             </div>
         </article>
     )

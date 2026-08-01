@@ -90,3 +90,62 @@ main {
   color: #8a1c1c;
   background-color: #ffe0e0;
 }
+
+.botao {
+  display: inline-block;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background-color: #7b3f20;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.botao:hover {
+  background-color: #5f2f18;
+}
+
+.pagina-detalhe {
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+
+.link-voltar {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #7b3f20;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.receita-detalhe__imagem {
+  display: block;
+  width: 100%;
+  max-height: 480px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.informacoes-receita {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #ffffff;
+}
+
+.informacoes-receita p {
+  margin: 0;
+}
+
+.bloco-receita {
+  margin-top: 32px;
+}
+
+.texto-preservado {
+  line-height: 1.7;
+  white-space: pre-line;
+}
