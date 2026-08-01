@@ -1,14 +1,16 @@
 package com.andry.livrodigitalreceitas.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.andry.livrodigitalreceitas.dto.ReceitaResumoDTO;
 import com.andry.livrodigitalreceitas.service.ReceitaService;
 
-@Controller
-@RequestMapping("/receitas")
+@RestController
+@RequestMapping("/api/receitas")
 public class ReceitaController {
 
     private final ReceitaService receitaService;
@@ -18,12 +20,10 @@ public class ReceitaController {
     }
 
     @GetMapping
-    public String listarReceitasPublicas(Model model) {
-        model.addAttribute(
-                "receitas",
-                receitaService.listarPublicas()
-        );
-
-        return "receitas/lista";
+    public List<ReceitaResumoDTO> listarReceitasPublicas() {
+        return receitaService.listarPublicas()
+                .stream()
+                .map(ReceitaResumoDTO::de)
+                .toList();
     }
 }
