@@ -8,6 +8,11 @@ interface LoginAdministradorResposta {
     mensagem: string
 }
 
+export interface SessaoAdministradorResposta {
+    autenticado: boolean
+    email: string
+}
+
 interface ErroApi {
     mensagem?: string
 }
@@ -35,4 +40,18 @@ export async function loginAdministrador(
     }
 
     return resposta.json() as Promise<LoginAdministradorResposta>
+}
+
+export async function consultarSessaoAdministrador():
+    Promise<SessaoAdministradorResposta> {
+    const resposta = await fetch('/api/auth/admin/sessao', {
+        method: 'GET',
+        credentials: 'include',
+    })
+
+    if (!resposta.ok) {
+        throw new Error('Sessão administrativa não encontrada.')
+    }
+
+    return resposta.json() as Promise<SessaoAdministradorResposta>
 }

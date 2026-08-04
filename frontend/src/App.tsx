@@ -4,6 +4,8 @@ import {
   Routes,
 } from 'react-router-dom'
 
+import { RotaAdminProtegida } from './components/RotaAdminProtegida'
+import { AdminInicioPage } from './pages/AdminInicioPage'
 import { DetalheReceitaPage } from './pages/DetalheReceitaPage'
 import { HomePage } from './pages/HomePage'
 import { ListaReceitasPage } from './pages/ListaReceitasPage'
@@ -18,6 +20,13 @@ function App() {
         <Route path="/" element={<HomePage />} />
 
         <Route path="/login-adm" element={<LoginAdmPage />} />
+
+        <Route element={<RotaAdminProtegida />}>
+          <Route
+            path="/admin"
+            element={<AdminInicioPage />}
+          />
+        </Route>
 
         <Route path="/login" element={<LoginPage />} />
 

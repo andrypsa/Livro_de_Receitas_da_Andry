@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,6 +87,16 @@ public class AdministradorController {
                 return ResponseEntity.ok(resposta);
         }
 
+        @GetMapping("/sessao")
+        public ResponseEntity<SessaoAdministradorResponse> consultarSessao(
+                        Authentication autenticacao) {
+                SessaoAdministradorResponse resposta = new SessaoAdministradorResponse(
+                                true,
+                                autenticacao.getName());
+
+                return ResponseEntity.ok(resposta);
+        }
+
         private record AdministradorCriadoResponse(
                         Long id,
                         String nome,
@@ -95,5 +106,10 @@ public class AdministradorController {
         private record LoginAdministradorResponse(
                         String email,
                         String mensagem) {
+        }
+
+        private record SessaoAdministradorResponse(
+                        boolean autenticado,
+                        String email) {
         }
 }
