@@ -888,3 +888,39 @@ a {
   }
 
 }
+
+.campo-senha {
+  position: relative;
+}
+
+.campo-senha input {
+  padding-right: 48px;
+}
+
+.botao-mostrar-senha {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  color: #795d6a;
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.botao-mostrar-senha:hover {
+  background: rgba(220, 167, 189, 0.2);
+}
+
+.botao-mostrar-senha:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}

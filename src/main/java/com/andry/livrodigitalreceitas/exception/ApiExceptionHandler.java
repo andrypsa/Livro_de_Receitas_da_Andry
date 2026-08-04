@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,60 +14,74 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErroApiResponse> tratarErroDeValidacao(
-            MethodArgumentNotValidException exception) {
-        Map<String, String> campos = new LinkedHashMap<>();
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<ErroApiResponse> tratarErroDeValidacao(
+                        MethodArgumentNotValidException exception) {
+                Map<String, String> campos = new LinkedHashMap<>();
 
-        exception.getBindingResult()
-                .getFieldErrors()
-                .forEach(erro -> campos.put(
-                        erro.getField(),
-                        erro.getDefaultMessage()));
+                exception.getBindingResult()
+                                .getFieldErrors()
+                                .forEach(erro -> campos.put(
+                                                erro.getField(),
+                                                erro.getDefaultMessage()));
 
-        ErroApiResponse resposta = new ErroApiResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Os dados informados são inválidos.",
-                campos,
-                LocalDateTime.now());
+                ErroApiResponse resposta = new ErroApiResponse(
+                                HttpStatus.BAD_REQUEST.value(),
+                                "Os dados informados são inválidos.",
+                                campos,
+                                LocalDateTime.now());
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(resposta);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(resposta);
+        }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErroApiResponse> tratarArgumentoInvalido(
-            IllegalArgumentException exception) {
-        ErroApiResponse resposta = new ErroApiResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                exception.getMessage(),
-                Map.of(),
-                LocalDateTime.now());
+        @ExceptionHandler(IllegalArgumentException.class)
+        public ResponseEntity<ErroApiResponse> tratarArgumentoInvalido(
+                        IllegalArgumentException exception) {
+                ErroApiResponse resposta = new ErroApiResponse(
+                                HttpStatus.BAD_REQUEST.value(),
+                                exception.getMessage(),
+                                Map.of(),
+                                LocalDateTime.now());
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(resposta);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(resposta);
+        }
 
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ErroApiResponse> tratarEstadoInvalido(
-            IllegalStateException exception) {
-        ErroApiResponse resposta = new ErroApiResponse(
-                HttpStatus.CONFLICT.value(),
-                exception.getMessage(),
-                Map.of(),
-                LocalDateTime.now());
+        @ExceptionHandler(IllegalStateException.class)
+        public ResponseEntity<ErroApiResponse> tratarEstadoInvalido(
+                        IllegalStateException exception) {
+                ErroApiResponse resposta = new ErroApiResponse(
+                                HttpStatus.CONFLICT.value(),
+                                exception.getMessage(),
+                                Map.of(),
+                                LocalDateTime.now());
 
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(resposta);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(resposta);
+        }
 
-    private record ErroApiResponse(
-            int status,
-            String mensagem,
-            Map<String, String> campos,
-            LocalDateTime horario) {
-    }
+        private record ErroApiResponse(
+                        int status,
+                        String mensagem,
+                        Map<String, String> campos,
+                        LocalDateTime horario) {
+        }
+
+        @ExceptionHandler(AuthenticationException.class)
+        public ResponseEntity<ErroApiResponse> tratarErroDeAutenticacao(
+                        AuthenticationException exception) {
+                ErroApiResponse resposta = new ErroApiResponse(
+                                HttpStatus.UNAUTHORIZED.value(),
+                                "E-mail ou senha inválidos.",
+                                Map.of(),
+                                LocalDateTime.now());
+
+                return ResponseEntity
+                                .status(HttpStatus.UNAUTHORIZED)
+                                .body(resposta);
+        }
 }

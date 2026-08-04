@@ -2,61 +2,121 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 
+import { loginAdministrador } from '../services/adminAuthService'
+
 export function LoginAdmPage() {
-    const [email, setEmail] = useState('')
-    const [senha, setSenha] = useState('')
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const [mostrarSenha, setMostrarSenha] = useState(false)
+  const [mensagem, setMensagem] = useState('')
+  const [erro, setErro] = useState('')
+  const [enviando, setEnviando] = useState(false)
 
-    function enviarFormulario(evento: FormEvent<HTMLFormElement>) {
-        evento.preventDefault()
+  async function enviarFormulario(
+    evento: FormEvent<HTMLFormElement>,
+  ) {
+    evento.preventDefault()
 
-        /*
-         * A autenticação real será conectada ao back-end posteriormente.
-         * Não coloque e-mail ou senha reais diretamente neste arquivo.
-         */
+    setMensagem('')
+    setErro('')
+    setEnviando(true)
+
+    try {
+      const resposta = await loginAdministrador({
+        email,
+        senha,
+      })
+
+      setMensagem(resposta.mensagem)
+      setSenha('')
+      setMostrarSenha(false)
+    } catch (erroRecebido) {
+      const mensagemDeErro =
+        erroRecebido instanceof Error
+          ? erroRecebido.message
+          : 'Não foi possível realizar o login.'
+
+      setErro(mensagemDeErro)
+    } finally {
+      setEnviando(false)
     }
+  }
 
-    return (
-        <main className="pagina-login-adm">
-            <section className="login-adm-painel">
-                <Link className="link-voltar" to="/">
-                    ← Voltar ao início
-                </Link>
+  return (
+    <main className="pagina-login-adm">
+      <section className="login-adm-painel">
+        <Link className="link-voltar" to="/">
+          ← Voltar ao início
+        </Link>
 
-                <h1>Login administrativo</h1>
+        <h1>Login administrativo</h1>
 
-                <form
-                    className="login-adm-formulario"
-                    onSubmit={enviarFormulario}
-                >
-                    <label className="login-adm-campo">
-                        <span>E-mail</span>
+        <form
+          className="login-adm-formulario"
+          onSubmit={enviarFormulario}
+        >
+          <label className="login-adm-campo">
+            <span>E-mail</span>
 
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(evento) => setEmail(evento.target.value)}
-                            autoComplete="email"
-                            required
-                        />
-                    </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(evento) => setEmail(evento.target.value)}
+              autoComplete="email"
+              disabled={enviando}
+              required
+            />
+          </label>
 
-                    <label className="login-adm-campo">
-                        <span>Senha</span>
+          <label className="login-adm-campo">
+            <span>Senha</span>
 
-                        <input
-                            type="password"
-                            value={senha}
-                            onChange={(evento) => setSenha(evento.target.value)}
-                            autoComplete="current-password"
-                            required
-                        />
-                    </label>
+            <div className="campo-senha">
+              <input
+                type={mostrarSenha ? 'text' : 'password'}
+                value={senha}
+                onChange={(evento) => setSenha(evento.target.value)}
+                autoComplete="current-password"
+                disabled={enviando}
+                required
+              />
 
-                    <button className="login-botao" type="submit">
-                        Entrar
-                    </button>
-                </form>
-            </section>
-        </main>
-    )
+              <button
+                className="botao-mostrar-senha"
+                type="button"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                disabled={enviando}
+                aria-label={
+                  mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'
+                }
+                title={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {mostrarSenha ? '🙈' : '👁'}
+              </button>
+            </div>
+          </label>
+
+          {erro && (
+            <p className="mensagem-login mensagem-login--erro">
+              {erro}
+            </p>
+          )}
+
+          {mensagem && (
+            <p className="mensagem-login mensagem-login--sucesso">
+              {mensagem}
+            </p>
+          )}
+
+          <button
+            className="login-botao"
+            type="submit"
+            disabled={enviando}
+          >
+            {enviando ? 'Entrando...' : 'Entrar'}
+          </button>
+        </form>
+      </section>
+    </main>
+  )
 }
