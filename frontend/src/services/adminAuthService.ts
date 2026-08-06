@@ -8,6 +8,10 @@ interface LoginAdministradorResposta {
     mensagem: string
 }
 
+interface MensagemResposta {
+    mensagem: string
+}
+
 export interface SessaoAdministradorResposta {
     autenticado: boolean
     email: string
@@ -54,4 +58,18 @@ export async function consultarSessaoAdministrador():
     }
 
     return resposta.json() as Promise<SessaoAdministradorResposta>
+}
+
+export async function logoutAdministrador():
+    Promise<MensagemResposta> {
+    const resposta = await fetch('/api/auth/admin/logout', {
+        method: 'POST',
+        credentials: 'include',
+    })
+
+    if (!resposta.ok) {
+        throw new Error('Não foi possível encerrar a sessão.')
+    }
+
+    return resposta.json() as Promise<MensagemResposta>
 }

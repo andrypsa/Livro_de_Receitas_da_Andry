@@ -21,6 +21,7 @@ import com.andry.livrodigitalreceitas.service.AdministradorService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RestController
@@ -97,6 +98,22 @@ public class AdministradorController {
                 return ResponseEntity.ok(resposta);
         }
 
+        @PostMapping("/logout")
+        public ResponseEntity<MensagemResponse> logout(
+                        HttpServletRequest request) {
+                HttpSession sessao = request.getSession(false);
+
+                if (sessao != null) {
+                        sessao.invalidate();
+                }
+
+                SecurityContextHolder.clearContext();
+
+                return ResponseEntity.ok(
+                                new MensagemResponse(
+                                                "Logout realizado com sucesso."));
+        }
+
         private record AdministradorCriadoResponse(
                         Long id,
                         String nome,
@@ -111,5 +128,9 @@ public class AdministradorController {
         private record SessaoAdministradorResponse(
                         boolean autenticado,
                         String email) {
+        }
+
+        private record MensagemResponse(
+                        String mensagem) {
         }
 }

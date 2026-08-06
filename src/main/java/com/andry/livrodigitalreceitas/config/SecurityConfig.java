@@ -79,7 +79,8 @@ public class SecurityConfig {
                                                 .requireExplicitSave(true))
                                 .csrf(csrf -> csrf.ignoringRequestMatchers(
                                                 "/api/auth/admin/primeiro-acesso",
-                                                "/api/auth/admin/login"))
+                                                "/api/auth/admin/login",
+                                                "/api/auth/admin/logout"))
                                 .formLogin(formulario -> formulario.disable());
 
                 return http.build();
