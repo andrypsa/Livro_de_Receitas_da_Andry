@@ -79,8 +79,8 @@ export function ListaReceitasPage() {
                     >
                         <button
                             className={`filtro-categoria ${categoriaSelecionada === 'TODAS'
-                                    ? 'filtro-categoria--ativo'
-                                    : ''
+                                ? 'filtro-categoria--ativo'
+                                : ''
                                 }`}
                             type="button"
                             onClick={() => setCategoriaSelecionada('TODAS')}
@@ -90,8 +90,8 @@ export function ListaReceitasPage() {
 
                         <button
                             className={`filtro-categoria ${categoriaSelecionada === 'SALGADO'
-                                    ? 'filtro-categoria--ativo'
-                                    : ''
+                                ? 'filtro-categoria--ativo'
+                                : ''
                                 }`}
                             type="button"
                             onClick={() => setCategoriaSelecionada('SALGADO')}
@@ -101,8 +101,8 @@ export function ListaReceitasPage() {
 
                         <button
                             className={`filtro-categoria ${categoriaSelecionada === 'DOCE'
-                                    ? 'filtro-categoria--ativo'
-                                    : ''
+                                ? 'filtro-categoria--ativo'
+                                : ''
                                 }`}
                             type="button"
                             onClick={() => setCategoriaSelecionada('DOCE')}
@@ -112,8 +112,8 @@ export function ListaReceitasPage() {
 
                         <button
                             className={`filtro-categoria ${categoriaSelecionada === 'MISTO'
-                                    ? 'filtro-categoria--ativo'
-                                    : ''
+                                ? 'filtro-categoria--ativo'
+                                : ''
                                 }`}
                             type="button"
                             onClick={() => setCategoriaSelecionada('MISTO')}

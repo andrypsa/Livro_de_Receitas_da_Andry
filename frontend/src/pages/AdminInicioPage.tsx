@@ -1,16 +1,41 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { ReceitaCard } from '../components/ReceitaCard'
 import { logoutAdministrador } from '../services/adminAuthService'
+import { listarReceitas } from '../services/receitaService'
+import type { Receita } from '../types/Receita'
+
+import './ListaReceitasPage.css'
 
 export function AdminInicioPage() {
     const navigate = useNavigate()
 
-    const [erro, setErro] = useState('')
+    const [receitas, setReceitas] = useState<Receita[]>([])
+    const [carregando, setCarregando] = useState(true)
+    const [erroReceitas, setErroReceitas] = useState('')
+    const [erroLogout, setErroLogout] = useState('')
     const [saindo, setSaindo] = useState(false)
 
+    useEffect(() => {
+        async function carregarReceitas() {
+            try {
+                const receitasCarregadas = await listarReceitas()
+                setReceitas(receitasCarregadas)
+            } catch {
+                setErroReceitas(
+                    'Não foi possível carregar as receitas neste momento.',
+                )
+            } finally {
+                setCarregando(false)
+            }
+        }
+
+        carregarReceitas()
+    }, [])
+
     async function sair() {
-        setErro('')
+        setErroLogout('')
         setSaindo(true)
 
         try {
@@ -22,36 +47,75 @@ export function AdminInicioPage() {
                     ? erroRecebido.message
                     : 'Não foi possível encerrar a sessão.'
 
-            setErro(mensagem)
+            setErroLogout(mensagem)
         } finally {
             setSaindo(false)
         }
     }
 
     return (
-        <main className="pagina-login-adm">
-            <section className="login-adm-painel">
-                <h1>Área administrativa</h1>
+        <main
+            className={`pagina-receitas ${carregando || erroReceitas || receitas.length === 0
+                    ? 'pagina-receitas--centralizada'
+                    : ''
+                }`}
+        >
+            <section className="receitas-painel">
+                <header className="receitas-cabecalho">
+                    <h1>Área administrativa</h1>
 
-                <p>
-                    Login realizado com sucesso. Esta será a página inicial
-                    para o gerenciamento das receitas.
-                </p>
+                    <p>
+                        Gerencie as receitas cadastradas no sistema.
+                    </p>
 
-                {erro && (
+                    <button
+                        className="login-botao"
+                        type="button"
+                        onClick={sair}
+                        disabled={saindo}
+                    >
+                        {saindo ? 'Saindo...' : 'Sair'}
+                    </button>
+                </header>
+
+                {erroLogout && (
                     <p className="mensagem-login mensagem-login--erro">
-                        {erro}
+                        {erroLogout}
                     </p>
                 )}
 
-                <button
-                    className="login-botao"
-                    type="button"
-                    onClick={sair}
-                    disabled={saindo}
-                >
-                    {saindo ? 'Saindo...' : 'Sair'}
-                </button>
+                {carregando && (
+                    <p className="mensagem-centralizada">
+                        Carregando receitas...
+                    </p>
+                )}
+
+                {erroReceitas && (
+                    <p className="mensagem-erro">
+                        {erroReceitas}
+                    </p>
+                )}
+
+                {!carregando &&
+                    !erroReceitas &&
+                    receitas.length === 0 && (
+                        <p className="mensagem-centralizada">
+                            Nenhuma receita cadastrada.
+                        </p>
+                    )}
+
+                {!carregando &&
+                    !erroReceitas &&
+                    receitas.length > 0 && (
+                        <div className="grade-receitas">
+                            {receitas.map((receita) => (
+                                <ReceitaCard
+                                    key={receita.id}
+                                    receita={receita}
+                                />
+                            ))}
+                        </div>
+                    )}
             </section>
         </main>
     )
