@@ -11,6 +11,7 @@ import { HomePage } from './pages/HomePage'
 import { ListaReceitasPage } from './pages/ListaReceitasPage'
 import { LoginAdmPage } from './pages/LoginAdmPage'
 import { LoginPage } from './pages/LoginPage'
+import { PrimeiroAcessoAdmPage } from './pages/PrimeiroAcessoAdmPage'
 import { SobrePage } from './pages/SobrePage'
 
 function App() {
@@ -20,6 +21,11 @@ function App() {
         <Route path="/" element={<HomePage />} />
 
         <Route path="/login-adm" element={<LoginAdmPage />} />
+
+        <Route
+          path="/primeiro-acesso-adm"
+          element={<PrimeiroAcessoAdmPage />}
+        />
 
         <Route element={<RotaAdminProtegida />}>
           <Route

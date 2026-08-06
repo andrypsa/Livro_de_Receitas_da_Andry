@@ -31,3 +31,21 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Configurações privadas
+.env
+.env.*
+!.env.example
+
+application-local.properties
+application-prod.properties
+
+# Bancos e backups
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+
+# Arquivos com dados particulares
+dados-privados/
+receitas-pessoais/
