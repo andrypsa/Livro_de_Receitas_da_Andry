@@ -18,6 +18,10 @@ export type StatusReceita =
     | 'TESTADA_E_REPROVADA'
     | 'PRECISA_DE_AJUSTES'
 
+export type PrivacidadeReceita =
+    | 'PUBLICA'
+    | 'PRIVADA'
+
 export interface Receita {
     id: number
     nome: string
@@ -34,4 +38,21 @@ export interface ReceitaDetalhe extends Receita {
     observacoes: string | null
     origem: OrigemReceita | null
     status: StatusReceita | null
+}
+
+export interface CriarReceitaDados {
+    nome: string
+    categoria: Categoria
+    ingredientes: string
+    modoPreparo: string
+    imagensUrls: string[]
+    observacoes: string | null
+    tempoPreparoMinutos: number | null
+    rendimento: string | null
+    dificuldade: Dificuldade | null
+    origem: OrigemReceita | null
+    status: StatusReceita | null
+    privacidade: PrivacidadeReceita | null
+    favorita: boolean
+    comentariosAtivos: boolean
 }

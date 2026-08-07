@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { ReceitaCard } from '../components/ReceitaCard'
 import { logoutAdministrador } from '../services/adminAuthService'
@@ -67,6 +67,13 @@ export function AdminInicioPage() {
                     <p>
                         Gerencie as receitas cadastradas no sistema.
                     </p>
+
+                    <Link
+                        className="login-botao"
+                        to="/admin/receitas/nova"
+                    >
+                        Nova receita
+                    </Link>
 
                     <button
                         className="login-botao"

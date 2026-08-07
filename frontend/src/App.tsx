@@ -11,6 +11,7 @@ import { HomePage } from './pages/HomePage'
 import { ListaReceitasPage } from './pages/ListaReceitasPage'
 import { LoginAdmPage } from './pages/LoginAdmPage'
 import { LoginPage } from './pages/LoginPage'
+import { NovaReceitaPage } from './pages/NovaReceitaPage'
 import { PrimeiroAcessoAdmPage } from './pages/PrimeiroAcessoAdmPage'
 import { SobrePage } from './pages/SobrePage'
 
@@ -31,6 +32,11 @@ function App() {
           <Route
             path="/admin"
             element={<AdminInicioPage />}
+          />
+
+          <Route
+            path="/admin/receitas/nova"
+            element={<NovaReceitaPage />}
           />
         </Route>
 

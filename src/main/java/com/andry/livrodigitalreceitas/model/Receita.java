@@ -7,7 +7,11 @@ import com.andry.livrodigitalreceitas.model.enums.Dificuldade;
 import com.andry.livrodigitalreceitas.model.enums.OrigemReceita;
 import com.andry.livrodigitalreceitas.model.enums.PrivacidadeReceita;
 import com.andry.livrodigitalreceitas.model.enums.StatusReceita;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -162,6 +166,9 @@ public class Receita {
         return imagemUrl;
     }
 
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImagemReceita> imagens = new ArrayList<>();
+
     public void setImagemUrl(String imagemUrl) {
         this.imagemUrl = imagemUrl;
     }
@@ -244,5 +251,19 @@ public class Receita {
 
     public LocalDateTime getDataAtualizacao() {
         return dataAtualizacao;
+    }
+
+    public List<ImagemReceita> getImagens() {
+        return imagens;
+    }
+
+    public void adicionarImagem(ImagemReceita imagem) {
+        imagem.setReceita(this);
+        imagens.add(imagem);
+    }
+
+    public void removerImagem(ImagemReceita imagem) {
+        imagens.remove(imagem);
+        imagem.setReceita(null);
     }
 }

@@ -924,3 +924,20 @@ a {
   cursor: not-allowed;
   opacity: 0.55;
 }
+
+.preview-imagem-receita {
+  display: flex;
+  width: 100%;
+  margin-top: -4px;
+  justify-content: center;
+}
+
+.preview-imagem-receita img {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  max-height: 320px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 6px 18px rgba(90, 65, 75, 0.16);
+}

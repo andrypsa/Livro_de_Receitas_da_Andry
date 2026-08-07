@@ -64,7 +64,8 @@ public class SecurityConfig {
                                                 .requestMatchers(
                                                                 HttpMethod.GET,
                                                                 "/api/receitas",
-                                                                "/api/receitas/**")
+                                                                "/api/receitas/**",
+                                                                "/uploads/**")
                                                 .permitAll()
                                                 .requestMatchers(
                                                                 HttpMethod.POST,

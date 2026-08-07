@@ -49,3 +49,6 @@ application-prod.properties
 # Arquivos com dados particulares
 dados-privados/
 receitas-pessoais/
+
+# Imagens enviadas pelo administrador
+uploads/
