@@ -41,7 +41,7 @@ export interface ReceitaDetalhe extends Receita {
 
     ingredientesCobertura: string | null
     modoPreparoCobertura: string | null
-
+    imagens: string[]
     observacoes: string | null
     origem: OrigemReceita | null
     status: StatusReceita | null

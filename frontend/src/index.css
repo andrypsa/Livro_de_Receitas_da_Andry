@@ -941,6 +941,7 @@ a {
   object-fit: cover;
   box-shadow: 0 6px 18px rgba(90, 65, 75, 0.16);
 }
+
 .galeria-preview-receita {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -1005,4 +1006,88 @@ a {
 .secao-opcional-receita legend {
   padding: 0 6px;
   font-weight: 600;
+}
+
+.carrossel-receita {
+  width: 100%;
+  margin: 24px 0;
+}
+
+.carrossel-receita__principal {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.receita-detalhe__imagem-principal {
+  display: block;
+  width: 100%;
+  height: 450px;
+
+  object-fit: contain;
+
+  border-radius: 12px;
+}
+
+.carrossel-receita__botao {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+
+  width: 44px;
+  height: 44px;
+
+  border: none;
+  border-radius: 50%;
+
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.carrossel-receita__botao--anterior {
+  left: 12px;
+}
+
+.carrossel-receita__botao--proxima {
+  right: 12px;
+}
+
+.carrossel-receita__miniaturas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+
+  margin-top: 14px;
+}
+
+.carrossel-receita__miniatura-botao {
+  padding: 0;
+
+  border: 2px solid transparent;
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.carrossel-receita__miniatura-botao--ativa {
+  border-color: currentColor;
+}
+
+.carrossel-receita__miniatura {
+  display: block;
+
+  width: 90px;
+  height: 70px;
+
+  object-fit: cover;
+
+  border-radius: 6px;
+}
+
+.carrossel-receita__contador {
+  text-align: center;
+  margin-top: 8px;
 }

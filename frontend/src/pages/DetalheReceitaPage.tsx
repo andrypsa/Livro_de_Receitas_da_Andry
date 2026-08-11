@@ -26,7 +26,8 @@ export function DetalheReceitaPage() {
 
     const [mensagemErro, setMensagemErro] =
         useState('')
-
+    const [indiceImagemAtual, setIndiceImagemAtual] =
+        useState(0)
     useEffect(() => {
         if (!idValido) {
             return
@@ -98,12 +99,78 @@ export function DetalheReceitaPage() {
                     ← Voltar para receitas
                 </Link>
 
-                {receita.imagemUrl && (
-                    <img
-                        className="receita-detalhe__imagem"
-                        src={receita.imagemUrl}
-                        alt={`Imagem da receita ${receita.nome}`}
-                    />
+                {receita.imagens.length > 0 && (
+                    <section className="carrossel-receita">
+                        <div className="carrossel-receita__principal">
+                            {receita.imagens.length > 1 && (
+                                <button
+                                    type="button"
+                                    className="carrossel-receita__botao carrossel-receita__botao--anterior"
+                                    onClick={() =>
+                                        setIndiceImagemAtual((indiceAtual) =>
+                                            indiceAtual === 0
+                                                ? receita.imagens.length - 1
+                                                : indiceAtual - 1,
+                                        )
+                                    }
+                                    aria-label="Imagem anterior"
+                                >
+                                    ‹
+                                </button>
+                            )}
+
+                            <img
+                                className="receita-detalhe__imagem-principal"
+                                src={receita.imagens[indiceImagemAtual]}
+                                alt={`Imagem ${indiceImagemAtual + 1} da receita ${receita.nome}`}
+                            />
+
+                            {receita.imagens.length > 1 && (
+                                <button
+                                    type="button"
+                                    className="carrossel-receita__botao carrossel-receita__botao--proxima"
+                                    onClick={() =>
+                                        setIndiceImagemAtual((indiceAtual) =>
+                                            indiceAtual === receita.imagens.length - 1
+                                                ? 0
+                                                : indiceAtual + 1,
+                                        )
+                                    }
+                                    aria-label="Próxima imagem"
+                                >
+                                    ›
+                                </button>
+                            )}
+                        </div>
+
+                        {receita.imagens.length > 1 && (
+                            <div className="carrossel-receita__miniaturas">
+                                {receita.imagens.map((imagem, indice) => (
+                                    <button
+                                        type="button"
+                                        key={imagem}
+                                        className={`carrossel-receita__miniatura-botao ${indice === indiceImagemAtual
+                                                ? 'carrossel-receita__miniatura-botao--ativa'
+                                                : ''
+                                            }`}
+                                        onClick={() =>
+                                            setIndiceImagemAtual(indice)
+                                        }
+                                    >
+                                        <img
+                                            className="carrossel-receita__miniatura"
+                                            src={imagem}
+                                            alt={`Selecionar imagem ${indice + 1}`}
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        <p className="carrossel-receita__contador">
+                            {indiceImagemAtual + 1} de {receita.imagens.length}
+                        </p>
+                    </section>
                 )}
 
                 <section className="informacoes-receita">

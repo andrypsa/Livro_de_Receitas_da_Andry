@@ -33,7 +33,7 @@ public List<Receita> listarPublicas() {
 }
 
 public Receita buscarPorId(Long id) {
-    return receitaRepository.findById(id)
+    return receitaRepository.buscarPorIdComImagens(id)
             .orElseThrow(ReceitaNaoEncontradaException::new);
 }
 

@@ -1,5 +1,7 @@
 package com.andry.livrodigitalreceitas.dto;
 
+import java.util.List;
+
 import com.andry.livrodigitalreceitas.model.Receita;
 import com.andry.livrodigitalreceitas.model.enums.Categoria;
 import com.andry.livrodigitalreceitas.model.enums.Dificuldade;
@@ -20,12 +22,15 @@ public record ReceitaDetalheDTO(
         String modoPreparoCobertura,
 
         String imagemUrl,
+        List<String> imagens,
+
         String observacoes,
         Integer tempoPreparoMinutos,
         String rendimento,
         Dificuldade dificuldade,
         OrigemReceita origem,
-        StatusReceita status) {
+        StatusReceita status
+) {
 
     public static ReceitaDetalheDTO de(Receita receita) {
         return new ReceitaDetalheDTO(
@@ -42,11 +47,18 @@ public record ReceitaDetalheDTO(
                 receita.getModoPreparoCobertura(),
 
                 receita.getImagemUrl(),
+
+                receita.getImagens()
+                        .stream()
+                        .map(imagem -> imagem.getUrl())
+                        .toList(),
+
                 receita.getObservacoes(),
                 receita.getTempoPreparoMinutos(),
                 receita.getRendimento(),
                 receita.getDificuldade(),
                 receita.getOrigem(),
-                receita.getStatus());
+                receita.getStatus()
+        );
     }
 }
