@@ -162,12 +162,60 @@ public class Receita {
         this.modoPreparo = modoPreparo;
     }
 
+    @Lob
+    @Column(name = "ingredientes_recheio", columnDefinition = "TEXT")
+    private String ingredientesRecheio;
+
+    @Lob
+    @Column(name = "modo_preparo_recheio", columnDefinition = "TEXT")
+    private String modoPreparoRecheio;
+
+    @Lob
+    @Column(name = "ingredientes_cobertura", columnDefinition = "TEXT")
+    private String ingredientesCobertura;
+
+    @Lob
+    @Column(name = "modo_preparo_cobertura", columnDefinition = "TEXT")
+    private String modoPreparoCobertura;
+
     public String getImagemUrl() {
         return imagemUrl;
     }
 
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImagemReceita> imagens = new ArrayList<>();
+
+    public String getIngredientesRecheio() {
+        return ingredientesRecheio;
+    }
+
+    public void setIngredientesRecheio(String ingredientesRecheio) {
+        this.ingredientesRecheio = ingredientesRecheio;
+    }
+
+    public String getModoPreparoRecheio() {
+        return modoPreparoRecheio;
+    }
+
+    public void setModoPreparoRecheio(String modoPreparoRecheio) {
+        this.modoPreparoRecheio = modoPreparoRecheio;
+    }
+
+    public String getIngredientesCobertura() {
+        return ingredientesCobertura;
+    }
+
+    public void setIngredientesCobertura(String ingredientesCobertura) {
+        this.ingredientesCobertura = ingredientesCobertura;
+    }
+
+    public String getModoPreparoCobertura() {
+        return modoPreparoCobertura;
+    }
+
+    public void setModoPreparoCobertura(String modoPreparoCobertura) {
+        this.modoPreparoCobertura = modoPreparoCobertura;
+    }
 
     public void setImagemUrl(String imagemUrl) {
         this.imagemUrl = imagemUrl;

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { ReceitaCard } from '../components/ReceitaCard'
 import { logoutAdministrador } from '../services/adminAuthService'
-import { listarReceitas } from '../services/receitaService'
+import { listarReceitasAdmin } from '../services/receitaService'
 import type { Receita } from '../types/Receita'
 
 import './ListaReceitasPage.css'
@@ -20,7 +20,7 @@ export function AdminInicioPage() {
     useEffect(() => {
         async function carregarReceitas() {
             try {
-                const receitasCarregadas = await listarReceitas()
+                const receitasCarregadas = await listarReceitasAdmin()
                 setReceitas(receitasCarregadas)
             } catch {
                 setErroReceitas(
@@ -56,8 +56,8 @@ export function AdminInicioPage() {
     return (
         <main
             className={`pagina-receitas ${carregando || erroReceitas || receitas.length === 0
-                    ? 'pagina-receitas--centralizada'
-                    : ''
+                ? 'pagina-receitas--centralizada'
+                : ''
                 }`}
         >
             <section className="receitas-painel">
@@ -67,7 +67,9 @@ export function AdminInicioPage() {
                     <p>
                         Gerencie as receitas cadastradas no sistema.
                     </p>
-
+                    <p>
+                        Total de receitas carregadas: {receitas.length}
+                    </p>
                     <Link
                         className="login-botao"
                         to="/admin/receitas/nova"

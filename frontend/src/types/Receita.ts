@@ -35,6 +35,13 @@ export interface Receita {
 export interface ReceitaDetalhe extends Receita {
     ingredientes: string
     modoPreparo: string
+
+    ingredientesRecheio: string | null
+    modoPreparoRecheio: string | null
+
+    ingredientesCobertura: string | null
+    modoPreparoCobertura: string | null
+
     observacoes: string | null
     origem: OrigemReceita | null
     status: StatusReceita | null
@@ -45,6 +52,10 @@ export interface CriarReceitaDados {
     categoria: Categoria
     ingredientes: string
     modoPreparo: string
+    ingredientesRecheio: string | null
+    modoPreparoRecheio: string | null
+    ingredientesCobertura: string | null
+    modoPreparoCobertura: string | null
     imagensUrls: string[]
     observacoes: string | null
     tempoPreparoMinutos: number | null

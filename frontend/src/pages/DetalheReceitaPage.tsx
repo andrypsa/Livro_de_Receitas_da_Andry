@@ -15,11 +15,17 @@ export function DetalheReceitaPage() {
     const { id } = useParams()
 
     const receitaId = Number(id)
-    const idValido = Number.isInteger(receitaId) && receitaId > 0
+    const idValido =
+        Number.isInteger(receitaId) && receitaId > 0
 
-    const [receita, setReceita] = useState<ReceitaDetalhe | null>(null)
-    const [carregando, setCarregando] = useState(true)
-    const [mensagemErro, setMensagemErro] = useState('')
+    const [receita, setReceita] =
+        useState<ReceitaDetalhe | null>(null)
+
+    const [carregando, setCarregando] =
+        useState(true)
+
+    const [mensagemErro, setMensagemErro] =
+        useState('')
 
     useEffect(() => {
         if (!idValido) {
@@ -29,7 +35,9 @@ export function DetalheReceitaPage() {
         buscarReceitaPorId(receitaId)
             .then(setReceita)
             .catch(() => {
-                setMensagemErro('Não foi possível carregar a receita.')
+                setMensagemErro(
+                    'Não foi possível carregar a receita.',
+                )
             })
             .finally(() => {
                 setCarregando(false)
@@ -39,9 +47,11 @@ export function DetalheReceitaPage() {
     if (!idValido) {
         return (
             <main className="container pagina-detalhe">
-                <p className="mensagem-erro">Receita inválida.</p>
+                <p className="mensagem-erro">
+                    Receita inválida.
+                </p>
 
-                <Link className="botao" to="/">
+                <Link className="botao" to="/receitas">
                     Voltar para receitas
                 </Link>
             </main>
@@ -60,10 +70,11 @@ export function DetalheReceitaPage() {
         return (
             <main className="container pagina-detalhe">
                 <p className="mensagem-erro">
-                    {mensagemErro || 'Receita não encontrada.'}
+                    {mensagemErro ||
+                        'Receita não encontrada.'}
                 </p>
 
-                <Link className="botao" to="/">
+                <Link className="botao" to="/receitas">
                     Voltar para receitas
                 </Link>
             </main>
@@ -80,7 +91,10 @@ export function DetalheReceitaPage() {
             </header>
 
             <main className="container pagina-detalhe">
-                <Link className="link-voltar" to="/">
+                <Link
+                    className="link-voltar"
+                    to="/receitas"
+                >
                     ← Voltar para receitas
                 </Link>
 
@@ -102,44 +116,102 @@ export function DetalheReceitaPage() {
 
                     {receita.rendimento && (
                         <p>
-                            <strong>Rendimento:</strong> {receita.rendimento}
+                            <strong>Rendimento:</strong>{' '}
+                            {receita.rendimento}
                         </p>
                     )}
 
                     {receita.dificuldade && (
                         <p>
                             <strong>Dificuldade:</strong>{' '}
-                            {formatarEnum(receita.dificuldade)}
+                            {formatarEnum(
+                                receita.dificuldade,
+                            )}
                         </p>
                     )}
 
                     {receita.origem && (
                         <p>
-                            <strong>Origem:</strong> {formatarEnum(receita.origem)}
+                            <strong>Origem:</strong>{' '}
+                            {formatarEnum(receita.origem)}
                         </p>
                     )}
 
                     {receita.status && (
                         <p>
-                            <strong>Status:</strong> {formatarEnum(receita.status)}
+                            <strong>Status:</strong>{' '}
+                            {formatarEnum(receita.status)}
                         </p>
                     )}
                 </section>
 
                 <section className="bloco-receita">
                     <h2>Ingredientes</h2>
-                    <p className="texto-preservado">{receita.ingredientes}</p>
+
+                    <h3>Principal</h3>
+
+                    <p className="texto-preservado">
+                        {receita.ingredientes}
+                    </p>
+
+                    {receita.ingredientesRecheio && (
+                        <>
+                            <h3>Recheio</h3>
+
+                            <p className="texto-preservado">
+                                {receita.ingredientesRecheio}
+                            </p>
+                        </>
+                    )}
+
+                    {receita.ingredientesCobertura && (
+                        <>
+                            <h3>Cobertura</h3>
+
+                            <p className="texto-preservado">
+                                {receita.ingredientesCobertura}
+                            </p>
+                        </>
+                    )}
                 </section>
 
                 <section className="bloco-receita">
                     <h2>Modo de preparo</h2>
-                    <p className="texto-preservado">{receita.modoPreparo}</p>
+
+                    <h3>Principal</h3>
+
+                    <p className="texto-preservado">
+                        {receita.modoPreparo}
+                    </p>
+
+                    {receita.modoPreparoRecheio && (
+                        <>
+                            <h3>Recheio</h3>
+
+                            <p className="texto-preservado">
+                                {receita.modoPreparoRecheio}
+                            </p>
+                        </>
+                    )}
+
+                    {receita.modoPreparoCobertura && (
+                        <>
+                            <h3>Cobertura</h3>
+
+                            <p className="texto-preservado">
+                                {receita.modoPreparoCobertura}
+                            </p>
+                        </>
+                    )}
                 </section>
 
                 {receita.observacoes && (
                     <section className="bloco-receita">
                         <h2>Observações</h2>
-                        <p className="texto-preservado">{receita.observacoes}</p>
+
+                        <p className="texto-preservado">
+                            {receita.observacoes}
+                        </p>
                     </section>
                 )}
             </main>

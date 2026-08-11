@@ -18,15 +18,116 @@ import type {
     StatusReceita,
 } from '../types/Receita'
 
+const CHAVE_RASCUNHO = 'rascunho-nova-receita'
+
+interface RascunhoReceita {
+    nome: string
+    categoria: Categoria
+    ingredientes: string
+    modoPreparo: string
+
+    temRecheio: boolean
+    ingredientesRecheio: string
+    modoPreparoRecheio: string
+
+    temCobertura: boolean
+    ingredientesCobertura: string
+    modoPreparoCobertura: string
+
+    observacoes: string
+    tempoPreparoMinutos: string
+    rendimento: string
+
+    dificuldade: Dificuldade | ''
+    origem: OrigemReceita | ''
+    status: StatusReceita
+    privacidade: PrivacidadeReceita
+
+    favorita: boolean
+    comentariosAtivos: boolean
+}
+
+function carregarRascunho(): RascunhoReceita | null {
+    try {
+        const rascunhoSalvo =
+            localStorage.getItem(CHAVE_RASCUNHO)
+
+        if (!rascunhoSalvo) {
+            return null
+        }
+
+        return JSON.parse(
+            rascunhoSalvo,
+        ) as RascunhoReceita
+    } catch {
+        return null
+    }
+}
+
 export function NovaReceitaPage() {
     const navigate = useNavigate()
 
-    const [nome, setNome] = useState('')
-    const [categoria, setCategoria] =
-        useState<Categoria>('SALGADO')
+    const [rascunhoInicial] =
+        useState<RascunhoReceita | null>(
+            carregarRascunho,
+        )
 
-    const [ingredientes, setIngredientes] = useState('')
-    const [modoPreparo, setModoPreparo] = useState('')
+    const [nome, setNome] = useState(
+        rascunhoInicial?.nome ?? '',
+    )
+
+    const [categoria, setCategoria] =
+        useState<Categoria>(
+            rascunhoInicial?.categoria ?? 'SALGADO',
+        )
+
+    const [ingredientes, setIngredientes] =
+        useState(
+            rascunhoInicial?.ingredientes ?? '',
+        )
+
+    const [modoPreparo, setModoPreparo] =
+        useState(
+            rascunhoInicial?.modoPreparo ?? '',
+        )
+
+    const [temRecheio, setTemRecheio] =
+        useState(
+            rascunhoInicial?.temRecheio ?? false,
+        )
+
+    const [
+        ingredientesRecheio,
+        setIngredientesRecheio,
+    ] = useState(
+        rascunhoInicial?.ingredientesRecheio ?? '',
+    )
+
+    const [
+        modoPreparoRecheio,
+        setModoPreparoRecheio,
+    ] = useState(
+        rascunhoInicial?.modoPreparoRecheio ?? '',
+    )
+
+    const [temCobertura, setTemCobertura] =
+        useState(
+            rascunhoInicial?.temCobertura ?? false,
+        )
+
+    const [
+        ingredientesCobertura,
+        setIngredientesCobertura,
+    ] = useState(
+        rascunhoInicial?.ingredientesCobertura ?? '',
+    )
+
+    const [
+        modoPreparoCobertura,
+        setModoPreparoCobertura,
+    ] = useState(
+        rascunhoInicial?.modoPreparoCobertura ?? '',
+    )
 
     const [arquivosImagem, setArquivosImagem] =
         useState<File[]>([])
@@ -34,30 +135,124 @@ export function NovaReceitaPage() {
     const [previewsImagem, setPreviewsImagem] =
         useState<string[]>([])
 
-    const [observacoes, setObservacoes] = useState('')
-    const [tempoPreparoMinutos, setTempoPreparoMinutos] =
-        useState('')
-    const [rendimento, setRendimento] = useState('')
+    const [observacoes, setObservacoes] =
+        useState(
+            rascunhoInicial?.observacoes ?? '',
+        )
+
+    const [
+        tempoPreparoMinutos,
+        setTempoPreparoMinutos,
+    ] = useState(
+        rascunhoInicial?.tempoPreparoMinutos ?? '',
+    )
+
+    const [rendimento, setRendimento] =
+        useState(
+            rascunhoInicial?.rendimento ?? '',
+        )
 
     const [dificuldade, setDificuldade] =
-        useState<Dificuldade | ''>('')
+        useState<Dificuldade | ''>(
+            rascunhoInicial?.dificuldade ?? '',
+        )
 
     const [origem, setOrigem] =
-        useState<OrigemReceita | ''>('')
+        useState<OrigemReceita | ''>(
+            rascunhoInicial?.origem ?? '',
+        )
 
     const [status, setStatus] =
-        useState<StatusReceita>('NAO_TESTADA')
+        useState<StatusReceita>(
+            rascunhoInicial?.status ??
+            'NAO_TESTADA',
+        )
 
     const [privacidade, setPrivacidade] =
-        useState<PrivacidadeReceita>('PRIVADA')
+        useState<PrivacidadeReceita>(
+            rascunhoInicial?.privacidade ??
+            'PRIVADA',
+        )
 
-    const [favorita, setFavorita] = useState(false)
+    const [favorita, setFavorita] =
+        useState(
+            rascunhoInicial?.favorita ?? false,
+        )
 
-    const [comentariosAtivos, setComentariosAtivos] =
-        useState(true)
+    const [
+        comentariosAtivos,
+        setComentariosAtivos,
+    ] = useState(
+        rascunhoInicial?.comentariosAtivos ??
+        true,
+    )
 
     const [erro, setErro] = useState('')
-    const [salvando, setSalvando] = useState(false)
+    const [salvando, setSalvando] =
+        useState(false)
+
+    /*
+     * Salva automaticamente o rascunho
+     * sempre que algum campo for alterado.
+     */
+    useEffect(() => {
+        const rascunho: RascunhoReceita = {
+            nome,
+            categoria,
+            ingredientes,
+            modoPreparo,
+
+            temRecheio,
+            ingredientesRecheio,
+            modoPreparoRecheio,
+
+            temCobertura,
+            ingredientesCobertura,
+            modoPreparoCobertura,
+
+            observacoes,
+            tempoPreparoMinutos,
+            rendimento,
+
+            dificuldade,
+            origem,
+            status,
+            privacidade,
+
+            favorita,
+            comentariosAtivos,
+        }
+
+        localStorage.setItem(
+            CHAVE_RASCUNHO,
+            JSON.stringify(rascunho),
+        )
+    }, [
+        nome,
+        categoria,
+        ingredientes,
+        modoPreparo,
+
+        temRecheio,
+        ingredientesRecheio,
+        modoPreparoRecheio,
+
+        temCobertura,
+        ingredientesCobertura,
+        modoPreparoCobertura,
+
+        observacoes,
+        tempoPreparoMinutos,
+        rendimento,
+
+        dificuldade,
+        origem,
+        status,
+        privacidade,
+
+        favorita,
+        comentariosAtivos,
+    ])
 
     useEffect(() => {
         return () => {
@@ -91,19 +286,23 @@ export function NovaReceitaPage() {
             setErro(
                 'Selecione apenas imagens JPG, PNG ou WebP.',
             )
+
             evento.target.value = ''
             return
         }
 
-        const arquivoMaiorQuePermitido = arquivos.find(
-            (arquivo) =>
-                arquivo.size > 5 * 1024 * 1024,
-        )
+        const arquivoMaiorQuePermitido =
+            arquivos.find(
+                (arquivo) =>
+                    arquivo.size >
+                    5 * 1024 * 1024,
+            )
 
         if (arquivoMaiorQuePermitido) {
             setErro(
                 'Cada imagem deve ter no máximo 5 MB.',
             )
+
             evento.target.value = ''
             return
         }
@@ -117,6 +316,7 @@ export function NovaReceitaPage() {
 
         setPreviewsImagem((previewsAtuais) => [
             ...previewsAtuais,
+
             ...arquivos.map((arquivo) =>
                 URL.createObjectURL(arquivo),
             ),
@@ -161,7 +361,9 @@ export function NovaReceitaPage() {
 
             for (const arquivo of arquivosImagem) {
                 const imagemUrl =
-                    await enviarImagemReceita(arquivo)
+                    await enviarImagemReceita(
+                        arquivo,
+                    )
 
                 imagensUrls.push(imagemUrl)
             }
@@ -171,24 +373,65 @@ export function NovaReceitaPage() {
                 categoria,
                 ingredientes,
                 modoPreparo,
+
+                ingredientesRecheio:
+                    temRecheio &&
+                        ingredientesRecheio.trim()
+                        ? ingredientesRecheio.trim()
+                        : null,
+
+                modoPreparoRecheio:
+                    temRecheio &&
+                        modoPreparoRecheio.trim()
+                        ? modoPreparoRecheio.trim()
+                        : null,
+
+                ingredientesCobertura:
+                    temCobertura &&
+                        ingredientesCobertura.trim()
+                        ? ingredientesCobertura.trim()
+                        : null,
+
+                modoPreparoCobertura:
+                    temCobertura &&
+                        modoPreparoCobertura.trim()
+                        ? modoPreparoCobertura.trim()
+                        : null,
+
                 imagensUrls,
+
                 observacoes:
                     observacoes.trim() || null,
+
                 tempoPreparoMinutos:
                     tempoPreparoMinutos === ''
                         ? null
-                        : Number(tempoPreparoMinutos),
+                        : Number(
+                            tempoPreparoMinutos,
+                        ),
+
                 rendimento:
                     rendimento.trim() || null,
+
                 dificuldade:
                     dificuldade || null,
+
                 origem:
                     origem || null,
+
                 status,
                 privacidade,
                 favorita,
                 comentariosAtivos,
             })
+
+            /*
+             * O rascunho só é apagado
+             * depois que o cadastro termina.
+             */
+            localStorage.removeItem(
+                CHAVE_RASCUNHO,
+            )
 
             navigate('/admin', {
                 replace: true,
@@ -229,13 +472,17 @@ export function NovaReceitaPage() {
                     onSubmit={enviarFormulario}
                 >
                     <label className="login-adm-campo">
-                        <span>Nome da receita</span>
+                        <span>
+                            Nome da receita
+                        </span>
 
                         <input
                             type="text"
                             value={nome}
                             onChange={(evento) =>
-                                setNome(evento.target.value)
+                                setNome(
+                                    evento.target.value,
+                                )
                             }
                             maxLength={150}
                             required
@@ -269,7 +516,9 @@ export function NovaReceitaPage() {
                     </label>
 
                     <label className="login-adm-campo">
-                        <span>Ingredientes</span>
+                        <span>
+                            Ingredientes principais
+                        </span>
 
                         <textarea
                             value={ingredientes}
@@ -284,7 +533,9 @@ export function NovaReceitaPage() {
                     </label>
 
                     <label className="login-adm-campo">
-                        <span>Modo de preparo</span>
+                        <span>
+                            Modo de preparo principal
+                        </span>
 
                         <textarea
                             value={modoPreparo}
@@ -298,28 +549,180 @@ export function NovaReceitaPage() {
                         />
                     </label>
 
+                    <fieldset className="secao-opcional-receita">
+                        <legend>Recheio</legend>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={temRecheio}
+                                onChange={(evento) =>
+                                    setTemRecheio(
+                                        evento.target
+                                            .checked,
+                                    )
+                                }
+                            />
+
+                            {' '}
+                            Esta receita tem recheio
+                        </label>
+
+                        {temRecheio && (
+                            <>
+                                <label className="login-adm-campo">
+                                    <span>
+                                        Ingredientes do
+                                        recheio
+                                    </span>
+
+                                    <textarea
+                                        value={
+                                            ingredientesRecheio
+                                        }
+                                        onChange={(
+                                            evento,
+                                        ) =>
+                                            setIngredientesRecheio(
+                                                evento
+                                                    .target
+                                                    .value,
+                                            )
+                                        }
+                                        rows={6}
+                                        required
+                                    />
+                                </label>
+
+                                <label className="login-adm-campo">
+                                    <span>
+                                        Modo de preparo do
+                                        recheio
+                                    </span>
+
+                                    <textarea
+                                        value={
+                                            modoPreparoRecheio
+                                        }
+                                        onChange={(
+                                            evento,
+                                        ) =>
+                                            setModoPreparoRecheio(
+                                                evento
+                                                    .target
+                                                    .value,
+                                            )
+                                        }
+                                        rows={6}
+                                        required
+                                    />
+                                </label>
+                            </>
+                        )}
+                    </fieldset>
+
+                    <fieldset className="secao-opcional-receita">
+                        <legend>Cobertura</legend>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={temCobertura}
+                                onChange={(evento) =>
+                                    setTemCobertura(
+                                        evento.target
+                                            .checked,
+                                    )
+                                }
+                            />
+
+                            {' '}
+                            Esta receita tem cobertura
+                        </label>
+
+                        {temCobertura && (
+                            <>
+                                <label className="login-adm-campo">
+                                    <span>
+                                        Ingredientes da
+                                        cobertura
+                                    </span>
+
+                                    <textarea
+                                        value={
+                                            ingredientesCobertura
+                                        }
+                                        onChange={(
+                                            evento,
+                                        ) =>
+                                            setIngredientesCobertura(
+                                                evento
+                                                    .target
+                                                    .value,
+                                            )
+                                        }
+                                        rows={6}
+                                        required
+                                    />
+                                </label>
+
+                                <label className="login-adm-campo">
+                                    <span>
+                                        Modo de preparo da
+                                        cobertura
+                                    </span>
+
+                                    <textarea
+                                        value={
+                                            modoPreparoCobertura
+                                        }
+                                        onChange={(
+                                            evento,
+                                        ) =>
+                                            setModoPreparoCobertura(
+                                                evento
+                                                    .target
+                                                    .value,
+                                            )
+                                        }
+                                        rows={6}
+                                        required
+                                    />
+                                </label>
+                            </>
+                        )}
+                    </fieldset>
+
                     <label className="login-adm-campo">
-                        <span>Fotos da receita</span>
+                        <span>
+                            Fotos da receita
+                        </span>
 
                         <input
                             type="file"
                             accept="image/jpeg,image/png,image/webp"
                             multiple
-                            onChange={selecionarImagens}
+                            onChange={
+                                selecionarImagens
+                            }
                         />
                     </label>
 
                     {previewsImagem.length > 0 && (
                         <div className="galeria-preview-receita">
                             {previewsImagem.map(
-                                (preview, indice) => (
+                                (
+                                    preview,
+                                    indice,
+                                ) => (
                                     <div
                                         className="item-preview-receita"
                                         key={preview}
                                     >
                                         <img
                                             src={preview}
-                                            alt={`Prévia da foto ${indice + 1
+                                            alt={`Prévia da foto ${indice +
+                                                1
                                                 }`}
                                         />
 
@@ -327,20 +730,25 @@ export function NovaReceitaPage() {
                                             className="botao-remover-imagem"
                                             type="button"
                                             onClick={() =>
-                                                removerImagem(indice)
+                                                removerImagem(
+                                                    indice,
+                                                )
                                             }
-                                            aria-label={`Remover foto ${indice + 1
+                                            aria-label={`Remover foto ${indice +
+                                                1
                                                 }`}
                                             title="Remover foto"
                                         >
                                             ×
                                         </button>
 
-                                        {indice === 0 && (
-                                            <span className="imagem-principal-aviso">
-                                                Foto principal
-                                            </span>
-                                        )}
+                                        {indice ===
+                                            0 && (
+                                                <span className="imagem-principal-aviso">
+                                                    Foto
+                                                    principal
+                                                </span>
+                                            )}
                                     </div>
                                 ),
                             )}
@@ -355,7 +763,9 @@ export function NovaReceitaPage() {
                         <input
                             type="number"
                             min="0"
-                            value={tempoPreparoMinutos}
+                            value={
+                                tempoPreparoMinutos
+                            }
                             onChange={(evento) =>
                                 setTempoPreparoMinutos(
                                     evento.target.value,
@@ -386,7 +796,8 @@ export function NovaReceitaPage() {
                             value={dificuldade}
                             onChange={(evento) =>
                                 setDificuldade(
-                                    evento.target.value as
+                                    evento.target
+                                        .value as
                                     | Dificuldade
                                     | '',
                                 )
@@ -417,7 +828,8 @@ export function NovaReceitaPage() {
                             value={origem}
                             onChange={(evento) =>
                                 setOrigem(
-                                    evento.target.value as
+                                    evento.target
+                                        .value as
                                     | OrigemReceita
                                     | '',
                                 )
@@ -537,6 +949,7 @@ export function NovaReceitaPage() {
                                 )
                             }
                         />
+
                         {' '}
                         Marcar como favorita
                     </label>
@@ -544,13 +957,16 @@ export function NovaReceitaPage() {
                     <label>
                         <input
                             type="checkbox"
-                            checked={comentariosAtivos}
+                            checked={
+                                comentariosAtivos
+                            }
                             onChange={(evento) =>
                                 setComentariosAtivos(
                                     evento.target.checked,
                                 )
                             }
                         />
+
                         {' '}
                         Permitir comentários
                     </label>

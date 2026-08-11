@@ -12,14 +12,20 @@ public record ReceitaDetalheDTO(
         Categoria categoria,
         String ingredientes,
         String modoPreparo,
+
+        String ingredientesRecheio,
+        String modoPreparoRecheio,
+
+        String ingredientesCobertura,
+        String modoPreparoCobertura,
+
         String imagemUrl,
         String observacoes,
         Integer tempoPreparoMinutos,
         String rendimento,
         Dificuldade dificuldade,
         OrigemReceita origem,
-        StatusReceita status
-) {
+        StatusReceita status) {
 
     public static ReceitaDetalheDTO de(Receita receita) {
         return new ReceitaDetalheDTO(
@@ -28,13 +34,19 @@ public record ReceitaDetalheDTO(
                 receita.getCategoria(),
                 receita.getIngredientes(),
                 receita.getModoPreparo(),
+
+                receita.getIngredientesRecheio(),
+                receita.getModoPreparoRecheio(),
+
+                receita.getIngredientesCobertura(),
+                receita.getModoPreparoCobertura(),
+
                 receita.getImagemUrl(),
                 receita.getObservacoes(),
                 receita.getTempoPreparoMinutos(),
                 receita.getRendimento(),
                 receita.getDificuldade(),
                 receita.getOrigem(),
-                receita.getStatus()
-        );
+                receita.getStatus());
     }
 }

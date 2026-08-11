@@ -23,6 +23,14 @@ public record CriarReceitaRequest(
 
         @NotBlank(message = "O modo de preparo é obrigatório.") String modoPreparo,
 
+        String ingredientesRecheio,
+
+        String modoPreparoRecheio,
+
+        String ingredientesCobertura,
+
+        String modoPreparoCobertura,
+
         List<String> imagensUrls,
 
         String observacoes,

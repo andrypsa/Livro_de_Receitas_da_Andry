@@ -8,6 +8,47 @@ interface ImagemReceitaResposta {
     imagemUrl: string
 }
 
+interface ErroApi {
+    mensagem?: string
+}
+
+function lerCookie(nome: string): string | null {
+    const prefixo = `${nome}=`
+
+    const cookie = document.cookie
+        .split('; ')
+        .find((item) => item.startsWith(prefixo))
+
+    return cookie
+        ? decodeURIComponent(
+            cookie.substring(prefixo.length),
+        )
+        : null
+}
+
+async function carregarCsrf(): Promise<string> {
+    const resposta = await fetch('/api/auth/admin/csrf', {
+        method: 'GET',
+        credentials: 'include',
+    })
+
+    if (!resposta.ok) {
+        throw new Error(
+            `Não foi possível preparar a sessão segura. Status: ${resposta.status}`,
+        )
+    }
+
+    const token = lerCookie('XSRF-TOKEN')
+
+    if (!token) {
+        throw new Error(
+            'O token de segurança não foi encontrado.',
+        )
+    }
+
+    return token
+}
+
 export async function listarReceitas(): Promise<Receita[]> {
     const resposta = await fetch('/api/receitas', {
         headers: {
@@ -24,6 +65,24 @@ export async function listarReceitas(): Promise<Receita[]> {
     return resposta.json() as Promise<Receita[]>
 }
 
+export async function listarReceitasAdmin(): Promise<Receita[]> {
+    const resposta = await fetch('/api/admin/receitas', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            Accept: 'application/json',
+        },
+    })
+
+    if (!resposta.ok) {
+        throw new Error(
+            `Não foi possível carregar as receitas administrativas. Status: ${resposta.status}`,
+        )
+    }
+
+    return resposta.json() as Promise<Receita[]>
+    
+}
 export async function buscarReceitaPorId(
     id: number,
 ): Promise<ReceitaDetalhe> {
@@ -45,23 +104,28 @@ export async function buscarReceitaPorId(
 export async function enviarImagemReceita(
     arquivo: File,
 ): Promise<string> {
+    const csrfToken = await carregarCsrf()
+
     const formulario = new FormData()
     formulario.append('imagem', arquivo)
 
     const resposta = await fetch('/api/receitas/imagens', {
         method: 'POST',
         credentials: 'include',
+        headers: {
+            'X-XSRF-TOKEN': csrfToken,
+        },
         body: formulario,
     })
 
     if (!resposta.ok) {
-        const erro = await resposta
+        const erro = (await resposta
             .json()
-            .catch(() => null)
+            .catch(() => ({}))) as ErroApi
 
         throw new Error(
-            erro?.mensagem ??
-            'Não foi possível enviar a imagem.',
+            erro.mensagem ??
+            `Não foi possível enviar a imagem. Status: ${resposta.status}`,
         )
     }
 
@@ -74,24 +138,27 @@ export async function enviarImagemReceita(
 export async function criarReceita(
     dados: CriarReceitaDados,
 ): Promise<ReceitaDetalhe> {
+    const csrfToken = await carregarCsrf()
+
     const resposta = await fetch('/api/receitas', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',
+            'X-XSRF-TOKEN': csrfToken,
         },
         credentials: 'include',
         body: JSON.stringify(dados),
     })
 
     if (!resposta.ok) {
-        const erro = await resposta
+        const erro = (await resposta
             .json()
-            .catch(() => null)
+            .catch(() => ({}))) as ErroApi
 
         throw new Error(
-            erro?.mensagem ??
-            'Não foi possível cadastrar a receita.',
+            erro.mensagem ??
+            `Não foi possível cadastrar a receita. Status: ${resposta.status}`,
         )
     }
 

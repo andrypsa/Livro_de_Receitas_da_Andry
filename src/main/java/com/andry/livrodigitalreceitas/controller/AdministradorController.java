@@ -1,7 +1,7 @@
 package com.andry.livrodigitalreceitas.controller;
 
 import java.net.URI;
-
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -112,6 +112,13 @@ public class AdministradorController {
                 return ResponseEntity.ok(
                                 new MensagemResponse(
                                                 "Logout realizado com sucesso."));
+        }
+
+        @GetMapping("/csrf")
+        public ResponseEntity<Void> csrf(CsrfToken csrfToken) {
+                csrfToken.getToken();
+
+                return ResponseEntity.noContent().build();
         }
 
         private record AdministradorCriadoResponse(

@@ -1,5 +1,6 @@
 package com.andry.livrodigitalreceitas.config;
 
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -78,10 +79,15 @@ public class SecurityConfig {
                                                 .securityContextRepository(
                                                                 securityContextRepository)
                                                 .requireExplicitSave(true))
-                                .csrf(csrf -> csrf.ignoringRequestMatchers(
-                                                "/api/auth/admin/primeiro-acesso",
-                                                "/api/auth/admin/login",
-                                                "/api/auth/admin/logout"))
+                                .csrf(csrf -> csrf
+                                                .csrfTokenRepository(
+                                                                CookieCsrfTokenRepository.withHttpOnlyFalse())
+                                                .csrfTokenRequestHandler(
+                                                                new org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler())
+                                                .ignoringRequestMatchers(
+                                                                "/api/auth/admin/primeiro-acesso",
+                                                                "/api/auth/admin/login",
+                                                                "/api/auth/admin/logout"))
                                 .formLogin(formulario -> formulario.disable());
 
                 return http.build();

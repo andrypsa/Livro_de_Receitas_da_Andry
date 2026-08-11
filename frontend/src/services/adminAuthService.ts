@@ -127,3 +127,14 @@ export async function logoutAdministrador():
 
     return resposta.json() as Promise<MensagemResposta>
 }
+
+export async function carregarCsrf(): Promise<void> {
+    const resposta = await fetch('/api/auth/admin/csrf', {
+        method: 'GET',
+        credentials: 'include',
+    })
+
+    if (!resposta.ok) {
+        throw new Error('Não foi possível preparar a sessão segura.')
+    }
+}

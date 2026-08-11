@@ -54,9 +54,12 @@ public class ReceitaController {
         receita.setCategoria(dados.categoria());
         receita.setIngredientes(dados.ingredientes());
         receita.setModoPreparo(dados.modoPreparo());
+        receita.setIngredientesRecheio(dados.ingredientesRecheio());
+        receita.setModoPreparoRecheio(dados.modoPreparoRecheio());
+        receita.setIngredientesCobertura(dados.ingredientesCobertura());
+        receita.setModoPreparoCobertura(dados.modoPreparoCobertura());
         receita.setObservacoes(dados.observacoes());
-        receita.setTempoPreparoMinutos(
-                dados.tempoPreparoMinutos());
+        receita.setTempoPreparoMinutos(dados.tempoPreparoMinutos());
         receita.setRendimento(dados.rendimento());
         receita.setDificuldade(dados.dificuldade());
         receita.setOrigem(dados.origem());
