@@ -81,7 +81,7 @@ export async function listarReceitasAdmin(): Promise<Receita[]> {
     }
 
     return resposta.json() as Promise<Receita[]>
-    
+
 }
 export async function buscarReceitaPorId(
     id: number,
@@ -95,6 +95,29 @@ export async function buscarReceitaPorId(
     if (!resposta.ok) {
         throw new Error(
             `Não foi possível carregar a receita. Status: ${resposta.status}`,
+        )
+    }
+
+    return resposta.json() as Promise<ReceitaDetalhe>
+}
+
+export async function buscarReceitaAdminPorId(
+    id: number,
+): Promise<ReceitaDetalhe> {
+    const resposta = await fetch(
+        `/api/admin/receitas/${id}`,
+        {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+            },
+        },
+    )
+
+    if (!resposta.ok) {
+        throw new Error(
+            `Não foi possível carregar a receita administrativa. Status: ${resposta.status}`,
         )
     }
 
@@ -159,6 +182,40 @@ export async function criarReceita(
         throw new Error(
             erro.mensagem ??
             `Não foi possível cadastrar a receita. Status: ${resposta.status}`,
+        )
+    }
+
+    return resposta.json() as Promise<ReceitaDetalhe>
+}
+
+export async function atualizarReceita(
+    id: number,
+    dados: CriarReceitaDados,
+): Promise<ReceitaDetalhe> {
+    const csrfToken = await carregarCsrf()
+
+    const resposta = await fetch(
+        `/api/admin/receitas/${id}`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-XSRF-TOKEN': csrfToken,
+            },
+            credentials: 'include',
+            body: JSON.stringify(dados),
+        },
+    )
+
+    if (!resposta.ok) {
+        const erro = (await resposta
+            .json()
+            .catch(() => ({}))) as ErroApi
+
+        throw new Error(
+            erro.mensagem ??
+            `Não foi possível atualizar a receita. Status: ${resposta.status}`,
         )
     }
 

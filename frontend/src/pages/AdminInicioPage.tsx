@@ -121,6 +121,7 @@ export function AdminInicioPage() {
                                 <ReceitaCard
                                     key={receita.id}
                                     receita={receita}
+                                    modoAdmin
                                 />
                             ))}
                         </div>

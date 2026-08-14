@@ -14,6 +14,7 @@ import { LoginPage } from './pages/LoginPage'
 import { NovaReceitaPage } from './pages/NovaReceitaPage'
 import { PrimeiroAcessoAdmPage } from './pages/PrimeiroAcessoAdmPage'
 import { SobrePage } from './pages/SobrePage'
+import { EditarReceitaPage } from './pages/EditarReceitaPage'
 
 function App() {
   return (
@@ -21,7 +22,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
 
-        <Route path="/login-adm" element={<LoginAdmPage />} />
+        <Route
+          path="/login-adm"
+          element={<LoginAdmPage />}
+        />
 
         <Route
           path="/primeiro-acesso-adm"
@@ -38,11 +42,27 @@ function App() {
             path="/admin/receitas/nova"
             element={<NovaReceitaPage />}
           />
+
+          <Route
+            path="/admin/receitas/:id/editar"
+            element={<EditarReceitaPage />}
+          />
+
+          <Route
+            path="/admin/receitas/:id"
+            element={<DetalheReceitaPage modoAdmin />}
+          />
         </Route>
 
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
 
-        <Route path="/sobre" element={<SobrePage />} />
+        <Route
+          path="/sobre"
+          element={<SobrePage />}
+        />
 
         <Route
           path="/receitas"

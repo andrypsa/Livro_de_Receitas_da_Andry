@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import { buscarReceitaPorId } from '../services/receitaService'
+import {
+    buscarReceitaAdminPorId,
+    buscarReceitaPorId,
+} from '../services/receitaService'
+
 import type { ReceitaDetalhe } from '../types/Receita'
+
+interface DetalheReceitaPageProps {
+    modoAdmin?: boolean
+}
 
 function formatarEnum(valor: string): string {
     return valor
@@ -11,10 +19,13 @@ function formatarEnum(valor: string): string {
         .replace(/\b\w/g, (letra) => letra.toUpperCase())
 }
 
-export function DetalheReceitaPage() {
+export function DetalheReceitaPage({
+    modoAdmin = false,
+}: DetalheReceitaPageProps) {
     const { id } = useParams()
 
     const receitaId = Number(id)
+
     const idValido =
         Number.isInteger(receitaId) && receitaId > 0
 
@@ -26,15 +37,34 @@ export function DetalheReceitaPage() {
 
     const [mensagemErro, setMensagemErro] =
         useState('')
-    const [indiceImagemAtual, setIndiceImagemAtual] =
-        useState(0)
+
+    const [
+        indiceImagemAtual,
+        setIndiceImagemAtual,
+    ] = useState(0)
+
+    const rotaVoltar = modoAdmin
+        ? '/admin'
+        : '/receitas'
+
+    const textoVoltar = modoAdmin
+        ? 'Voltar para área administrativa'
+        : 'Voltar para receitas'
+
     useEffect(() => {
         if (!idValido) {
             return
         }
 
-        buscarReceitaPorId(receitaId)
-            .then(setReceita)
+        const buscarReceita = modoAdmin
+            ? buscarReceitaAdminPorId
+            : buscarReceitaPorId
+
+        buscarReceita(receitaId)
+            .then((receitaCarregada) => {
+                setReceita(receitaCarregada)
+                setIndiceImagemAtual(0)
+            })
             .catch(() => {
                 setMensagemErro(
                     'Não foi possível carregar a receita.',
@@ -43,7 +73,7 @@ export function DetalheReceitaPage() {
             .finally(() => {
                 setCarregando(false)
             })
-    }, [idValido, receitaId])
+    }, [idValido, receitaId, modoAdmin])
 
     if (!idValido) {
         return (
@@ -52,8 +82,11 @@ export function DetalheReceitaPage() {
                     Receita inválida.
                 </p>
 
-                <Link className="botao" to="/receitas">
-                    Voltar para receitas
+                <Link
+                    className="botao"
+                    to={rotaVoltar}
+                >
+                    {textoVoltar}
                 </Link>
             </main>
         )
@@ -75,8 +108,11 @@ export function DetalheReceitaPage() {
                         'Receita não encontrada.'}
                 </p>
 
-                <Link className="botao" to="/receitas">
-                    Voltar para receitas
+                <Link
+                    className="botao"
+                    to={rotaVoltar}
+                >
+                    {textoVoltar}
                 </Link>
             </main>
         )
@@ -87,16 +123,21 @@ export function DetalheReceitaPage() {
             <header className="cabecalho">
                 <div className="container">
                     <h1>{receita.nome}</h1>
-                    <p>{formatarEnum(receita.categoria)}</p>
+
+                    <p>
+                        {formatarEnum(
+                            receita.categoria,
+                        )}
+                    </p>
                 </div>
             </header>
 
             <main className="container pagina-detalhe">
                 <Link
                     className="link-voltar"
-                    to="/receitas"
+                    to={rotaVoltar}
                 >
-                    ← Voltar para receitas
+                    ← {textoVoltar}
                 </Link>
 
                 {receita.imagens.length > 0 && (
@@ -107,10 +148,11 @@ export function DetalheReceitaPage() {
                                     type="button"
                                     className="carrossel-receita__botao carrossel-receita__botao--anterior"
                                     onClick={() =>
-                                        setIndiceImagemAtual((indiceAtual) =>
-                                            indiceAtual === 0
-                                                ? receita.imagens.length - 1
-                                                : indiceAtual - 1,
+                                        setIndiceImagemAtual(
+                                            (indiceAtual) =>
+                                                indiceAtual === 0
+                                                    ? receita.imagens.length - 1
+                                                    : indiceAtual - 1,
                                         )
                                     }
                                     aria-label="Imagem anterior"
@@ -121,8 +163,14 @@ export function DetalheReceitaPage() {
 
                             <img
                                 className="receita-detalhe__imagem-principal"
-                                src={receita.imagens[indiceImagemAtual]}
-                                alt={`Imagem ${indiceImagemAtual + 1} da receita ${receita.nome}`}
+                                src={
+                                    receita.imagens[
+                                    indiceImagemAtual
+                                    ]
+                                }
+                                alt={`Imagem ${indiceImagemAtual + 1
+                                    } da receita ${receita.nome
+                                    }`}
                             />
 
                             {receita.imagens.length > 1 && (
@@ -130,10 +178,12 @@ export function DetalheReceitaPage() {
                                     type="button"
                                     className="carrossel-receita__botao carrossel-receita__botao--proxima"
                                     onClick={() =>
-                                        setIndiceImagemAtual((indiceAtual) =>
-                                            indiceAtual === receita.imagens.length - 1
-                                                ? 0
-                                                : indiceAtual + 1,
+                                        setIndiceImagemAtual(
+                                            (indiceAtual) =>
+                                                indiceAtual ===
+                                                    receita.imagens.length - 1
+                                                    ? 0
+                                                    : indiceAtual + 1,
                                         )
                                     }
                                     aria-label="Próxima imagem"
@@ -145,52 +195,72 @@ export function DetalheReceitaPage() {
 
                         {receita.imagens.length > 1 && (
                             <div className="carrossel-receita__miniaturas">
-                                {receita.imagens.map((imagem, indice) => (
-                                    <button
-                                        type="button"
-                                        key={imagem}
-                                        className={`carrossel-receita__miniatura-botao ${indice === indiceImagemAtual
+                                {receita.imagens.map(
+                                    (
+                                        imagem,
+                                        indice,
+                                    ) => (
+                                        <button
+                                            type="button"
+                                            key={imagem}
+                                            className={`carrossel-receita__miniatura-botao ${indice ===
+                                                indiceImagemAtual
                                                 ? 'carrossel-receita__miniatura-botao--ativa'
                                                 : ''
-                                            }`}
-                                        onClick={() =>
-                                            setIndiceImagemAtual(indice)
-                                        }
-                                    >
-                                        <img
-                                            className="carrossel-receita__miniatura"
-                                            src={imagem}
-                                            alt={`Selecionar imagem ${indice + 1}`}
-                                        />
-                                    </button>
-                                ))}
+                                                }`}
+                                            onClick={() =>
+                                                setIndiceImagemAtual(
+                                                    indice,
+                                                )
+                                            }
+                                        >
+                                            <img
+                                                className="carrossel-receita__miniatura"
+                                                src={imagem}
+                                                alt={`Selecionar imagem ${indice + 1
+                                                    }`}
+                                            />
+                                        </button>
+                                    ),
+                                )}
                             </div>
                         )}
 
                         <p className="carrossel-receita__contador">
-                            {indiceImagemAtual + 1} de {receita.imagens.length}
+                            {indiceImagemAtual + 1} de{' '}
+                            {receita.imagens.length}
                         </p>
                     </section>
                 )}
 
                 <section className="informacoes-receita">
-                    {receita.tempoPreparoMinutos !== null && (
-                        <p>
-                            <strong>Tempo de preparo:</strong>{' '}
-                            {receita.tempoPreparoMinutos} minutos
-                        </p>
-                    )}
+                    {receita.tempoPreparoMinutos !==
+                        null && (
+                            <p>
+                                <strong>
+                                    Tempo de preparo:
+                                </strong>{' '}
+                                {
+                                    receita.tempoPreparoMinutos
+                                }{' '}
+                                minutos
+                            </p>
+                        )}
 
                     {receita.rendimento && (
                         <p>
-                            <strong>Rendimento:</strong>{' '}
+                            <strong>
+                                Rendimento:
+                            </strong>{' '}
                             {receita.rendimento}
                         </p>
                     )}
 
                     {receita.dificuldade && (
                         <p>
-                            <strong>Dificuldade:</strong>{' '}
+                            <strong>
+                                Dificuldade:
+                            </strong>{' '}
                             {formatarEnum(
                                 receita.dificuldade,
                             )}
@@ -199,15 +269,23 @@ export function DetalheReceitaPage() {
 
                     {receita.origem && (
                         <p>
-                            <strong>Origem:</strong>{' '}
-                            {formatarEnum(receita.origem)}
+                            <strong>
+                                Origem:
+                            </strong>{' '}
+                            {formatarEnum(
+                                receita.origem,
+                            )}
                         </p>
                     )}
 
                     {receita.status && (
                         <p>
-                            <strong>Status:</strong>{' '}
-                            {formatarEnum(receita.status)}
+                            <strong>
+                                Status:
+                            </strong>{' '}
+                            {formatarEnum(
+                                receita.status,
+                            )}
                         </p>
                     )}
                 </section>
@@ -226,7 +304,9 @@ export function DetalheReceitaPage() {
                             <h3>Recheio</h3>
 
                             <p className="texto-preservado">
-                                {receita.ingredientesRecheio}
+                                {
+                                    receita.ingredientesRecheio
+                                }
                             </p>
                         </>
                     )}
@@ -236,7 +316,9 @@ export function DetalheReceitaPage() {
                             <h3>Cobertura</h3>
 
                             <p className="texto-preservado">
-                                {receita.ingredientesCobertura}
+                                {
+                                    receita.ingredientesCobertura
+                                }
                             </p>
                         </>
                     )}
@@ -256,7 +338,9 @@ export function DetalheReceitaPage() {
                             <h3>Recheio</h3>
 
                             <p className="texto-preservado">
-                                {receita.modoPreparoRecheio}
+                                {
+                                    receita.modoPreparoRecheio
+                                }
                             </p>
                         </>
                     )}
@@ -266,7 +350,9 @@ export function DetalheReceitaPage() {
                             <h3>Cobertura</h3>
 
                             <p className="texto-preservado">
-                                {receita.modoPreparoCobertura}
+                                {
+                                    receita.modoPreparoCobertura
+                                }
                             </p>
                         </>
                     )}
@@ -280,6 +366,17 @@ export function DetalheReceitaPage() {
                             {receita.observacoes}
                         </p>
                     </section>
+                )}
+
+                {modoAdmin && (
+                    <div className="acoes-receita-admin">
+                        <Link
+                            className="botao botao--pequeno"
+                            to={`/admin/receitas/${receita.id}/editar`}
+                        >
+                            Editar receita
+                        </Link>
+                    </div>
                 )}
             </main>
         </>

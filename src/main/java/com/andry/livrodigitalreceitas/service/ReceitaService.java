@@ -26,19 +26,28 @@ public class ReceitaService {
         return receitaRepository.findAll();
     }
 
-public List<Receita> listarPublicas() {
-    return receitaRepository.findByPrivacidadeOrderByNomeAsc(
-            PrivacidadeReceita.PUBLICA
-    );
-}
+    public List<Receita> listarPublicas() {
+        return receitaRepository.findByPrivacidadeOrderByNomeAsc(
+                PrivacidadeReceita.PUBLICA);
+    }
 
-public Receita buscarPorId(Long id) {
-    return receitaRepository.buscarPorIdComImagens(id)
-            .orElseThrow(ReceitaNaoEncontradaException::new);
-}
+    public Receita buscarPorId(Long id) {
+        return receitaRepository.buscarPorIdComImagens(id)
+                .orElseThrow(ReceitaNaoEncontradaException::new);
+    }
 
-public void excluirPorId(Long id) {
-    Receita receita = buscarPorId(id);
-    receitaRepository.delete(receita);
-}
+    public Receita buscarPublicaPorId(Long id) {
+        return receitaRepository
+                .buscarPorIdEPrivacidadeComImagens(
+                        id,
+                        PrivacidadeReceita.PUBLICA)
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Receita pública não encontrada."));
+    }
+
+    public void excluirPorId(Long id) {
+        Receita receita = buscarPorId(id);
+        receitaRepository.delete(receita);
+    }
 }

@@ -12,17 +12,26 @@ import com.andry.livrodigitalreceitas.model.enums.PrivacidadeReceita;
 
 public interface ReceitaRepository extends JpaRepository<Receita, Long> {
 
-    List<Receita> findByPrivacidadeOrderByNomeAsc(
-            PrivacidadeReceita privacidade
-    );
+        List<Receita> findByPrivacidadeOrderByNomeAsc(
+                        PrivacidadeReceita privacidade);
 
-    @Query("""
-            SELECT DISTINCT r
-            FROM Receita r
-            LEFT JOIN FETCH r.imagens
-            WHERE r.id = :id
-            """)
-    Optional<Receita> buscarPorIdComImagens(
-            @Param("id") Long id
-    );
+        @Query("""
+                        SELECT DISTINCT r
+                        FROM Receita r
+                        LEFT JOIN FETCH r.imagens
+                        WHERE r.id = :id
+                        """)
+        Optional<Receita> buscarPorIdComImagens(
+                        @Param("id") Long id);
+
+        @Query("""
+                        SELECT DISTINCT r
+                        FROM Receita r
+                        LEFT JOIN FETCH r.imagens
+                        WHERE r.id = :id
+                        AND r.privacidade = :privacidade
+                        """)
+        Optional<Receita> buscarPorIdEPrivacidadeComImagens(
+                        @Param("id") Long id,
+                        @Param("privacidade") PrivacidadeReceita privacidade);
 }

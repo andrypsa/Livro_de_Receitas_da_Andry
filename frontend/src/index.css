@@ -1091,3 +1091,15 @@ a {
   text-align: center;
   margin-top: 8px;
 }
+
+.acoes-receita-admin {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.botao--pequeno {
+    width: auto;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+}

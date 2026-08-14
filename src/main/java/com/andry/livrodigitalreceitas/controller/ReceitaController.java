@@ -42,7 +42,7 @@ public class ReceitaController {
     public ReceitaDetalheDTO buscarReceitaPorId(
             @PathVariable Long id) {
         return ReceitaDetalheDTO.de(
-                receitaService.buscarPorId(id));
+                receitaService.buscarPublicaPorId(id));
     }
 
     @PostMapping

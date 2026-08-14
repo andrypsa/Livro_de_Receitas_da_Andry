@@ -4,6 +4,7 @@ import type { Receita } from '../types/Receita'
 
 interface ReceitaCardProps {
     receita: Receita
+    modoAdmin?: boolean
 }
 
 function formatarEnum(valor: string): string {
@@ -13,7 +14,10 @@ function formatarEnum(valor: string): string {
         .replace(/\b\w/g, (letra) => letra.toUpperCase())
 }
 
-export function ReceitaCard({ receita }: ReceitaCardProps) {
+export function ReceitaCard({
+    receita,
+    modoAdmin = false,
+}: ReceitaCardProps) {
     return (
         <article className="receita-card">
             {receita.imagemUrl && (
@@ -52,7 +56,11 @@ export function ReceitaCard({ receita }: ReceitaCardProps) {
 
                 <Link
                     className="botao"
-                    to={`/receitas/${receita.id}`}
+                    to={
+                        modoAdmin
+                            ? `/admin/receitas/${receita.id}`
+                            : `/receitas/${receita.id}`
+                    }
                 >
                     Ver receita
                 </Link>
