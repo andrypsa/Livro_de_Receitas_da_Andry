@@ -45,6 +45,9 @@ export interface ReceitaDetalhe extends Receita {
     observacoes: string | null
     origem: OrigemReceita | null
     status: StatusReceita | null
+    privacidade: PrivacidadeReceita
+    favorita: boolean
+    comentariosAtivos: boolean
 }
 
 export interface CriarReceitaDados {

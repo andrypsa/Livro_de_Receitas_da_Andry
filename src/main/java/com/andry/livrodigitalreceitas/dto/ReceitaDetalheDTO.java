@@ -6,59 +6,64 @@ import com.andry.livrodigitalreceitas.model.Receita;
 import com.andry.livrodigitalreceitas.model.enums.Categoria;
 import com.andry.livrodigitalreceitas.model.enums.Dificuldade;
 import com.andry.livrodigitalreceitas.model.enums.OrigemReceita;
+import com.andry.livrodigitalreceitas.model.enums.PrivacidadeReceita;
 import com.andry.livrodigitalreceitas.model.enums.StatusReceita;
 
 public record ReceitaDetalheDTO(
-        Long id,
-        String nome,
-        Categoria categoria,
-        String ingredientes,
-        String modoPreparo,
+                Long id,
+                String nome,
+                Categoria categoria,
+                String ingredientes,
+                String modoPreparo,
 
-        String ingredientesRecheio,
-        String modoPreparoRecheio,
+                String ingredientesRecheio,
+                String modoPreparoRecheio,
 
-        String ingredientesCobertura,
-        String modoPreparoCobertura,
+                String ingredientesCobertura,
+                String modoPreparoCobertura,
 
-        String imagemUrl,
-        List<String> imagens,
+                String imagemUrl,
+                List<String> imagens,
 
-        String observacoes,
-        Integer tempoPreparoMinutos,
-        String rendimento,
-        Dificuldade dificuldade,
-        OrigemReceita origem,
-        StatusReceita status
-) {
+                String observacoes,
+                Integer tempoPreparoMinutos,
+                String rendimento,
+                Dificuldade dificuldade,
+                OrigemReceita origem,
+                StatusReceita status,
+                PrivacidadeReceita privacidade,
+                boolean favorita,
+                boolean comentariosAtivos) {
 
-    public static ReceitaDetalheDTO de(Receita receita) {
-        return new ReceitaDetalheDTO(
-                receita.getId(),
-                receita.getNome(),
-                receita.getCategoria(),
-                receita.getIngredientes(),
-                receita.getModoPreparo(),
+        public static ReceitaDetalheDTO de(Receita receita) {
+                return new ReceitaDetalheDTO(
+                                receita.getId(),
+                                receita.getNome(),
+                                receita.getCategoria(),
+                                receita.getIngredientes(),
+                                receita.getModoPreparo(),
 
-                receita.getIngredientesRecheio(),
-                receita.getModoPreparoRecheio(),
+                                receita.getIngredientesRecheio(),
+                                receita.getModoPreparoRecheio(),
 
-                receita.getIngredientesCobertura(),
-                receita.getModoPreparoCobertura(),
+                                receita.getIngredientesCobertura(),
+                                receita.getModoPreparoCobertura(),
 
-                receita.getImagemUrl(),
+                                receita.getImagemUrl(),
 
-                receita.getImagens()
-                        .stream()
-                        .map(imagem -> imagem.getUrl())
-                        .toList(),
+                                receita.getImagens()
+                                                .stream()
+                                                .map(imagem -> imagem.getUrl())
+                                                .toList(),
 
-                receita.getObservacoes(),
-                receita.getTempoPreparoMinutos(),
-                receita.getRendimento(),
-                receita.getDificuldade(),
-                receita.getOrigem(),
-                receita.getStatus()
-        );
-    }
+                                receita.getObservacoes(),
+                                receita.getTempoPreparoMinutos(),
+                                receita.getRendimento(),
+                                receita.getDificuldade(),
+                                receita.getOrigem(),
+                                receita.getStatus(),
+                                receita.getPrivacidade(),
+                                receita.isFavorita(),
+                                receita.isComentariosAtivos());
+        }
 }
