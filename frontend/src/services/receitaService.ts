@@ -221,3 +221,30 @@ export async function atualizarReceita(
 
     return resposta.json() as Promise<ReceitaDetalhe>
 }
+export async function excluirReceita(
+    id: number,
+): Promise<void> {
+    const csrfToken = await carregarCsrf()
+
+    const resposta = await fetch(
+        `/api/admin/receitas/${id}`,
+        {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'X-XSRF-TOKEN': csrfToken,
+            },
+        },
+    )
+
+    if (!resposta.ok) {
+        const erro = (await resposta
+            .json()
+            .catch(() => ({}))) as ErroApi
+
+        throw new Error(
+            erro.mensagem ??
+            `Não foi possível excluir a receita. Status: ${resposta.status}`,
+        )
+    }
+}

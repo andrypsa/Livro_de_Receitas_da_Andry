@@ -3,6 +3,7 @@ package com.andry.livrodigitalreceitas.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,6 +51,15 @@ public class AdminReceitaController {
 
         return ResponseEntity.ok(
                 ReceitaDetalheDTO.de(receita));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirReceita(
+            @PathVariable Long id) {
+
+        receitaService.excluirPorId(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

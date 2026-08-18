@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import {
+    Link,
+    useNavigate,
+    useParams,
+} from 'react-router-dom'
 
 import {
     buscarReceitaAdminPorId,
     buscarReceitaPorId,
+    excluirReceita,
 } from '../services/receitaService'
 
 import type { ReceitaDetalhe } from '../types/Receita'
@@ -22,6 +27,8 @@ function formatarEnum(valor: string): string {
 export function DetalheReceitaPage({
     modoAdmin = false,
 }: DetalheReceitaPageProps) {
+    const navigate = useNavigate()
+    
     const { id } = useParams()
 
     const receitaId = Number(id)
@@ -42,6 +49,12 @@ export function DetalheReceitaPage({
         indiceImagemAtual,
         setIndiceImagemAtual,
     ] = useState(0)
+
+    const [excluindo, setExcluindo] =
+        useState(false)
+
+    const [erroExclusao, setErroExclusao] =
+        useState('')
 
     const rotaVoltar = modoAdmin
         ? '/admin'
@@ -116,6 +129,40 @@ export function DetalheReceitaPage({
                 </Link>
             </main>
         )
+    }
+
+    async function confirmarExclusao() {
+        if (!receita) {
+            return
+        }
+
+        const confirmou = window.confirm(
+            `Tem certeza que deseja excluir a receita "${receita.nome}"?`,
+        )
+
+        if (!confirmou) {
+            return
+        }
+
+        setErroExclusao('')
+        setExcluindo(true)
+
+        try {
+            await excluirReceita(receita.id)
+
+            navigate('/admin', {
+                replace: true,
+            })
+        } catch (erroRecebido) {
+            const mensagem =
+                erroRecebido instanceof Error
+                    ? erroRecebido.message
+                    : 'Não foi possível excluir a receita.'
+
+            setErroExclusao(mensagem)
+        } finally {
+            setExcluindo(false)
+        }
     }
 
     return (
@@ -369,14 +416,33 @@ export function DetalheReceitaPage({
                 )}
 
                 {modoAdmin && (
-                    <div className="acoes-receita-admin">
-                        <Link
-                            className="botao botao--pequeno"
-                            to={`/admin/receitas/${receita.id}/editar`}
-                        >
-                            Editar receita
-                        </Link>
-                    </div>
+                    <>
+                        {erroExclusao && (
+                            <p className="mensagem-erro">
+                                {erroExclusao}
+                            </p>
+                        )}
+
+                        <div className="acoes-receita-admin">
+                            <Link
+                                className="botao botao--pequeno"
+                                to={`/admin/receitas/${receita.id}/editar`}
+                            >
+                                Editar receita
+                            </Link>
+
+                            <button
+                                className="botao botao--pequeno"
+                                type="button"
+                                onClick={confirmarExclusao}
+                                disabled={excluindo}
+                            >
+                                {excluindo
+                                    ? 'Excluindo...'
+                                    : 'Excluir receita'}
+                            </button>
+                        </div>
+                    </>
                 )}
             </main>
         </>
