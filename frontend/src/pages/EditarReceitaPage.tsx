@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import type { ChangeEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import {
     atualizarReceita,
     buscarReceitaAdminPorId,
+    enviarImagemReceita,
 } from '../services/receitaService'
 import type {
     Categoria,
@@ -80,6 +82,15 @@ function FormularioEdicao({
         receita.modoPreparoCobertura ?? '',
     )
 
+    const [imagensExistentes, setImagensExistentes] =
+        useState<string[]>(receita.imagens)
+
+    const [arquivosImagem, setArquivosImagem] =
+        useState<File[]>([])
+
+    const [previewsImagem, setPreviewsImagem] =
+        useState<string[]>([])
+
     const [
         tempoPreparoMinutos,
         setTempoPreparoMinutos,
@@ -136,6 +147,20 @@ function FormularioEdicao({
         setSalvando(true)
 
         try {
+            const novasImagensUrls: string[] = []
+
+            for (const arquivo of arquivosImagem) {
+                const imagemUrl =
+                    await enviarImagemReceita(arquivo)
+
+                novasImagensUrls.push(imagemUrl)
+            }
+
+            const imagensUrls = [
+                ...imagensExistentes,
+                ...novasImagensUrls,
+            ]
+
             await atualizarReceita(receita.id, {
                 nome,
                 categoria,
@@ -166,7 +191,7 @@ function FormularioEdicao({
                         ? modoPreparoCobertura.trim()
                         : null,
 
-                imagensUrls: receita.imagens,
+                imagensUrls,
 
                 observacoes:
                     observacoes.trim() || null,
@@ -399,6 +424,88 @@ function FormularioEdicao({
                     </>
                 )}
             </fieldset>
+
+            <label className="login-adm-campo">
+                <span>Fotos da receita</span>
+
+                <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple
+                    onChange={(evento: ChangeEvent<HTMLInputElement>) => {
+                        const arquivos = Array.from(
+                            evento.target.files ?? [],
+                        )
+
+                        setArquivosImagem(arquivos)
+
+                        setPreviewsImagem(
+                            arquivos.map((arquivo) =>
+                                URL.createObjectURL(arquivo),
+                            ),
+                        )
+                    }}
+                />
+            </label>
+
+            {imagensExistentes.length > 0 && (
+                <div className="galeria-preview-receita">
+                    {imagensExistentes.map((imagem, indice) => (
+                        <div
+                            className="item-preview-receita"
+                            key={imagem}
+                        >
+                            <img
+                                src={imagem}
+                                alt={`Foto atual ${indice + 1}`}
+                            />
+
+                            <button
+                                className="botao-remover-imagem"
+                                type="button"
+                                onClick={() =>
+                                    setImagensExistentes(
+                                        (imagensAtuais) =>
+                                            imagensAtuais.filter(
+                                                (_, indiceAtual) =>
+                                                    indiceAtual !== indice,
+                                            ),
+                                    )
+                                }
+                            >
+                                ×
+                            </button>
+
+                            {indice === 0 && (
+                                <span className="imagem-principal-aviso">
+                                    Foto principal
+                                </span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {previewsImagem.length > 0 && (
+                <div className="galeria-preview-receita">
+                    {previewsImagem.map((preview, indice) => (
+                        <div
+                            className="item-preview-receita"
+                            key={preview}
+                        >
+                            <img
+                                src={preview}
+                                alt={`Nova foto ${indice + 1} `}
+                            />
+
+                            <span>
+                                Nova foto
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            )}
+
             <label className="login-adm-campo">
                 <span>
                     Tempo de preparo em minutos
@@ -718,7 +825,7 @@ export function EditarReceitaPage() {
             <section className="receitas-painel">
                 <Link
                     className="link-voltar"
-                    to={`/admin/receitas/${receita.id}`}
+                    to={`/ admin / receitas / ${receita.id} `}
                 >
                     ← Voltar para receita
                 </Link>
