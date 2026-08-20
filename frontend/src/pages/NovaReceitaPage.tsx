@@ -35,6 +35,7 @@ interface RascunhoReceita {
     modoPreparoCobertura: string
 
     observacoes: string
+    tempoPreparoHoras: string
     tempoPreparoMinutos: string
     rendimento: string
 
@@ -140,6 +141,11 @@ export function NovaReceitaPage() {
             rascunhoInicial?.observacoes ?? '',
         )
 
+    const [tempoPreparoHoras, setTempoPreparoHoras] =
+        useState(
+            rascunhoInicial?.tempoPreparoHoras ?? '',
+        )
+
     const [
         tempoPreparoMinutos,
         setTempoPreparoMinutos,
@@ -195,6 +201,7 @@ export function NovaReceitaPage() {
      * Salva automaticamente o rascunho
      * sempre que algum campo for alterado.
      */
+
     useEffect(() => {
         const rascunho: RascunhoReceita = {
             nome,
@@ -211,6 +218,7 @@ export function NovaReceitaPage() {
             modoPreparoCobertura,
 
             observacoes,
+            tempoPreparoHoras,
             tempoPreparoMinutos,
             rendimento,
 
@@ -242,6 +250,7 @@ export function NovaReceitaPage() {
         modoPreparoCobertura,
 
         observacoes,
+        tempoPreparoHoras,
         tempoPreparoMinutos,
         rendimento,
 
@@ -404,11 +413,11 @@ export function NovaReceitaPage() {
                     observacoes.trim() || null,
 
                 tempoPreparoMinutos:
-                    tempoPreparoMinutos === ''
+                    tempoPreparoHoras === '' &&
+                        tempoPreparoMinutos === ''
                         ? null
-                        : Number(
-                            tempoPreparoMinutos,
-                        ),
+                        : Number(tempoPreparoHoras || 0) * 60 +
+                        Number(tempoPreparoMinutos || 0),
 
                 rendimento:
                     rendimento.trim() || null,
@@ -596,8 +605,7 @@ export function NovaReceitaPage() {
 
                                 <label className="login-adm-campo">
                                     <span>
-                                        Modo de preparo do
-                                        recheio
+                                        Modo de preparo do recheio
                                     </span>
 
                                     <textarea
@@ -644,8 +652,7 @@ export function NovaReceitaPage() {
                             <>
                                 <label className="login-adm-campo">
                                     <span>
-                                        Ingredientes da
-                                        cobertura
+                                        Ingredientes da cobertura
                                     </span>
 
                                     <textarea
@@ -668,8 +675,7 @@ export function NovaReceitaPage() {
 
                                 <label className="login-adm-campo">
                                     <span>
-                                        Modo de preparo da
-                                        cobertura
+                                        Modo de preparo da cobertura
                                     </span>
 
                                     <textarea
@@ -745,8 +751,7 @@ export function NovaReceitaPage() {
                                         {indice ===
                                             0 && (
                                                 <span className="imagem-principal-aviso">
-                                                    Foto
-                                                    principal
+                                                    Foto principal
                                                 </span>
                                             )}
                                     </div>
@@ -755,24 +760,40 @@ export function NovaReceitaPage() {
                         </div>
                     )}
 
-                    <label className="login-adm-campo">
-                        <span>
-                            Tempo de preparo em minutos
-                        </span>
+                    <fieldset className="secao-opcional-receita">
+                        <legend>Tempo de preparo</legend>
 
-                        <input
-                            type="number"
-                            min="0"
-                            value={
-                                tempoPreparoMinutos
-                            }
-                            onChange={(evento) =>
-                                setTempoPreparoMinutos(
-                                    evento.target.value,
-                                )
-                            }
-                        />
-                    </label>
+                        <label className="login-adm-campo">
+                            <span>Horas</span>
+
+                            <input
+                                type="number"
+                                min="0"
+                                value={tempoPreparoHoras}
+                                onChange={(evento) =>
+                                    setTempoPreparoHoras(
+                                        evento.target.value,
+                                    )
+                                }
+                            />
+                        </label>
+
+                        <label className="login-adm-campo">
+                            <span>Minutos</span>
+
+                            <input
+                                type="number"
+                                min="0"
+                                max="59"
+                                value={tempoPreparoMinutos}
+                                onChange={(evento) =>
+                                    setTempoPreparoMinutos(
+                                        evento.target.value,
+                                    )
+                                }
+                            />
+                        </label>
+                    </fieldset>
 
                     <label className="login-adm-campo">
                         <span>Rendimento</span>

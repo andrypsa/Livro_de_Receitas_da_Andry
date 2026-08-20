@@ -24,11 +24,28 @@ function formatarEnum(valor: string): string {
         .replace(/\b\w/g, (letra) => letra.toUpperCase())
 }
 
+function formatarTempoPreparo(
+    totalMinutos: number,
+): string {
+    const horas = Math.floor(totalMinutos / 60)
+    const minutos = totalMinutos % 60
+
+    if (horas === 0) {
+        return `${minutos} min`
+    }
+
+    if (minutos === 0) {
+        return `${horas}h`
+    }
+
+    return `${horas}h ${minutos}min`
+}
+
 export function DetalheReceitaPage({
     modoAdmin = false,
 }: DetalheReceitaPageProps) {
     const navigate = useNavigate()
-    
+
     const { id } = useParams()
 
     const receitaId = Number(id)
@@ -251,9 +268,9 @@ export function DetalheReceitaPage({
                                             type="button"
                                             key={imagem}
                                             className={`carrossel-receita__miniatura-botao ${indice ===
-                                                indiceImagemAtual
-                                                ? 'carrossel-receita__miniatura-botao--ativa'
-                                                : ''
+                                                    indiceImagemAtual
+                                                    ? 'carrossel-receita__miniatura-botao--ativa'
+                                                    : ''
                                                 }`}
                                             onClick={() =>
                                                 setIndiceImagemAtual(
@@ -287,10 +304,9 @@ export function DetalheReceitaPage({
                                 <strong>
                                     Tempo de preparo:
                                 </strong>{' '}
-                                {
-                                    receita.tempoPreparoMinutos
-                                }{' '}
-                                minutos
+                                {formatarTempoPreparo(
+                                    receita.tempoPreparoMinutos,
+                                )}
                             </p>
                         )}
 
