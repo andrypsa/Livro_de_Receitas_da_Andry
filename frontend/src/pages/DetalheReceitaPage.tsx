@@ -268,9 +268,9 @@ export function DetalheReceitaPage({
                                             type="button"
                                             key={imagem}
                                             className={`carrossel-receita__miniatura-botao ${indice ===
-                                                    indiceImagemAtual
-                                                    ? 'carrossel-receita__miniatura-botao--ativa'
-                                                    : ''
+                                                indiceImagemAtual
+                                                ? 'carrossel-receita__miniatura-botao--ativa'
+                                                : ''
                                                 }`}
                                             onClick={() =>
                                                 setIndiceImagemAtual(
@@ -351,6 +351,38 @@ export function DetalheReceitaPage({
                             )}
                         </p>
                     )}
+
+                    {modoAdmin && (
+                        <>
+                            <p>
+                                <strong>
+                                    Privacidade:
+                                </strong>{' '}
+                                {receita.privacidade === 'PUBLICA'
+                                    ? 'Pública'
+                                    : 'Privada'}
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Favorita:
+                                </strong>{' '}
+                                {receita.favorita
+                                    ? 'Sim'
+                                    : 'Não'}
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Comentários:
+                                </strong>{' '}
+                                {receita.comentariosAtivos
+                                    ? 'Ativos'
+                                    : 'Desativados'}
+                            </p>
+                        </>
+                    )}
+
                 </section>
 
                 <section className="bloco-receita">
