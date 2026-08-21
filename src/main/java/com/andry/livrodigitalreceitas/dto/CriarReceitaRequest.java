@@ -13,41 +13,42 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
+// Representa os dados recebidos pelo backend para criar uma nova receita
 public record CriarReceitaRequest(
 
-        @NotBlank(message = "O nome da receita é obrigatório.") @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres.") String nome,
+                @NotBlank(message = "O nome da receita é obrigatório.") @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres.") String nome,
 
-        @NotNull(message = "A categoria é obrigatória.") Categoria categoria,
+                @NotNull(message = "A categoria é obrigatória.") Categoria categoria,
 
-        @NotBlank(message = "Os ingredientes são obrigatórios.") String ingredientes,
+                @NotBlank(message = "Os ingredientes são obrigatórios.") String ingredientes,
 
-        @NotBlank(message = "O modo de preparo é obrigatório.") String modoPreparo,
+                @NotBlank(message = "O modo de preparo é obrigatório.") String modoPreparo,
 
-        String ingredientesRecheio,
+                String ingredientesRecheio,
 
-        String modoPreparoRecheio,
+                String modoPreparoRecheio,
 
-        String ingredientesCobertura,
+                String ingredientesCobertura,
 
-        String modoPreparoCobertura,
+                String modoPreparoCobertura,
 
-        List<String> imagensUrls,
+                List<String> imagensUrls,
 
-        String observacoes,
+                String observacoes,
 
-        @PositiveOrZero(message = "O tempo de preparo não pode ser negativo.") Integer tempoPreparoMinutos,
+                @PositiveOrZero(message = "O tempo de preparo não pode ser negativo.") Integer tempoPreparoMinutos,
 
-        @Size(max = 100, message = "O rendimento deve ter no máximo 100 caracteres.") String rendimento,
+                @Size(max = 100, message = "O rendimento deve ter no máximo 100 caracteres.") String rendimento,
 
-        Dificuldade dificuldade,
+                Dificuldade dificuldade,
 
-        OrigemReceita origem,
+                OrigemReceita origem,
 
-        StatusReceita status,
+                StatusReceita status,
 
-        PrivacidadeReceita privacidade,
+                PrivacidadeReceita privacidade,
 
-        boolean favorita,
+                boolean favorita,
 
-        boolean comentariosAtivos) {
+                boolean comentariosAtivos) {
 }

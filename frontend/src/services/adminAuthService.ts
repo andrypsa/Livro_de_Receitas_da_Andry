@@ -34,6 +34,7 @@ interface ErroApi {
     campos?: Record<string, string>
 }
 
+// Extrai a mensagem de erro retornada pela API e prioriza erros de validação de campos
 async function obterMensagemErro(
     resposta: Response,
     mensagemPadrao: string,
@@ -46,9 +47,12 @@ async function obterMensagemErro(
         ? Object.values(erro.campos)[0]
         : undefined
 
-    return primeiroErroDeCampo ?? erro.mensagem ?? mensagemPadrao
+    return primeiroErroDeCampo ??
+        erro.mensagem ??
+        mensagemPadrao
 }
 
+// Cria o primeiro administrador do sistema
 export async function criarPrimeiroAdministrador(
     dados: CriarPrimeiroAdministradorDados,
 ): Promise<AdministradorCriadoResposta> {
@@ -76,6 +80,7 @@ export async function criarPrimeiroAdministrador(
     return resposta.json() as Promise<AdministradorCriadoResposta>
 }
 
+// Realiza o login do administrador
 export async function loginAdministrador(
     dados: LoginAdministradorDados,
 ): Promise<LoginAdministradorResposta> {
@@ -100,6 +105,7 @@ export async function loginAdministrador(
     return resposta.json() as Promise<LoginAdministradorResposta>
 }
 
+// Consulta se existe uma sessão administrativa autenticada
 export async function consultarSessaoAdministrador():
     Promise<SessaoAdministradorResposta> {
     const resposta = await fetch('/api/auth/admin/sessao', {
@@ -108,12 +114,15 @@ export async function consultarSessaoAdministrador():
     })
 
     if (!resposta.ok) {
-        throw new Error('Sessão administrativa não encontrada.')
+        throw new Error(
+            'Sessão administrativa não encontrada.',
+        )
     }
 
     return resposta.json() as Promise<SessaoAdministradorResposta>
 }
 
+// Encerra a sessão administrativa atual
 export async function logoutAdministrador():
     Promise<MensagemResposta> {
     const resposta = await fetch('/api/auth/admin/logout', {
@@ -122,12 +131,15 @@ export async function logoutAdministrador():
     })
 
     if (!resposta.ok) {
-        throw new Error('Não foi possível encerrar a sessão.')
+        throw new Error(
+            'Não foi possível encerrar a sessão.',
+        )
     }
 
     return resposta.json() as Promise<MensagemResposta>
 }
 
+// Prepara o token CSRF usado pelas requisições protegidas
 export async function carregarCsrf(): Promise<void> {
     const resposta = await fetch('/api/auth/admin/csrf', {
         method: 'GET',
@@ -135,6 +147,8 @@ export async function carregarCsrf(): Promise<void> {
     })
 
     if (!resposta.ok) {
-        throw new Error('Não foi possível preparar a sessão segura.')
+        throw new Error(
+            'Não foi possível preparar a sessão segura.',
+        )
     }
 }

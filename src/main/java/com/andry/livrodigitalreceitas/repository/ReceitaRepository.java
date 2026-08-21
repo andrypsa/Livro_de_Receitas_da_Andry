@@ -10,11 +10,14 @@ import org.springframework.data.repository.query.Param;
 import com.andry.livrodigitalreceitas.model.Receita;
 import com.andry.livrodigitalreceitas.model.enums.PrivacidadeReceita;
 
-public interface ReceitaRepository extends JpaRepository<Receita, Long> {
+public interface ReceitaRepository
+                extends JpaRepository<Receita, Long> {
 
+        // Lista receitas por privacidade em ordem alfabética
         List<Receita> findByPrivacidadeOrderByNomeAsc(
                         PrivacidadeReceita privacidade);
 
+        // Busca uma receita pelo ID carregando também suas imagens
         @Query("""
                         SELECT DISTINCT r
                         FROM Receita r
@@ -24,6 +27,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long> {
         Optional<Receita> buscarPorIdComImagens(
                         @Param("id") Long id);
 
+        // Busca uma receita pelo ID e privacidade carregando também suas imagens
         @Query("""
                         SELECT DISTINCT r
                         FROM Receita r

@@ -1,13 +1,14 @@
 package com.andry.livrodigitalreceitas.controller;
 
 import java.net.URI;
-import org.springframework.security.web.csrf.CsrfToken;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,11 +42,13 @@ public class AdministradorController {
                 this.securityContextRepository = securityContextRepository;
         }
 
+        // Cria o primeiro administrador do sistema
         @PostMapping("/primeiro-acesso")
         public ResponseEntity<AdministradorCriadoResponse> criarPrimeiroAdministrador(
                         @Valid @RequestBody CriarPrimeiroAdministradorRequest dados) {
 
-                Administrador administrador = administradorService.criarPrimeiroAdministrador(dados);
+                Administrador administrador = administradorService.criarPrimeiroAdministrador(
+                                dados);
 
                 AdministradorCriadoResponse resposta = new AdministradorCriadoResponse(
                                 administrador.getId(),
@@ -53,25 +56,33 @@ public class AdministradorController {
                                 administrador.getEmail());
 
                 URI localizacao = URI.create(
-                                "/api/administradores/" + administrador.getId());
+                                "/api/administradores/" +
+                                                administrador.getId());
 
                 return ResponseEntity
                                 .created(localizacao)
                                 .body(resposta);
         }
 
+        // Autentica o administrador e salva o contexto de segurança na sessão
         @PostMapping("/login")
         public ResponseEntity<LoginAdministradorResponse> login(
                         @Valid @RequestBody LoginAdministradorRequest dados,
                         HttpServletRequest request,
                         HttpServletResponse response) {
-                Authentication tentativa = UsernamePasswordAuthenticationToken.unauthenticated(
-                                dados.email().trim().toLowerCase(),
-                                dados.senha());
 
-                Authentication autenticacao = authenticationManager.authenticate(tentativa);
+                Authentication tentativa = UsernamePasswordAuthenticationToken
+                                .unauthenticated(
+                                                dados.email()
+                                                                .trim()
+                                                                .toLowerCase(),
+                                                dados.senha());
+
+                Authentication autenticacao = authenticationManager.authenticate(
+                                tentativa);
 
                 var contexto = SecurityContextHolder.createEmptyContext();
+
                 contexto.setAuthentication(autenticacao);
 
                 SecurityContextHolder.setContext(contexto);
@@ -88,9 +99,11 @@ public class AdministradorController {
                 return ResponseEntity.ok(resposta);
         }
 
+        // Consulta se existe uma sessão administrativa autenticada
         @GetMapping("/sessao")
         public ResponseEntity<SessaoAdministradorResponse> consultarSessao(
                         Authentication autenticacao) {
+
                 SessaoAdministradorResponse resposta = new SessaoAdministradorResponse(
                                 true,
                                 autenticacao.getName());
@@ -98,9 +111,11 @@ public class AdministradorController {
                 return ResponseEntity.ok(resposta);
         }
 
+        // Encerra a sessão do administrador e limpa o contexto de segurança
         @PostMapping("/logout")
         public ResponseEntity<MensagemResponse> logout(
                         HttpServletRequest request) {
+
                 HttpSession sessao = request.getSession(false);
 
                 if (sessao != null) {
@@ -114,11 +129,16 @@ public class AdministradorController {
                                                 "Logout realizado com sucesso."));
         }
 
+        // Disponibiliza o token CSRF usado nas requisições protegidas
         @GetMapping("/csrf")
-        public ResponseEntity<Void> csrf(CsrfToken csrfToken) {
+        public ResponseEntity<Void> csrf(
+                        CsrfToken csrfToken) {
+
                 csrfToken.getToken();
 
-                return ResponseEntity.noContent().build();
+                return ResponseEntity
+                                .noContent()
+                                .build();
         }
 
         private record AdministradorCriadoResponse(

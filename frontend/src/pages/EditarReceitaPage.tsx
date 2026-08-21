@@ -7,6 +7,7 @@ import {
     buscarReceitaAdminPorId,
     enviarImagemReceita,
 } from '../services/receitaService'
+
 import type {
     Categoria,
     Dificuldade,
@@ -20,12 +21,13 @@ interface FormularioEdicaoProps {
     receita: ReceitaDetalhe
 }
 
+// Controla o formulário responsável pela edição dos dados de uma receita
 function FormularioEdicao({
     receita,
 }: FormularioEdicaoProps) {
-
     const navigate = useNavigate()
 
+    // Estados dos dados principais da receita
     const [nome, setNome] =
         useState(receita.nome)
 
@@ -38,6 +40,7 @@ function FormularioEdicao({
     const [modoPreparo, setModoPreparo] =
         useState(receita.modoPreparo)
 
+    // Estados da seção opcional de recheio
     const [temRecheio, setTemRecheio] =
         useState(
             Boolean(
@@ -60,6 +63,7 @@ function FormularioEdicao({
         receita.modoPreparoRecheio ?? '',
     )
 
+    // Estados da seção opcional de cobertura
     const [temCobertura, setTemCobertura] =
         useState(
             Boolean(
@@ -82,6 +86,7 @@ function FormularioEdicao({
         receita.modoPreparoCobertura ?? '',
     )
 
+    // Controla imagens existentes, novos arquivos e previews
     const [imagensExistentes, setImagensExistentes] =
         useState<string[]>(receita.imagens)
 
@@ -91,11 +96,25 @@ function FormularioEdicao({
     const [previewsImagem, setPreviewsImagem] =
         useState<string[]>([])
 
+    // Converte o tempo armazenado em minutos para horas e minutos no formulário
+    const [tempoPreparoHoras, setTempoPreparoHoras] =
+        useState(
+            receita.tempoPreparoMinutos !== null
+                ? Math.floor(
+                    receita.tempoPreparoMinutos / 60,
+                ).toString()
+                : '',
+        )
+
     const [
         tempoPreparoMinutos,
         setTempoPreparoMinutos,
     ] = useState(
-        receita.tempoPreparoMinutos?.toString() ?? '',
+        receita.tempoPreparoMinutos !== null
+            ? (
+                receita.tempoPreparoMinutos % 60
+            ).toString()
+            : '',
     )
 
     const [rendimento, setRendimento] =
@@ -138,6 +157,7 @@ function FormularioEdicao({
     const [salvando, setSalvando] =
         useState(false)
 
+    // Envia novas imagens, reúne os dados do formulário e atualiza a receita
     async function salvarAlteracoes(
         evento: React.FormEvent<HTMLFormElement>,
     ) {
@@ -197,9 +217,11 @@ function FormularioEdicao({
                     observacoes.trim() || null,
 
                 tempoPreparoMinutos:
-                    tempoPreparoMinutos === ''
+                    tempoPreparoHoras === '' &&
+                        tempoPreparoMinutos === ''
                         ? null
-                        : Number(tempoPreparoMinutos),
+                        : Number(tempoPreparoHoras || 0) * 60 +
+                        Number(tempoPreparoMinutos || 0),
 
                 rendimento:
                     rendimento.trim() || null,
@@ -233,6 +255,7 @@ function FormularioEdicao({
             setSalvando(false)
         }
     }
+
     return (
         <form
             className="login-adm-formulario"
@@ -245,14 +268,13 @@ function FormularioEdicao({
                     type="text"
                     value={nome}
                     onChange={(evento) =>
-                        setNome(
-                            evento.target.value,
-                        )
+                        setNome(evento.target.value)
                     }
                     maxLength={150}
                     required
                 />
             </label>
+
             <label className="login-adm-campo">
                 <span>Categoria</span>
 
@@ -311,6 +333,8 @@ function FormularioEdicao({
                     required
                 />
             </label>
+
+            {/* Campos opcionais de recheio */}
             <fieldset className="secao-opcional-receita">
                 <legend>Recheio</legend>
 
@@ -368,6 +392,7 @@ function FormularioEdicao({
                 )}
             </fieldset>
 
+            {/* Campos opcionais de cobertura */}
             <fieldset className="secao-opcional-receita">
                 <legend>Cobertura</legend>
 
@@ -425,6 +450,7 @@ function FormularioEdicao({
                 )}
             </fieldset>
 
+            {/* Gerenciamento das imagens atuais e novas imagens */}
             <label className="login-adm-campo">
                 <span>Fotos da receita</span>
 
@@ -432,7 +458,9 @@ function FormularioEdicao({
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
                     multiple
-                    onChange={(evento: ChangeEvent<HTMLInputElement>) => {
+                    onChange={(
+                        evento: ChangeEvent<HTMLInputElement>,
+                    ) => {
                         const arquivos = Array.from(
                             evento.target.files ?? [],
                         )
@@ -450,78 +478,102 @@ function FormularioEdicao({
 
             {imagensExistentes.length > 0 && (
                 <div className="galeria-preview-receita">
-                    {imagensExistentes.map((imagem, indice) => (
-                        <div
-                            className="item-preview-receita"
-                            key={imagem}
-                        >
-                            <img
-                                src={imagem}
-                                alt={`Foto atual ${indice + 1}`}
-                            />
-
-                            <button
-                                className="botao-remover-imagem"
-                                type="button"
-                                onClick={() =>
-                                    setImagensExistentes(
-                                        (imagensAtuais) =>
-                                            imagensAtuais.filter(
-                                                (_, indiceAtual) =>
-                                                    indiceAtual !== indice,
-                                            ),
-                                    )
-                                }
+                    {imagensExistentes.map(
+                        (imagem, indice) => (
+                            <div
+                                className="item-preview-receita"
+                                key={imagem}
                             >
-                                ×
-                            </button>
+                                <img
+                                    src={imagem}
+                                    alt={`Foto atual ${indice + 1}`}
+                                />
 
-                            {indice === 0 && (
-                                <span className="imagem-principal-aviso">
-                                    Foto principal
-                                </span>
-                            )}
-                        </div>
-                    ))}
+                                <button
+                                    className="botao-remover-imagem"
+                                    type="button"
+                                    onClick={() =>
+                                        setImagensExistentes(
+                                            (imagensAtuais) =>
+                                                imagensAtuais.filter(
+                                                    (_, indiceAtual) =>
+                                                        indiceAtual !==
+                                                        indice,
+                                                ),
+                                        )
+                                    }
+                                >
+                                    ×
+                                </button>
+
+                                {indice === 0 && (
+                                    <span className="imagem-principal-aviso">
+                                        Foto principal
+                                    </span>
+                                )}
+                            </div>
+                        ),
+                    )}
                 </div>
             )}
 
             {previewsImagem.length > 0 && (
                 <div className="galeria-preview-receita">
-                    {previewsImagem.map((preview, indice) => (
-                        <div
-                            className="item-preview-receita"
-                            key={preview}
-                        >
-                            <img
-                                src={preview}
-                                alt={`Nova foto ${indice + 1} `}
-                            />
+                    {previewsImagem.map(
+                        (preview, indice) => (
+                            <div
+                                className="item-preview-receita"
+                                key={preview}
+                            >
+                                <img
+                                    src={preview}
+                                    alt={`Nova foto ${indice + 1}`}
+                                />
 
-                            <span>
-                                Nova foto
-                            </span>
-                        </div>
-                    ))}
+                                <span>
+                                    Nova foto
+                                </span>
+                            </div>
+                        ),
+                    )}
                 </div>
             )}
 
-            <label className="login-adm-campo">
-                <span>
-                    Tempo de preparo em minutos
-                </span>
+            {/* Tempo de preparo separado em horas e minutos */}
+            <fieldset className="secao-opcional-receita">
+                <legend>Tempo de preparo</legend>
 
-                <input
-                    type="number"
-                    min="0"
-                    value={tempoPreparoMinutos}
-                    onChange={(evento) =>
-                        setTempoPreparoMinutos(
-                            evento.target.value,
-                        )
-                    }
-                />
-            </label>
+                <label className="login-adm-campo">
+                    <span>Horas</span>
+
+                    <input
+                        type="number"
+                        min="0"
+                        value={tempoPreparoHoras}
+                        onChange={(evento) =>
+                            setTempoPreparoHoras(
+                                evento.target.value,
+                            )
+                        }
+                    />
+                </label>
+
+                <label className="login-adm-campo">
+                    <span>Minutos</span>
+
+                    <input
+                        type="number"
+                        min="0"
+                        max="59"
+                        value={tempoPreparoMinutos}
+                        onChange={(evento) =>
+                            setTempoPreparoMinutos(
+                                evento.target.value,
+                            )
+                        }
+                    />
+                </label>
+            </fieldset>
 
             <label className="login-adm-campo">
                 <span>Rendimento</span>
@@ -586,37 +638,16 @@ function FormularioEdicao({
                         Não informada
                     </option>
 
-                    <option value="AUTORAL">
-                        Autoral
-                    </option>
-
-                    <option value="YOUTUBE">
-                        YouTube
-                    </option>
-
-                    <option value="TIKTOK">
-                        TikTok
-                    </option>
-
-                    <option value="INSTAGRAM">
-                        Instagram
-                    </option>
-
-                    <option value="FACEBOOK">
-                        Facebook
-                    </option>
-
-                    <option value="SITE">
-                        Site
-                    </option>
-
+                    <option value="AUTORAL">Autoral</option>
+                    <option value="YOUTUBE">YouTube</option>
+                    <option value="TIKTOK">TikTok</option>
+                    <option value="INSTAGRAM">Instagram</option>
+                    <option value="FACEBOOK">Facebook</option>
+                    <option value="SITE">Site</option>
                     <option value="LIVRO_DE_RECEITAS">
                         Livro de receitas
                     </option>
-
-                    <option value="OUTROS">
-                        Outros
-                    </option>
+                    <option value="OUTROS">Outros</option>
                 </select>
             </label>
 
@@ -627,8 +658,7 @@ function FormularioEdicao({
                     value={status}
                     onChange={(evento) =>
                         setStatus(
-                            evento.target
-                                .value as StatusReceita,
+                            evento.target.value as StatusReceita,
                         )
                     }
                 >
@@ -657,8 +687,7 @@ function FormularioEdicao({
                     value={privacidade}
                     onChange={(evento) =>
                         setPrivacidade(
-                            evento.target
-                                .value as PrivacidadeReceita,
+                            evento.target.value as PrivacidadeReceita,
                         )
                     }
                 >
@@ -671,6 +700,7 @@ function FormularioEdicao({
                     </option>
                 </select>
             </label>
+
             <label className="login-adm-campo">
                 <span>Observações</span>
 
@@ -714,6 +744,7 @@ function FormularioEdicao({
                 {' '}
                 Permitir comentários
             </label>
+
             {erroSalvar && (
                 <p className="mensagem-login mensagem-login--erro">
                     {erroSalvar}
@@ -750,6 +781,7 @@ export function EditarReceitaPage() {
     const [erro, setErro] =
         useState('')
 
+    // Carrega os dados atuais da receita antes de exibir o formulário
     useEffect(() => {
         if (!idValido) {
             return
@@ -769,6 +801,7 @@ export function EditarReceitaPage() {
             })
     }, [idValido, receitaId])
 
+    // Trata os estados de ID inválido, carregamento e erro
     if (!idValido) {
         return (
             <main className="pagina-receitas">
@@ -825,7 +858,7 @@ export function EditarReceitaPage() {
             <section className="receitas-painel">
                 <Link
                     className="link-voltar"
-                    to={`/ admin / receitas / ${receita.id} `}
+                    to={`/admin/receitas/${receita.id}`}
                 >
                     ← Voltar para receita
                 </Link>

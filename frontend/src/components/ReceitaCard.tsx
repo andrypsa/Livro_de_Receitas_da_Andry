@@ -7,6 +7,7 @@ interface ReceitaCardProps {
     modoAdmin?: boolean
 }
 
+// Formata valores de enum para exibição na interface
 function formatarEnum(valor: string): string {
     return valor
         .toLowerCase()
@@ -14,6 +15,23 @@ function formatarEnum(valor: string): string {
         .replace(/\b\w/g, (letra) => letra.toUpperCase())
 }
 
+// Converte o tempo total em minutos para horas e minutos
+function formatarTempoPreparo(totalMinutos: number): string {
+    const horas = Math.floor(totalMinutos / 60)
+    const minutos = totalMinutos % 60
+
+    if (horas === 0) {
+        return `${minutos} min`
+    }
+
+    if (minutos === 0) {
+        return `${horas}h`
+    }
+
+    return `${horas}h ${minutos}min`
+}
+
+// Exibe o resumo da receita nas listagens pública e administrativa
 export function ReceitaCard({
     receita,
     modoAdmin = false,
@@ -32,18 +50,23 @@ export function ReceitaCard({
                 <h2>{receita.nome}</h2>
 
                 <p>
-                    <strong>Categoria:</strong> {formatarEnum(receita.categoria)}
+                    <strong>Categoria:</strong>{' '}
+                    {formatarEnum(receita.categoria)}
                 </p>
 
                 {receita.tempoPreparoMinutos !== null && (
                     <p>
-                        <strong>Tempo:</strong> {receita.tempoPreparoMinutos} minutos
+                        <strong>Tempo:</strong>{' '}
+                        {formatarTempoPreparo(
+                            receita.tempoPreparoMinutos,
+                        )}
                     </p>
                 )}
 
                 {receita.rendimento && (
                     <p>
-                        <strong>Rendimento:</strong> {receita.rendimento}
+                        <strong>Rendimento:</strong>{' '}
+                        {receita.rendimento}
                     </p>
                 )}
 

@@ -23,6 +23,7 @@ public class ImagemReceitaService {
 
     private static final long TAMANHO_MAXIMO = 5L * 1024L * 1024L;
 
+    // Valida a imagem recebida e salva o arquivo na pasta de uploads
     public String salvar(MultipartFile arquivo) {
 
         if (arquivo == null || arquivo.isEmpty()) {
@@ -49,7 +50,8 @@ public class ImagemReceitaService {
         String nomeArquivo = UUID.randomUUID() + extensao;
 
         try {
-            Files.createDirectories(PASTA_UPLOADS);
+            Files.createDirectories(
+                    PASTA_UPLOADS);
 
             Path destino = PASTA_UPLOADS
                     .resolve(nomeArquivo)
@@ -60,7 +62,8 @@ public class ImagemReceitaService {
                     destino,
                     StandardCopyOption.REPLACE_EXISTING);
 
-            return "/uploads/receitas/" + nomeArquivo;
+            return "/uploads/receitas/" +
+                    nomeArquivo;
 
         } catch (IOException exception) {
             throw new IllegalStateException(
@@ -69,11 +72,15 @@ public class ImagemReceitaService {
         }
     }
 
-    private String obterExtensao(String tipoConteudo) {
+    // Retorna a extensão correspondente ao tipo de imagem permitido
+    private String obterExtensao(
+            String tipoConteudo) {
+
         return switch (tipoConteudo) {
             case "image/jpeg" -> ".jpg";
             case "image/png" -> ".png";
             case "image/webp" -> ".webp";
+
             default -> throw new IllegalArgumentException(
                     "Formato de imagem não permitido.");
         };

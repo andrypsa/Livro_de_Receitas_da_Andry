@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
+// Representa o convite enviado para cadastro de um novo administrador
 @Entity
 @Table(name = "solicitacoes_administrador")
 public class SolicitacaoAdministrador {
@@ -24,18 +25,19 @@ public class SolicitacaoAdministrador {
     private Long id;
 
     @Column(name = "nome_solicitante", nullable = false, length = 120)
-    private String nomeSolicitante;
+    private String nomeConvidado;
 
     @Column(name = "email_solicitante", nullable = false, length = 180)
-    private String emailSolicitante;
+    private String emailConvidado;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private StatusSolicitacaoAdministrador status;
 
+    // Registra qual administrador gerou o convite
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "aprovado_por_id")
-    private Administrador aprovadoPor;
+    private Administrador administradorConvidante;
 
     @Column(name = "token_cadastro", unique = true, length = 120)
     private String tokenCadastro;
@@ -52,6 +54,7 @@ public class SolicitacaoAdministrador {
     public SolicitacaoAdministrador() {
     }
 
+    // Define a data do convite e o status inicial antes do primeiro salvamento
     @PrePersist
     public void antesDeSalvar() {
         solicitadoEm = LocalDateTime.now();
@@ -65,20 +68,20 @@ public class SolicitacaoAdministrador {
         return id;
     }
 
-    public String getNomeSolicitante() {
-        return nomeSolicitante;
+    public String getNomeConvidado() {
+        return nomeConvidado;
     }
 
-    public void setNomeSolicitante(String nomeSolicitante) {
-        this.nomeSolicitante = nomeSolicitante;
+    public void setNomeConvidado(String nomeConvidado) {
+        this.nomeConvidado = nomeConvidado;
     }
 
-    public String getEmailSolicitante() {
-        return emailSolicitante;
+    public String getEmailConvidado() {
+        return emailConvidado;
     }
 
-    public void setEmailSolicitante(String emailSolicitante) {
-        this.emailSolicitante = emailSolicitante;
+    public void setEmailConvidado(String emailConvidado) {
+        this.emailConvidado = emailConvidado;
     }
 
     public StatusSolicitacaoAdministrador getStatus() {
@@ -89,12 +92,13 @@ public class SolicitacaoAdministrador {
         this.status = status;
     }
 
-    public Administrador getAprovadoPor() {
-        return aprovadoPor;
+    public Administrador getAdministradorConvidante() {
+        return administradorConvidante;
     }
 
-    public void setAprovadoPor(Administrador aprovadoPor) {
-        this.aprovadoPor = aprovadoPor;
+    public void setAdministradorConvidante(
+            Administrador administradorConvidante) {
+        this.administradorConvidante = administradorConvidante;
     }
 
     public String getTokenCadastro() {

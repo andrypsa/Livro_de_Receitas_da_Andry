@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+// Representa uma imagem associada a uma receita
 @Entity
 @Table(name = "imagens_receita")
 public class ImagemReceita {
@@ -24,6 +25,7 @@ public class ImagemReceita {
     @Column(nullable = false)
     private boolean principal = false;
 
+    // Relaciona cada imagem a uma única receita
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "receita_id", nullable = false)
     private Receita receita;

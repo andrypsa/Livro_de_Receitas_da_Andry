@@ -1,3 +1,4 @@
+/* Agrupa os botões usados para filtrar receitas por categoria */
 .filtros-categoria {
     display: flex;
     flex-wrap: wrap;
@@ -6,6 +7,7 @@
     margin-top: 22px;
 }
 
+/* Estilo padrão dos botões de filtro */
 .filtro-categoria {
     min-height: 38px;
     padding: 8px 18px;
@@ -24,6 +26,7 @@
         box-shadow 0.2s ease;
 }
 
+/* Destaca o filtro ao passar o mouse */
 .filtro-categoria:hover {
     color: #ffffff;
     border-color: #8f4f6d;
@@ -32,6 +35,7 @@
     transform: translateY(-2px);
 }
 
+/* Indica visualmente qual categoria está selecionada */
 .filtro-categoria--ativo {
     color: #ffffff;
     border-color: #9e5d7a;

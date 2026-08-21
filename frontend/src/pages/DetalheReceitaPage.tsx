@@ -17,6 +17,7 @@ interface DetalheReceitaPageProps {
     modoAdmin?: boolean
 }
 
+// Formata valores de enum para exibição na interface
 function formatarEnum(valor: string): string {
     return valor
         .toLowerCase()
@@ -24,6 +25,7 @@ function formatarEnum(valor: string): string {
         .replace(/\b\w/g, (letra) => letra.toUpperCase())
 }
 
+// Converte o tempo total em minutos para horas e minutos
 function formatarTempoPreparo(
     totalMinutos: number,
 ): string {
@@ -41,6 +43,7 @@ function formatarTempoPreparo(
     return `${horas}h ${minutos}min`
 }
 
+// Exibe os detalhes de uma receita na área pública ou administrativa
 export function DetalheReceitaPage({
     modoAdmin = false,
 }: DetalheReceitaPageProps) {
@@ -81,6 +84,7 @@ export function DetalheReceitaPage({
         ? 'Voltar para área administrativa'
         : 'Voltar para receitas'
 
+    // Carrega a receita correta conforme o acesso público ou administrativo
     useEffect(() => {
         if (!idValido) {
             return
@@ -148,6 +152,7 @@ export function DetalheReceitaPage({
         )
     }
 
+    // Confirma e executa a exclusão de uma receita na área administrativa
     async function confirmarExclusao() {
         if (!receita) {
             return
@@ -204,6 +209,7 @@ export function DetalheReceitaPage({
                     ← {textoVoltar}
                 </Link>
 
+                {/* Exibe o carrossel quando a receita possui imagens */}
                 {receita.imagens.length > 0 && (
                     <section className="carrossel-receita">
                         <div className="carrossel-receita__principal">
@@ -268,9 +274,9 @@ export function DetalheReceitaPage({
                                             type="button"
                                             key={imagem}
                                             className={`carrossel-receita__miniatura-botao ${indice ===
-                                                indiceImagemAtual
-                                                ? 'carrossel-receita__miniatura-botao--ativa'
-                                                : ''
+                                                    indiceImagemAtual
+                                                    ? 'carrossel-receita__miniatura-botao--ativa'
+                                                    : ''
                                                 }`}
                                             onClick={() =>
                                                 setIndiceImagemAtual(
@@ -297,6 +303,7 @@ export function DetalheReceitaPage({
                     </section>
                 )}
 
+                {/* Exibe as principais informações de preparo da receita */}
                 <section className="informacoes-receita">
                     {receita.tempoPreparoMinutos !==
                         null && (
@@ -330,17 +337,6 @@ export function DetalheReceitaPage({
                         </p>
                     )}
 
-                    {receita.origem && (
-                        <p>
-                            <strong>
-                                Origem:
-                            </strong>{' '}
-                            {formatarEnum(
-                                receita.origem,
-                            )}
-                        </p>
-                    )}
-
                     {receita.status && (
                         <p>
                             <strong>
@@ -351,40 +347,9 @@ export function DetalheReceitaPage({
                             )}
                         </p>
                     )}
-
-                    {modoAdmin && (
-                        <>
-                            <p>
-                                <strong>
-                                    Privacidade:
-                                </strong>{' '}
-                                {receita.privacidade === 'PUBLICA'
-                                    ? 'Pública'
-                                    : 'Privada'}
-                            </p>
-
-                            <p>
-                                <strong>
-                                    Favorita:
-                                </strong>{' '}
-                                {receita.favorita
-                                    ? 'Sim'
-                                    : 'Não'}
-                            </p>
-
-                            <p>
-                                <strong>
-                                    Comentários:
-                                </strong>{' '}
-                                {receita.comentariosAtivos
-                                    ? 'Ativos'
-                                    : 'Desativados'}
-                            </p>
-                        </>
-                    )}
-
                 </section>
 
+                {/* Exibe os ingredientes principais, recheio e cobertura */}
                 <section className="bloco-receita">
                     <h2>Ingredientes</h2>
 
@@ -419,6 +384,7 @@ export function DetalheReceitaPage({
                     )}
                 </section>
 
+                {/* Exibe os modos de preparo disponíveis */}
                 <section className="bloco-receita">
                     <h2>Modo de preparo</h2>
 
@@ -463,6 +429,42 @@ export function DetalheReceitaPage({
                     </section>
                 )}
 
+                {/* Exibe origem e informações administrativas secundárias */}
+                <section className="informacoes-secundarias-receita">
+                    {receita.origem && (
+                        <p>
+                            <strong>Origem:</strong>{' '}
+                            {formatarEnum(receita.origem)}
+                        </p>
+                    )}
+
+                    {modoAdmin && (
+                        <>
+                            <p>
+                                <strong>Privacidade:</strong>{' '}
+                                {receita.privacidade === 'PUBLICA'
+                                    ? 'Pública'
+                                    : 'Privada'}
+                            </p>
+
+                            <p>
+                                <strong>Favorita:</strong>{' '}
+                                {receita.favorita
+                                    ? 'Sim'
+                                    : 'Não'}
+                            </p>
+
+                            <p>
+                                <strong>Comentários:</strong>{' '}
+                                {receita.comentariosAtivos
+                                    ? 'Ativos'
+                                    : 'Desativados'}
+                            </p>
+                        </>
+                    )}
+                </section>
+
+                {/* Disponibiliza as ações de edição e exclusão para administradores */}
                 {modoAdmin && (
                     <>
                         {erroExclusao && (

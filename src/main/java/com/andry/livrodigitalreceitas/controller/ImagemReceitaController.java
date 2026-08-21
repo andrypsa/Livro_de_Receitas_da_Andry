@@ -20,9 +20,11 @@ public class ImagemReceitaController {
         this.imagemReceitaService = imagemReceitaService;
     }
 
+    // Recebe uma imagem da receita, salva o arquivo e retorna a URL gerada
     @PostMapping
     public ResponseEntity<ImagemReceitaResponse> enviarImagem(
             @RequestParam("imagem") MultipartFile imagem) {
+
         String imagemUrl = imagemReceitaService.salvar(imagem);
 
         return ResponseEntity.ok(

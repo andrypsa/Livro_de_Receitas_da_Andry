@@ -10,19 +10,18 @@ import com.andry.livrodigitalreceitas.model.SolicitacaoAdministrador;
 import com.andry.livrodigitalreceitas.model.StatusSolicitacaoAdministrador;
 
 public interface SolicitacaoAdministradorRepository
-        extends JpaRepository<SolicitacaoAdministrador, Long> {
+                extends JpaRepository<SolicitacaoAdministrador, Long> {
 
-    boolean existsByEmailSolicitanteIgnoreCaseAndStatusIn(
-            String email,
-            Collection<StatusSolicitacaoAdministrador> status
-    );
+        // Verifica se já existe convite ativo para o e-mail informado
+        boolean existsByEmailConvidadoIgnoreCaseAndStatusIn(
+                        String email,
+                        Collection<StatusSolicitacaoAdministrador> status);
 
-    List<SolicitacaoAdministrador>
-            findByStatusOrderBySolicitadoEmAsc(
-                    StatusSolicitacaoAdministrador status
-            );
+        // Lista solicitações por status em ordem de criação
+        List<SolicitacaoAdministrador> findByStatusOrderBySolicitadoEmAsc(
+                        StatusSolicitacaoAdministrador status);
 
-    Optional<SolicitacaoAdministrador> findByTokenCadastro(
-            String tokenCadastro
-    );
+        // Busca um convite pelo token de cadastro
+        Optional<SolicitacaoAdministrador> findByTokenCadastro(
+                        String tokenCadastro);
 }

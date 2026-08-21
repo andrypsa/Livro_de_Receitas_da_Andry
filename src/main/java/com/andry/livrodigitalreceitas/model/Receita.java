@@ -1,17 +1,16 @@
 package com.andry.livrodigitalreceitas.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.andry.livrodigitalreceitas.model.enums.Categoria;
 import com.andry.livrodigitalreceitas.model.enums.Dificuldade;
 import com.andry.livrodigitalreceitas.model.enums.OrigemReceita;
 import com.andry.livrodigitalreceitas.model.enums.PrivacidadeReceita;
 import com.andry.livrodigitalreceitas.model.enums.StatusReceita;
-import java.util.ArrayList;
-import java.util.List;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,6 +19,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -28,6 +28,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
+// Representa uma receita e todos os dados armazenados no sistema
 @Entity
 @Table(name = "receitas")
 public class Receita {
@@ -56,8 +57,30 @@ public class Receita {
     @Column(name = "modo_preparo", nullable = false, columnDefinition = "TEXT")
     private String modoPreparo;
 
+    // Dados opcionais de recheio
+    @Lob
+    @Column(name = "ingredientes_recheio", columnDefinition = "TEXT")
+    private String ingredientesRecheio;
+
+    @Lob
+    @Column(name = "modo_preparo_recheio", columnDefinition = "TEXT")
+    private String modoPreparoRecheio;
+
+    // Dados opcionais de cobertura
+    @Lob
+    @Column(name = "ingredientes_cobertura", columnDefinition = "TEXT")
+    private String ingredientesCobertura;
+
+    @Lob
+    @Column(name = "modo_preparo_cobertura", columnDefinition = "TEXT")
+    private String modoPreparoCobertura;
+
     @Column(name = "imagem_url", length = 500)
     private String imagemUrl;
+
+    // Mantém a relação entre a receita e suas imagens
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImagemReceita> imagens = new ArrayList<>();
 
     @Lob
     @Column(columnDefinition = "TEXT")
@@ -102,9 +125,11 @@ public class Receita {
     public Receita() {
     }
 
+    // Define datas e valores padrão antes do primeiro salvamento da receita
     @PrePersist
     public void antesDeSalvar() {
         LocalDateTime agora = LocalDateTime.now();
+
         this.dataCriacao = agora;
         this.dataAtualizacao = agora;
 
@@ -117,6 +142,7 @@ public class Receita {
         }
     }
 
+    // Atualiza automaticamente a data sempre que a receita é alterada
     @PreUpdate
     public void antesDeAtualizar() {
         this.dataAtualizacao = LocalDateTime.now();
@@ -124,10 +150,6 @@ public class Receita {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -162,29 +184,6 @@ public class Receita {
         this.modoPreparo = modoPreparo;
     }
 
-    @Lob
-    @Column(name = "ingredientes_recheio", columnDefinition = "TEXT")
-    private String ingredientesRecheio;
-
-    @Lob
-    @Column(name = "modo_preparo_recheio", columnDefinition = "TEXT")
-    private String modoPreparoRecheio;
-
-    @Lob
-    @Column(name = "ingredientes_cobertura", columnDefinition = "TEXT")
-    private String ingredientesCobertura;
-
-    @Lob
-    @Column(name = "modo_preparo_cobertura", columnDefinition = "TEXT")
-    private String modoPreparoCobertura;
-
-    public String getImagemUrl() {
-        return imagemUrl;
-    }
-
-    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImagemReceita> imagens = new ArrayList<>();
-
     public String getIngredientesRecheio() {
         return ingredientesRecheio;
     }
@@ -217,8 +216,16 @@ public class Receita {
         this.modoPreparoCobertura = modoPreparoCobertura;
     }
 
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
     public void setImagemUrl(String imagemUrl) {
         this.imagemUrl = imagemUrl;
+    }
+
+    public List<ImagemReceita> getImagens() {
+        return imagens;
     }
 
     public String getObservacoes() {
@@ -301,17 +308,9 @@ public class Receita {
         return dataAtualizacao;
     }
 
-    public List<ImagemReceita> getImagens() {
-        return imagens;
-    }
-
+    // Adiciona uma imagem e mantém o relacionamento entre os dois objetos
     public void adicionarImagem(ImagemReceita imagem) {
         imagem.setReceita(this);
         imagens.add(imagem);
-    }
-
-    public void removerImagem(ImagemReceita imagem) {
-        imagens.remove(imagem);
-        imagem.setReceita(null);
     }
 }

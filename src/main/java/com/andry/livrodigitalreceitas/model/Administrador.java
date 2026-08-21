@@ -11,6 +11,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
+// Representa o administrador responsável pelo gerenciamento do sistema
 @Entity
 @Table(name = "administradores")
 public class Administrador {
@@ -43,6 +44,8 @@ public class Administrador {
     public Administrador() {
     }
 
+    // Define automaticamente as datas de criação e atualização antes do primeiro
+    // salvamento
     @PrePersist
     public void antesDeSalvar() {
         LocalDateTime agora = LocalDateTime.now();
@@ -50,6 +53,7 @@ public class Administrador {
         atualizadoEm = agora;
     }
 
+    // Atualiza automaticamente a data da última alteração
     @PreUpdate
     public void antesDeAtualizar() {
         atualizadoEm = LocalDateTime.now();

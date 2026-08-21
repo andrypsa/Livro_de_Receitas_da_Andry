@@ -30,6 +30,7 @@ public class ReceitaController {
         this.receitaService = receitaService;
     }
 
+    // Lista apenas as receitas públicas disponíveis para visitantes
     @GetMapping
     public List<ReceitaResumoDTO> listarReceitasPublicas() {
         return receitaService.listarPublicas()
@@ -38,16 +39,20 @@ public class ReceitaController {
                 .toList();
     }
 
+    // Busca os detalhes de uma receita pública pelo ID
     @GetMapping("/{id}")
     public ReceitaDetalheDTO buscarReceitaPorId(
             @PathVariable Long id) {
+
         return ReceitaDetalheDTO.de(
                 receitaService.buscarPublicaPorId(id));
     }
 
+    // Cria uma nova receita com seus dados e imagens
     @PostMapping
     public ResponseEntity<ReceitaDetalheDTO> criarReceita(
             @Valid @RequestBody CriarReceitaRequest dados) {
+
         Receita receita = new Receita();
 
         receita.setNome(dados.nome());
@@ -69,22 +74,30 @@ public class ReceitaController {
         receita.setComentariosAtivos(
                 dados.comentariosAtivos());
 
-        adicionarImagens(receita, dados.imagensUrls());
+        adicionarImagens(
+                receita,
+                dados.imagensUrls());
 
         Receita receitaSalva = receitaService.salvar(receita);
 
         URI localizacao = URI.create(
-                "/api/receitas/" + receitaSalva.getId());
+                "/api/receitas/" +
+                        receitaSalva.getId());
 
         return ResponseEntity
                 .created(localizacao)
-                .body(ReceitaDetalheDTO.de(receitaSalva));
+                .body(
+                        ReceitaDetalheDTO.de(
+                                receitaSalva));
     }
 
+    // Adiciona as imagens à receita e define a primeira como principal
     private void adicionarImagens(
             Receita receita,
             List<String> imagensUrls) {
-        if (imagensUrls == null || imagensUrls.isEmpty()) {
+
+        if (imagensUrls == null ||
+                imagensUrls.isEmpty()) {
             return;
         }
 
@@ -92,18 +105,25 @@ public class ReceitaController {
 
             String url = imagensUrls.get(indice);
 
-            if (url == null || url.isBlank()) {
+            if (url == null ||
+                    url.isBlank()) {
                 continue;
             }
 
             ImagemReceita imagem = new ImagemReceita();
-            imagem.setUrl(url.trim());
-            imagem.setPrincipal(indice == 0);
 
-            receita.adicionarImagem(imagem);
+            imagem.setUrl(
+                    url.trim());
+
+            imagem.setPrincipal(
+                    indice == 0);
+
+            receita.adicionarImagem(
+                    imagem);
 
             if (indice == 0) {
-                receita.setImagemUrl(url.trim());
+                receita.setImagemUrl(
+                        url.trim());
             }
         }
     }

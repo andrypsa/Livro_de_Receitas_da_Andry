@@ -1,5 +1,6 @@
 package com.andry.livrodigitalreceitas.model.enums;
 
+// Define os possíveis status de teste e aprovação de uma receita
 public enum StatusReceita {
 
     NAO_TESTADA,

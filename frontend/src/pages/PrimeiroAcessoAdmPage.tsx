@@ -7,6 +7,7 @@ import { criarPrimeiroAdministrador } from '../services/adminAuthService'
 export function PrimeiroAcessoAdmPage() {
     const navigate = useNavigate()
 
+    // Controla os dados do formulário e os estados da solicitação
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
@@ -14,6 +15,7 @@ export function PrimeiroAcessoAdmPage() {
     const [erro, setErro] = useState('')
     const [enviando, setEnviando] = useState(false)
 
+    // Cria o primeiro administrador e redireciona para a tela de login
     async function enviarFormulario(
         evento: FormEvent<HTMLFormElement>,
     ) {
@@ -55,6 +57,7 @@ export function PrimeiroAcessoAdmPage() {
                     Cadastre o primeiro administrador do sistema.
                 </p>
 
+                {/* Formulário de cadastro do primeiro administrador */}
                 <form
                     className="login-adm-formulario"
                     onSubmit={enviarFormulario}
@@ -65,7 +68,9 @@ export function PrimeiroAcessoAdmPage() {
                         <input
                             type="text"
                             value={nome}
-                            onChange={(evento) => setNome(evento.target.value)}
+                            onChange={(evento) =>
+                                setNome(evento.target.value)
+                            }
                             autoComplete="name"
                             disabled={enviando}
                             required
@@ -78,7 +83,9 @@ export function PrimeiroAcessoAdmPage() {
                         <input
                             type="email"
                             value={email}
-                            onChange={(evento) => setEmail(evento.target.value)}
+                            onChange={(evento) =>
+                                setEmail(evento.target.value)
+                            }
                             autoComplete="email"
                             disabled={enviando}
                             required
@@ -92,17 +99,22 @@ export function PrimeiroAcessoAdmPage() {
                             <input
                                 type={mostrarSenha ? 'text' : 'password'}
                                 value={senha}
-                                onChange={(evento) => setSenha(evento.target.value)}
+                                onChange={(evento) =>
+                                    setSenha(evento.target.value)
+                                }
                                 autoComplete="new-password"
                                 minLength={8}
                                 disabled={enviando}
                                 required
                             />
 
+                            {/* Alterna a visibilidade da senha */}
                             <button
                                 className="botao-mostrar-senha"
                                 type="button"
-                                onClick={() => setMostrarSenha(!mostrarSenha)}
+                                onClick={() =>
+                                    setMostrarSenha(!mostrarSenha)
+                                }
                                 disabled={enviando}
                                 aria-label={
                                     mostrarSenha
@@ -120,6 +132,7 @@ export function PrimeiroAcessoAdmPage() {
                         </div>
                     </label>
 
+                    {/* Exibe erros ocorridos durante o cadastro */}
                     {erro && (
                         <p className="mensagem-login mensagem-login--erro">
                             {erro}

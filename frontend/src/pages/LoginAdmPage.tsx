@@ -7,12 +7,14 @@ import { loginAdministrador } from '../services/adminAuthService'
 export function LoginAdmPage() {
     const navigate = useNavigate()
 
+    // Controla os dados do formulário e seus estados de interação
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [mostrarSenha, setMostrarSenha] = useState(false)
     const [erro, setErro] = useState('')
     const [enviando, setEnviando] = useState(false)
 
+    // Autentica o administrador e redireciona para a área administrativa
     async function enviarFormulario(
         evento: FormEvent<HTMLFormElement>,
     ) {
@@ -52,6 +54,7 @@ export function LoginAdmPage() {
 
                 <h1>Login administrativo</h1>
 
+                {/* Formulário de autenticação do administrador */}
                 <form
                     className="login-adm-formulario"
                     onSubmit={enviarFormulario}
@@ -62,7 +65,9 @@ export function LoginAdmPage() {
                         <input
                             type="email"
                             value={email}
-                            onChange={(evento) => setEmail(evento.target.value)}
+                            onChange={(evento) =>
+                                setEmail(evento.target.value)
+                            }
                             autoComplete="email"
                             disabled={enviando}
                             required
@@ -76,16 +81,21 @@ export function LoginAdmPage() {
                             <input
                                 type={mostrarSenha ? 'text' : 'password'}
                                 value={senha}
-                                onChange={(evento) => setSenha(evento.target.value)}
+                                onChange={(evento) =>
+                                    setSenha(evento.target.value)
+                                }
                                 autoComplete="current-password"
                                 disabled={enviando}
                                 required
                             />
 
+                            {/* Alterna a visibilidade da senha */}
                             <button
                                 className="botao-mostrar-senha"
                                 type="button"
-                                onClick={() => setMostrarSenha(!mostrarSenha)}
+                                onClick={() =>
+                                    setMostrarSenha(!mostrarSenha)
+                                }
                                 disabled={enviando}
                                 aria-label={
                                     mostrarSenha
@@ -103,6 +113,7 @@ export function LoginAdmPage() {
                         </div>
                     </label>
 
+                    {/* Exibe erros retornados durante a autenticação */}
                     {erro && (
                         <p className="mensagem-login mensagem-login--erro">
                             {erro}

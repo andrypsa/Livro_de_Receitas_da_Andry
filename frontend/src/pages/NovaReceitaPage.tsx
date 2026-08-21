@@ -18,6 +18,7 @@ import type {
     StatusReceita,
 } from '../types/Receita'
 
+// Chave utilizada para armazenar o rascunho da receita no navegador
 const CHAVE_RASCUNHO = 'rascunho-nova-receita'
 
 interface RascunhoReceita {
@@ -48,6 +49,7 @@ interface RascunhoReceita {
     comentariosAtivos: boolean
 }
 
+// Recupera o rascunho salvo anteriormente no navegador
 function carregarRascunho(): RascunhoReceita | null {
     try {
         const rascunhoSalvo =
@@ -73,6 +75,7 @@ export function NovaReceitaPage() {
             carregarRascunho,
         )
 
+    // Estados principais do formulário
     const [nome, setNome] = useState(
         rascunhoInicial?.nome ?? '',
     )
@@ -92,6 +95,7 @@ export function NovaReceitaPage() {
             rascunhoInicial?.modoPreparo ?? '',
         )
 
+    // Estados da seção opcional de recheio
     const [temRecheio, setTemRecheio] =
         useState(
             rascunhoInicial?.temRecheio ?? false,
@@ -111,6 +115,7 @@ export function NovaReceitaPage() {
         rascunhoInicial?.modoPreparoRecheio ?? '',
     )
 
+    // Estados da seção opcional de cobertura
     const [temCobertura, setTemCobertura] =
         useState(
             rascunhoInicial?.temCobertura ?? false,
@@ -130,6 +135,7 @@ export function NovaReceitaPage() {
         rascunhoInicial?.modoPreparoCobertura ?? '',
     )
 
+    // Controla os arquivos selecionados e suas prévias
     const [arquivosImagem, setArquivosImagem] =
         useState<File[]>([])
 
@@ -197,11 +203,7 @@ export function NovaReceitaPage() {
     const [salvando, setSalvando] =
         useState(false)
 
-    /*
-     * Salva automaticamente o rascunho
-     * sempre que algum campo for alterado.
-     */
-
+    // Salva automaticamente o rascunho sempre que algum campo é alterado
     useEffect(() => {
         const rascunho: RascunhoReceita = {
             nome,
@@ -263,6 +265,7 @@ export function NovaReceitaPage() {
         comentariosAtivos,
     ])
 
+    // Libera as URLs temporárias usadas nas prévias das imagens
     useEffect(() => {
         return () => {
             previewsImagem.forEach((preview) => {
@@ -271,6 +274,7 @@ export function NovaReceitaPage() {
         }
     }, [previewsImagem])
 
+    // Valida os arquivos selecionados e cria suas prévias
     function selecionarImagens(
         evento: ChangeEvent<HTMLInputElement>,
     ) {
@@ -334,6 +338,7 @@ export function NovaReceitaPage() {
         evento.target.value = ''
     }
 
+    // Remove uma imagem selecionada antes do cadastro
     function removerImagem(indice: number) {
         const previewRemovido =
             previewsImagem[indice]
@@ -357,6 +362,7 @@ export function NovaReceitaPage() {
         )
     }
 
+    // Envia as imagens, monta os dados da receita e realiza o cadastro
     async function enviarFormulario(
         evento: FormEvent<HTMLFormElement>,
     ) {
@@ -434,10 +440,7 @@ export function NovaReceitaPage() {
                 comentariosAtivos,
             })
 
-            /*
-             * O rascunho só é apagado
-             * depois que o cadastro termina.
-             */
+            //Apaga o rascunho somente após o cadastro ser concluído
             localStorage.removeItem(
                 CHAVE_RASCUNHO,
             )
@@ -460,6 +463,7 @@ export function NovaReceitaPage() {
     return (
         <main className="pagina-receitas">
             <section className="receitas-painel">
+                {/* Navegação de retorno para a área administrativa */}
                 <Link
                     className="link-voltar"
                     to="/admin"
@@ -467,6 +471,7 @@ export function NovaReceitaPage() {
                     ← Voltar para área administrativa
                 </Link>
 
+                {/* Cabeçalho da página de cadastro */}
                 <header className="receitas-cabecalho">
                     <h1>Nova receita</h1>
 
@@ -480,6 +485,7 @@ export function NovaReceitaPage() {
                     className="login-adm-formulario"
                     onSubmit={enviarFormulario}
                 >
+                    {/* Dados principais da receita */}
                     <label className="login-adm-campo">
                         <span>
                             Nome da receita
@@ -558,6 +564,7 @@ export function NovaReceitaPage() {
                         />
                     </label>
 
+                    {/* Seção opcional de recheio */}
                     <fieldset className="secao-opcional-receita">
                         <legend>Recheio</legend>
 
@@ -629,6 +636,7 @@ export function NovaReceitaPage() {
                         )}
                     </fieldset>
 
+                    {/* Seção opcional de cobertura */}
                     <fieldset className="secao-opcional-receita">
                         <legend>Cobertura</legend>
 
@@ -699,6 +707,7 @@ export function NovaReceitaPage() {
                         )}
                     </fieldset>
 
+                    {/* Seleção e visualização das imagens da receita */}
                     <label className="login-adm-campo">
                         <span>
                             Fotos da receita
@@ -760,6 +769,7 @@ export function NovaReceitaPage() {
                         </div>
                     )}
 
+                    {/* Tempo de preparo informado em horas e minutos */}
                     <fieldset className="secao-opcional-receita">
                         <legend>Tempo de preparo</legend>
 
@@ -795,6 +805,7 @@ export function NovaReceitaPage() {
                         </label>
                     </fieldset>
 
+                    {/* Informações complementares da receita */}
                     <label className="login-adm-campo">
                         <span>Rendimento</span>
 
@@ -924,6 +935,7 @@ export function NovaReceitaPage() {
                         </select>
                     </label>
 
+                    {/* Configurações administrativas da receita */}
                     <label className="login-adm-campo">
                         <span>Privacidade</span>
 
@@ -992,6 +1004,7 @@ export function NovaReceitaPage() {
                         Permitir comentários
                     </label>
 
+                    {/* Mensagem de erro e envio do formulário */}
                     {erro && (
                         <p className="mensagem-login mensagem-login--erro">
                             {erro}

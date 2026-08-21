@@ -11,49 +11,47 @@ import com.andry.livrodigitalreceitas.repository.AdministradorRepository;
 @Service
 public class AdministradorService {
 
-    private final AdministradorRepository administradorRepository;
-    private final PasswordEncoder passwordEncoder;
+        private final AdministradorRepository administradorRepository;
+        private final PasswordEncoder passwordEncoder;
 
-    public AdministradorService(
-            AdministradorRepository administradorRepository,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.administradorRepository = administradorRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Transactional
-    public Administrador criarPrimeiroAdministrador(
-            CriarPrimeiroAdministradorRequest dados
-    ) {
-        if (administradorRepository.count() > 0) {
-            throw new IllegalStateException(
-                    "O primeiro administrador já foi criado."
-            );
+        public AdministradorService(
+                        AdministradorRepository administradorRepository,
+                        PasswordEncoder passwordEncoder) {
+                this.administradorRepository = administradorRepository;
+                this.passwordEncoder = passwordEncoder;
         }
 
-        String emailNormalizado = dados.email()
-                .trim()
-                .toLowerCase();
+        // Cria o primeiro administrador do sistema e impede cadastros duplicados
+        @Transactional
+        public Administrador criarPrimeiroAdministrador(
+                        CriarPrimeiroAdministradorRequest dados) {
+                if (administradorRepository.count() > 0) {
+                        throw new IllegalStateException(
+                                        "O primeiro administrador já foi criado.");
+                }
 
-        if (administradorRepository.existsByEmailIgnoreCase(
-                emailNormalizado
-        )) {
-            throw new IllegalArgumentException(
-                    "Já existe um administrador com este e-mail."
-            );
+                String emailNormalizado = dados.email()
+                                .trim()
+                                .toLowerCase();
+
+                if (administradorRepository.existsByEmailIgnoreCase(
+                                emailNormalizado)) {
+                        throw new IllegalArgumentException(
+                                        "Já existe um administrador com este e-mail.");
+                }
+
+                Administrador administrador = new Administrador();
+
+                administrador.setNome(dados.nome().trim());
+                administrador.setEmail(emailNormalizado);
+
+                // Armazena somente o hash da senha, nunca a senha original
+                administrador.setSenhaHash(
+                                passwordEncoder.encode(dados.senha()));
+
+                administrador.setAtivo(true);
+                administrador.setPrimeiroAdministrador(true);
+
+                return administradorRepository.save(administrador);
         }
-
-        Administrador administrador = new Administrador();
-
-        administrador.setNome(dados.nome().trim());
-        administrador.setEmail(emailNormalizado);
-        administrador.setSenhaHash(
-                passwordEncoder.encode(dados.senha())
-        );
-        administrador.setAtivo(true);
-        administrador.setPrimeiroAdministrador(true);
-
-        return administradorRepository.save(administrador);
-    }
 }

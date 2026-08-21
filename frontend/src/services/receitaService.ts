@@ -12,6 +12,7 @@ interface ErroApi {
     mensagem?: string
 }
 
+// Lê um cookie pelo nome para recuperar o token CSRF
 function lerCookie(nome: string): string | null {
     const prefixo = `${nome}=`
 
@@ -26,6 +27,7 @@ function lerCookie(nome: string): string | null {
         : null
 }
 
+// Prepara e recupera o token CSRF usado nas requisições protegidas
 async function carregarCsrf(): Promise<string> {
     const resposta = await fetch('/api/auth/admin/csrf', {
         method: 'GET',
@@ -49,6 +51,7 @@ async function carregarCsrf(): Promise<string> {
     return token
 }
 
+// Lista as receitas públicas disponíveis para visitantes
 export async function listarReceitas(): Promise<Receita[]> {
     const resposta = await fetch('/api/receitas', {
         headers: {
@@ -65,6 +68,7 @@ export async function listarReceitas(): Promise<Receita[]> {
     return resposta.json() as Promise<Receita[]>
 }
 
+// Lista todas as receitas disponíveis na área administrativa
 export async function listarReceitasAdmin(): Promise<Receita[]> {
     const resposta = await fetch('/api/admin/receitas', {
         method: 'GET',
@@ -81,8 +85,9 @@ export async function listarReceitasAdmin(): Promise<Receita[]> {
     }
 
     return resposta.json() as Promise<Receita[]>
-
 }
+
+// Busca os detalhes de uma receita pública pelo ID
 export async function buscarReceitaPorId(
     id: number,
 ): Promise<ReceitaDetalhe> {
@@ -101,6 +106,7 @@ export async function buscarReceitaPorId(
     return resposta.json() as Promise<ReceitaDetalhe>
 }
 
+// Busca os detalhes completos de uma receita na área administrativa
 export async function buscarReceitaAdminPorId(
     id: number,
 ): Promise<ReceitaDetalhe> {
@@ -124,6 +130,7 @@ export async function buscarReceitaAdminPorId(
     return resposta.json() as Promise<ReceitaDetalhe>
 }
 
+// Envia uma imagem ao backend e retorna a URL gerada
 export async function enviarImagemReceita(
     arquivo: File,
 ): Promise<string> {
@@ -158,6 +165,7 @@ export async function enviarImagemReceita(
     return dados.imagemUrl
 }
 
+// Cadastra uma nova receita
 export async function criarReceita(
     dados: CriarReceitaDados,
 ): Promise<ReceitaDetalhe> {
@@ -188,6 +196,7 @@ export async function criarReceita(
     return resposta.json() as Promise<ReceitaDetalhe>
 }
 
+// Atualiza uma receita existente na área administrativa
 export async function atualizarReceita(
     id: number,
     dados: CriarReceitaDados,
@@ -221,6 +230,8 @@ export async function atualizarReceita(
 
     return resposta.json() as Promise<ReceitaDetalhe>
 }
+
+// Exclui uma receita da área administrativa
 export async function excluirReceita(
     id: number,
 ): Promise<void> {

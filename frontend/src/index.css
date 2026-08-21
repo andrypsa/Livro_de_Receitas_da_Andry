@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap');
 
+/* Configurações globais */
+
 * {
   box-sizing: border-box;
 }
@@ -21,7 +23,10 @@ body {
   min-height: 100vh;
   margin: 0;
   background-image:
-    linear-gradient(rgba(255, 247, 250, 0.2), rgba(255, 247, 250, 0.2)),
+    linear-gradient(
+      rgba(255, 247, 250, 0.2),
+      rgba(255, 247, 250, 0.2)
+    ),
     url('/images/fundo_floral.png');
   background-attachment: fixed;
   background-position: center;
@@ -70,14 +75,16 @@ a {
   background: rgba(255, 251, 253, 0.86);
   box-shadow: 0 24px 70px rgba(127, 78, 102, 0.2);
   backdrop-filter: blur(13px);
-  clip-path: polygon(28px 0,
-      calc(100% - 28px) 0,
-      100% 28px,
-      100% calc(100% - 28px),
-      calc(100% - 28px) 100%,
-      28px 100%,
-      0 calc(100% - 28px),
-      0 28px);
+  clip-path: polygon(
+    28px 0,
+    calc(100% - 28px) 0,
+    100% 28px,
+    100% calc(100% - 28px),
+    calc(100% - 28px) 100%,
+    28px 100%,
+    0 calc(100% - 28px),
+    0 28px
+  );
 }
 
 .botao,
@@ -142,6 +149,18 @@ a {
   text-align: center;
 }
 
+/* Títulos principais das páginas */
+
+.login-painel h1,
+.receitas-cabecalho h1,
+.sobre-texto h1,
+.cabecalho h1 {
+  color: #755261;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4.2vw, 3.55rem);
+  font-weight: 600;
+}
+
 /* Página inicial */
 
 .pagina-home {
@@ -166,7 +185,7 @@ a {
   justify-content: flex-end;
 }
 
-.home-botao-login {
+.home-login-adm {
   min-height: 38px;
   padding: 8px 17px;
   font-size: 0.76rem;
@@ -239,18 +258,6 @@ a {
   margin: 0;
 }
 
-/* Títulos principais das páginas */
-
-.login-painel h1,
-.receitas-cabecalho h1,
-.sobre-texto h1,
-.cabecalho h1 {
-  color: #755261;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 4.2vw, 3.55rem);
-  font-weight: 600;
-}
-
 /* Página de login */
 
 .login-painel {
@@ -277,7 +284,6 @@ a {
   width: 100%;
 }
 
-
 /* Login administrativo */
 
 .pagina-login-adm {
@@ -296,14 +302,16 @@ a {
   box-shadow: 0 24px 70px rgba(127, 78, 102, 0.2);
   text-align: center;
   backdrop-filter: blur(13px);
-  clip-path: polygon(26px 0,
-      calc(100% - 26px) 0,
-      100% 26px,
-      100% calc(100% - 26px),
-      calc(100% - 26px) 100%,
-      26px 100%,
-      0 calc(100% - 26px),
-      0 26px);
+  clip-path: polygon(
+    26px 0,
+    calc(100% - 26px) 0,
+    100% 26px,
+    100% calc(100% - 26px),
+    calc(100% - 26px) 100%,
+    26px 100%,
+    0 calc(100% - 26px),
+    0 26px
+  );
 }
 
 .login-adm-painel .link-voltar {
@@ -373,6 +381,44 @@ a {
   font-size: 0.76rem;
 }
 
+/* Campo de senha */
+
+.campo-senha {
+  position: relative;
+}
+
+.campo-senha input {
+  padding-right: 48px;
+}
+
+.botao-mostrar-senha {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  color: #795d6a;
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.botao-mostrar-senha:hover {
+  background: rgba(220, 167, 189, 0.2);
+}
+
+.botao-mostrar-senha:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 /* Página de receitas */
 
 .pagina-receitas {
@@ -418,7 +464,7 @@ a {
     0 0 0 4px rgba(210, 157, 181, 0.16);
 }
 
-/* Cards */
+/* Cards de receitas */
 
 .grade-receitas {
   display: grid;
@@ -435,12 +481,14 @@ a {
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
-  clip-path: polygon(18px 0,
-      100% 0,
-      100% calc(100% - 18px),
-      calc(100% - 18px) 100%,
-      0 100%,
-      0 18px);
+  clip-path: polygon(
+    18px 0,
+    100% 0,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0 100%,
+    0 18px
+  );
 }
 
 .receita-card:hover {
@@ -482,465 +530,7 @@ a {
   margin-top: 20px;
 }
 
-/* Página Sobre */
-
-.pagina-sobre {
-  align-items: flex-start;
-  padding-top: 48px;
-  padding-bottom: 48px;
-}
-
-.sobre-painel {
-  width: min(900px, 100%);
-  padding: 56px 64px 40px;
-}
-
-.sobre-texto {
-  max-width: 740px;
-  margin: 0 auto;
-}
-
-.sobre-texto h1 {
-  margin: 8px 0 34px;
-  line-height: 1.15;
-  text-align: center;
-}
-
-.sobre-texto p {
-  margin: 0 0 22px;
-  color: #715f68;
-  font-size: 0.97rem;
-  line-height: 1.9;
-  text-align: justify;
-}
-
-.sobre-ilustracao {
-  display: flex;
-  justify-content: flex-end;
-  max-width: 740px;
-  margin: 12px auto 0;
-}
-
-.sobre-ilustracao img {
-  width: 220px;
-  height: auto;
-  object-fit: contain;
-}
-
-/* Página de detalhes */
-
-.cabecalho {
-  width: min(1000px, calc(100% - 48px));
-  margin: 40px auto 0;
-  padding: 54px 32px 24px;
-  color: #755261;
-  background: rgba(255, 251, 253, 0.86);
-  text-align: center;
-  backdrop-filter: blur(13px);
-  clip-path: polygon(28px 0,
-      calc(100% - 28px) 0,
-      100% 28px,
-      100% 100%,
-      0 100%,
-      0 28px);
-}
-
-.cabecalho h1 {
-  margin: 0 0 12px;
-}
-
-.cabecalho p {
-  margin: 0;
-  color: #a16f85;
-}
-
-.pagina-detalhe {
-  width: min(1000px, calc(100% - 48px));
-  margin: 0 auto 40px;
-  padding: 42px;
-  clip-path: polygon(0 0,
-      100% 0,
-      100% calc(100% - 28px),
-      calc(100% - 28px) 100%,
-      28px 100%,
-      0 calc(100% - 28px));
-}
-
-.receita-detalhe__imagem {
-  width: 100%;
-  max-height: 500px;
-  margin-bottom: 32px;
-  border-radius: 18px;
-  object-fit: cover;
-}
-
-.informacoes-receita {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-}
-
-.informacoes-receita p {
-  margin: 0;
-  padding: 10px 16px;
-  border: 1px solid rgba(210, 161, 181, 0.25);
-  border-radius: 999px;
-  color: #765b68;
-  background: #f9edf2;
-}
-
-.bloco-receita {
-  margin-top: 34px;
-  padding: 28px;
-  border: 1px solid rgba(208, 158, 180, 0.22);
-  background: rgba(255, 250, 252, 0.74);
-}
-
-.bloco-receita h2 {
-  margin: 0 0 16px;
-  color: #755261;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
-}
-
-.texto-preservado {
-  margin: 0;
-  color: #78666f;
-  line-height: 1.9;
-  white-space: pre-line;
-}
-
-/* Responsividade */
-
-@media (max-width: 900px) {
-  .home-titulo-principal {
-    white-space: normal;
-  }
-}
-
-@media (max-width: 720px) {
-
-  .pagina-home,
-  .pagina-login,
-  .pagina-receitas,
-  .pagina-sobre {
-    min-height: 100vh;
-    padding: 10px;
-  }
-
-  /* Página inicial */
-
-  .pagina-home {
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .home-painel {
-    width: 100%;
-    padding: 18px 18px 34px;
-  }
-
-  .home-botao-login {
-    min-height: 32px;
-    padding: 6px 12px;
-    font-size: 0.68rem;
-  }
-
-  .home-conteudo {
-    margin-top: 24px;
-  }
-
-  .home-titulo-introducao {
-    margin-bottom: 8px;
-    font-size: 0.92rem;
-    line-height: 1.3;
-  }
-
-  .home-titulo-principal {
-    font-size: 2rem;
-    line-height: 1.12;
-    white-space: normal;
-  }
-
-  .home-acoes {
-    display: flex;
-    margin-top: 26px;
-    gap: 10px;
-  }
-
-  .home-botao:not(.home-botao-login) {
-    width: auto;
-    min-height: 38px;
-    padding: 8px 16px;
-    font-size: 0.74rem;
-  }
-
-  .rodape-projeto {
-    font-size: 0.72rem;
-    line-height: 1.4;
-  }
-
-  /* Login */
-
-  .login-painel {
-    padding: 30px 20px;
-  }
-
-  .login-painel h1 {
-    font-size: 2rem;
-  }
-
-  .login-botao {
-    min-height: 40px;
-    padding: 9px 16px;
-    font-size: 0.76rem;
-  }
-
-  .login-painel:has(.login-adm-formulario) {
-    padding: 30px 22px;
-  }
-
-  .login-painel:has(.login-adm-formulario) h1 {
-    margin-bottom: 24px;
-    font-size: 1.8rem;
-  }
-
-  .login-adm-campo input {
-    height: 40px;
-  }
-
-  .login-adm-formulario .login-botao {
-    min-height: 38px;
-  }
-
-  /* Página de receitas */
-
-  .pagina-receitas {
-    align-items: flex-start;
-  }
-
-  .receitas-painel {
-    width: 100%;
-    min-height: auto;
-    padding: 24px 16px;
-  }
-
-  .receitas-cabecalho {
-    margin-bottom: 28px;
-  }
-
-  .receitas-cabecalho h1 {
-    margin-bottom: 18px;
-    font-size: 2rem;
-  }
-
-  .campo-busca {
-    min-height: 42px;
-    padding: 9px 15px;
-    font-size: 0.78rem;
-  }
-
-  .filtros-categoria {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 16px;
-  }
-
-  .filtro-categoria {
-    flex: 1;
-    min-width: 0;
-    min-height: 32px;
-    padding: 5px 6px;
-    font-size: 0.62rem;
-    white-space: nowrap;
-  }
-
-  .grade-receitas {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .receita-card__imagem {
-    height: 180px;
-  }
-
-  .receita-card__conteudo {
-    padding: 18px;
-  }
-
-  .receita-card h2 {
-    font-size: 1.55rem;
-  }
-
-  /* Página Sobre */
-
-  .pagina-sobre {
-    align-items: flex-start;
-  }
-
-  .sobre-painel {
-    width: 100%;
-    padding: 30px 20px 24px;
-  }
-
-  .sobre-texto h1 {
-    margin-bottom: 24px;
-    font-size: 2rem;
-    line-height: 1.15;
-  }
-
-  .sobre-texto p {
-    margin-bottom: 16px;
-    font-size: 0.84rem;
-    line-height: 1.65;
-    text-align: left;
-  }
-
-  .sobre-ilustracao {
-    margin-top: 6px;
-  }
-
-  .sobre-ilustracao img {
-    width: 125px;
-  }
-
-  /* Detalhes da receita */
-
-  .cabecalho {
-    width: calc(100% - 20px);
-    margin-top: 10px;
-    padding: 32px 18px 18px;
-  }
-
-  .cabecalho h1 {
-    font-size: 2rem;
-  }
-
-  .pagina-detalhe {
-    width: calc(100% - 20px);
-    margin-bottom: 10px;
-    padding: 24px 18px;
-  }
-
-  .bloco-receita {
-    padding: 20px;
-  }
-
-  .bloco-receita h2 {
-    font-size: 1.6rem;
-  }
-
-  .texto-preservado {
-    font-size: 0.86rem;
-    line-height: 1.7;
-  }
-
-  .pagina-receitas.pagina-receitas--centralizada {
-    align-items: center;
-  }
-
-  .pagina-receitas.pagina-receitas--centralizada .receitas-painel {
-    min-height: auto;
-  }
-
-
-
-  /* Login administrativo */
-
-  .pagina-login-adm {
-    padding: 10px;
-  }
-
-  .login-adm-painel {
-    width: 100%;
-    padding: 26px 20px 30px;
-  }
-
-  .login-adm-painel .link-voltar {
-    margin-bottom: 18px;
-  }
-
-  .login-adm-painel h1 {
-    margin-bottom: 22px;
-    font-size: 1.7rem;
-  }
-
-  .login-adm-formulario {
-    gap: 15px;
-  }
-
-  .login-adm-campo {
-    font-size: 0.74rem;
-  }
-
-  .login-adm-campo input {
-    height: 40px;
-    padding: 8px 12px;
-  }
-
-  .login-adm-formulario .login-botao {
-    min-height: 36px;
-    padding: 7px 20px;
-    font-size: 0.72rem;
-  }
-
-}
-
-.campo-senha {
-  position: relative;
-}
-
-.campo-senha input {
-  padding-right: 48px;
-}
-
-.botao-mostrar-senha {
-  position: absolute;
-  top: 50%;
-  right: 8px;
-  display: inline-flex;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  color: #795d6a;
-  background: transparent;
-  font-size: 1rem;
-  cursor: pointer;
-  transform: translateY(-50%);
-}
-
-.botao-mostrar-senha:hover {
-  background: rgba(220, 167, 189, 0.2);
-}
-
-.botao-mostrar-senha:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
-
-.preview-imagem-receita {
-  display: flex;
-  width: 100%;
-  margin-top: -4px;
-  justify-content: center;
-}
-
-.preview-imagem-receita img {
-  display: block;
-  width: 100%;
-  max-width: 420px;
-  max-height: 320px;
-  border-radius: 16px;
-  object-fit: cover;
-  box-shadow: 0 6px 18px rgba(90, 65, 75, 0.16);
-}
+/* Formulários de receitas */
 
 .galeria-preview-receita {
   display: grid;
@@ -1008,6 +598,96 @@ a {
   font-weight: 600;
 }
 
+/* Página Sobre */
+
+.pagina-sobre {
+  align-items: flex-start;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.sobre-painel {
+  width: min(900px, 100%);
+  padding: 56px 64px 40px;
+}
+
+.sobre-texto {
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+.sobre-texto h1 {
+  margin: 8px 0 34px;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.sobre-texto p {
+  margin: 0 0 22px;
+  color: #715f68;
+  font-size: 0.97rem;
+  line-height: 1.9;
+  text-align: justify;
+}
+
+.sobre-ilustracao {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 740px;
+  margin: 12px auto 0;
+}
+
+.sobre-ilustracao img {
+  width: 220px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Página de detalhes */
+
+.cabecalho {
+  width: min(1000px, calc(100% - 48px));
+  margin: 40px auto 0;
+  padding: 54px 32px 24px;
+  color: #755261;
+  background: rgba(255, 251, 253, 0.86);
+  text-align: center;
+  backdrop-filter: blur(13px);
+  clip-path: polygon(
+    28px 0,
+    calc(100% - 28px) 0,
+    100% 28px,
+    100% 100%,
+    0 100%,
+    0 28px
+  );
+}
+
+.cabecalho h1 {
+  margin: 0 0 12px;
+}
+
+.cabecalho p {
+  margin: 0;
+  color: #a16f85;
+}
+
+.pagina-detalhe {
+  width: min(1000px, calc(100% - 48px));
+  margin: 0 auto 40px;
+  padding: 42px;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 28px),
+    calc(100% - 28px) 100%,
+    28px 100%,
+    0 calc(100% - 28px)
+  );
+}
+
+/* Carrossel da receita */
+
 .carrossel-receita {
   width: 100%;
   margin: 24px 0;
@@ -1024,26 +704,21 @@ a {
   display: block;
   width: 100%;
   height: 450px;
-
-  object-fit: contain;
-
   border-radius: 12px;
+  object-fit: contain;
 }
 
 .carrossel-receita__botao {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
   z-index: 2;
-
   width: 44px;
   height: 44px;
-
   border: none;
   border-radius: 50%;
-
   font-size: 32px;
   cursor: pointer;
+  transform: translateY(-50%);
 }
 
 .carrossel-receita__botao--anterior {
@@ -1059,16 +734,13 @@ a {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-
   margin-top: 14px;
 }
 
 .carrossel-receita__miniatura-botao {
   padding: 0;
-
   border: 2px solid transparent;
   border-radius: 8px;
-
   cursor: pointer;
 }
 
@@ -1078,28 +750,323 @@ a {
 
 .carrossel-receita__miniatura {
   display: block;
-
   width: 90px;
   height: 70px;
-
-  object-fit: cover;
-
   border-radius: 6px;
+  object-fit: cover;
 }
 
 .carrossel-receita__contador {
-  text-align: center;
   margin-top: 8px;
+  text-align: center;
 }
 
+/* Conteúdo da receita */
+
+.informacoes-receita {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.informacoes-receita p {
+  margin: 0;
+  padding: 10px 16px;
+  border: 1px solid rgba(210, 161, 181, 0.25);
+  border-radius: 999px;
+  color: #765b68;
+  background: #f9edf2;
+}
+
+.bloco-receita {
+  margin-top: 34px;
+  padding: 28px;
+  border: 1px solid rgba(208, 158, 180, 0.22);
+  background: rgba(255, 250, 252, 0.74);
+}
+
+.bloco-receita h2 {
+  margin: 0 0 16px;
+  color: #755261;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+}
+
+.texto-preservado {
+  margin: 0;
+  color: #78666f;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+
+/* Ações administrativas da receita */
+
 .acoes-receita-admin {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
 }
 
 .botao--pequeno {
+  width: auto;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+}
+
+/* Responsividade */
+
+@media (max-width: 900px) {
+  .home-titulo-principal {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 720px) {
+  .pagina-home,
+  .pagina-login,
+  .pagina-receitas,
+  .pagina-sobre {
+    min-height: 100vh;
+    padding: 10px;
+  }
+
+  /* Página inicial */
+
+  .pagina-home {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .home-painel {
+    width: 100%;
+    padding: 18px 18px 34px;
+  }
+
+  .home-login-adm {
+    min-height: 32px;
+    padding: 6px 12px;
+    font-size: 0.68rem;
+  }
+
+  .home-conteudo {
+    margin-top: 24px;
+  }
+
+  .home-titulo-introducao {
+    margin-bottom: 8px;
+    font-size: 0.92rem;
+    line-height: 1.3;
+  }
+
+  .home-titulo-principal {
+    font-size: 2rem;
+    line-height: 1.12;
+    white-space: normal;
+  }
+
+  .home-acoes {
+    display: flex;
+    gap: 10px;
+    margin-top: 26px;
+  }
+
+  .home-botao {
     width: auto;
-    padding: 8px 14px;
-    font-size: 0.9rem;
+    min-height: 38px;
+    padding: 8px 16px;
+    font-size: 0.74rem;
+  }
+
+  .rodape-projeto {
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  /* Página de login */
+
+  .login-painel {
+    padding: 30px 20px;
+  }
+
+  .login-painel h1 {
+    font-size: 2rem;
+  }
+
+  .login-botao {
+    min-height: 40px;
+    padding: 9px 16px;
+    font-size: 0.76rem;
+  }
+
+  /* Página de receitas */
+
+  .pagina-receitas {
+    align-items: flex-start;
+  }
+
+  .receitas-painel {
+    width: 100%;
+    min-height: auto;
+    padding: 24px 16px;
+  }
+
+  .receitas-cabecalho {
+    margin-bottom: 28px;
+  }
+
+  .receitas-cabecalho h1 {
+    margin-bottom: 18px;
+    font-size: 2rem;
+  }
+
+  .campo-busca {
+    min-height: 42px;
+    padding: 9px 15px;
+    font-size: 0.78rem;
+  }
+
+  .filtros-categoria {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 16px;
+  }
+
+  .filtro-categoria {
+    flex: 1;
+    min-width: 0;
+    min-height: 32px;
+    padding: 5px 6px;
+    font-size: 0.62rem;
+    white-space: nowrap;
+  }
+
+  .grade-receitas {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .receita-card__imagem {
+    height: 180px;
+  }
+
+  .receita-card__conteudo {
+    padding: 18px;
+  }
+
+  .receita-card h2 {
+    font-size: 1.55rem;
+  }
+
+  .pagina-receitas.pagina-receitas--centralizada {
+    align-items: center;
+  }
+
+  .pagina-receitas.pagina-receitas--centralizada .receitas-painel {
+    min-height: auto;
+  }
+
+  /* Página Sobre */
+
+  .pagina-sobre {
+    align-items: flex-start;
+  }
+
+  .sobre-painel {
+    width: 100%;
+    padding: 30px 20px 24px;
+  }
+
+  .sobre-texto h1 {
+    margin-bottom: 24px;
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  .sobre-texto p {
+    margin-bottom: 16px;
+    font-size: 0.84rem;
+    line-height: 1.65;
+    text-align: left;
+  }
+
+  .sobre-ilustracao {
+    margin-top: 6px;
+  }
+
+  .sobre-ilustracao img {
+    width: 125px;
+  }
+
+  /* Detalhes da receita */
+
+  .cabecalho {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+    padding: 32px 18px 18px;
+  }
+
+  .cabecalho h1 {
+    font-size: 2rem;
+  }
+
+  .pagina-detalhe {
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    padding: 24px 18px;
+  }
+
+  .bloco-receita {
+    padding: 20px;
+  }
+
+  .bloco-receita h2 {
+    font-size: 1.6rem;
+  }
+
+  .texto-preservado {
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  /* Login administrativo */
+
+  .pagina-login-adm {
+    padding: 10px;
+  }
+
+  .login-adm-painel {
+    width: 100%;
+    padding: 26px 20px 30px;
+  }
+
+  .login-adm-painel .link-voltar {
+    margin-bottom: 18px;
+  }
+
+  .login-adm-painel h1 {
+    margin-bottom: 22px;
+    font-size: 1.7rem;
+  }
+
+  .login-adm-formulario {
+    gap: 15px;
+  }
+
+  .login-adm-campo {
+    font-size: 0.74rem;
+  }
+
+  .login-adm-campo input {
+    height: 40px;
+    padding: 8px 12px;
+  }
+
+  .login-adm-formulario .login-botao {
+    min-height: 36px;
+    padding: 7px 20px;
+    font-size: 0.72rem;
+  }
 }

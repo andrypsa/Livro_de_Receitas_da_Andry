@@ -12,39 +12,40 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+// Representa os dados recebidos pelo backend para atualizar uma receita existente
 public record AtualizarReceitaRequest(
 
-        @NotBlank @Size(max = 150) String nome,
+                @NotBlank @Size(max = 150) String nome,
 
-        @NotNull Categoria categoria,
+                @NotNull Categoria categoria,
 
-        @NotBlank String ingredientes,
+                @NotBlank String ingredientes,
 
-        @NotBlank String modoPreparo,
+                @NotBlank String modoPreparo,
 
-        String ingredientesRecheio,
-        String modoPreparoRecheio,
+                String ingredientesRecheio,
+                String modoPreparoRecheio,
 
-        String ingredientesCobertura,
-        String modoPreparoCobertura,
+                String ingredientesCobertura,
+                String modoPreparoCobertura,
 
-        List<String> imagensUrls,
+                List<String> imagensUrls,
 
-        String observacoes,
+                String observacoes,
 
-        Integer tempoPreparoMinutos,
+                Integer tempoPreparoMinutos,
 
-        @Size(max = 100) String rendimento,
+                @Size(max = 100) String rendimento,
 
-        Dificuldade dificuldade,
+                Dificuldade dificuldade,
 
-        OrigemReceita origem,
+                OrigemReceita origem,
 
-        StatusReceita status,
+                StatusReceita status,
 
-        PrivacidadeReceita privacidade,
+                PrivacidadeReceita privacidade,
 
-        boolean favorita,
+                boolean favorita,
 
-        boolean comentariosAtivos) {
+                boolean comentariosAtivos) {
 }

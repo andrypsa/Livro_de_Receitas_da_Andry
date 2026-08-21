@@ -4,6 +4,7 @@ import com.andry.livrodigitalreceitas.model.Receita;
 import com.andry.livrodigitalreceitas.model.enums.Categoria;
 import com.andry.livrodigitalreceitas.model.enums.Dificuldade;
 
+// Representa os dados resumidos de uma receita usados nas listagens
 public record ReceitaResumoDTO(
         Long id,
         String nome,
@@ -11,9 +12,9 @@ public record ReceitaResumoDTO(
         Integer tempoPreparoMinutos,
         String rendimento,
         Dificuldade dificuldade,
-        String imagemUrl
-) {
+        String imagemUrl) {
 
+    // Converte uma entidade Receita para o DTO de resumo
     public static ReceitaResumoDTO de(Receita receita) {
         return new ReceitaResumoDTO(
                 receita.getId(),
@@ -22,7 +23,6 @@ public record ReceitaResumoDTO(
                 receita.getTempoPreparoMinutos(),
                 receita.getRendimento(),
                 receita.getDificuldade(),
-                receita.getImagemUrl()
-        );
+                receita.getImagemUrl());
     }
 }

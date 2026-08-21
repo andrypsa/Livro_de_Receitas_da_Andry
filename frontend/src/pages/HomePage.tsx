@@ -5,6 +5,7 @@ export function HomePage() {
     return (
         <main className="pagina-home">
             <section className="home-painel">
+                {/* Acesso rápido à área administrativa */}
                 <div className="home-topo">
                     <Link
                         className="home-login-adm"
@@ -14,6 +15,7 @@ export function HomePage() {
                     </Link>
                 </div>
 
+                {/* Conteúdo principal da página inicial */}
                 <div className="home-conteudo">
                     <h1 className="home-titulo">
                         <span className="home-titulo-introducao">
@@ -25,8 +27,12 @@ export function HomePage() {
                         </span>
                     </h1>
 
+                    {/* Ações principais de navegação */}
                     <div className="home-acoes">
-                        <Link className="home-botao" to="/receitas">
+                        <Link
+                            className="home-botao"
+                            to="/receitas"
+                        >
                             Acessar receitas
                         </Link>
 
@@ -40,6 +46,7 @@ export function HomePage() {
                 </div>
             </section>
 
+            {/* Rodapé compartilhado da aplicação */}
             <Rodape />
         </main>
     )

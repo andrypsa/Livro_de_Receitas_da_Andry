@@ -24,139 +24,146 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/admin/receitas")
 public class AdminReceitaController {
 
-    private final ReceitaService receitaService;
+        private final ReceitaService receitaService;
 
-    public AdminReceitaController(
-            ReceitaService receitaService) {
-        this.receitaService = receitaService;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ReceitaResumoDTO>> listarTodas() {
-
-        List<ReceitaResumoDTO> receitas = receitaService
-                .listarTodas()
-                .stream()
-                .map(this::converterParaResumo)
-                .toList();
-
-        return ResponseEntity.ok(receitas);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ReceitaDetalheDTO> buscarPorId(
-            @PathVariable Long id) {
-
-        Receita receita = receitaService.buscarPorId(id);
-
-        return ResponseEntity.ok(
-                ReceitaDetalheDTO.de(receita));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirReceita(
-            @PathVariable Long id) {
-
-        receitaService.excluirPorId(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ReceitaDetalheDTO> atualizarReceita(
-            @PathVariable Long id,
-            @Valid @RequestBody AtualizarReceitaRequest dados) {
-
-        Receita receita = receitaService.buscarPorId(id);
-
-        receita.setNome(dados.nome());
-        receita.setCategoria(dados.categoria());
-
-        receita.setIngredientes(dados.ingredientes());
-        receita.setModoPreparo(dados.modoPreparo());
-
-        receita.setIngredientesRecheio(
-                dados.ingredientesRecheio());
-
-        receita.setModoPreparoRecheio(
-                dados.modoPreparoRecheio());
-
-        receita.setIngredientesCobertura(
-                dados.ingredientesCobertura());
-
-        receita.setModoPreparoCobertura(
-                dados.modoPreparoCobertura());
-
-        receita.setObservacoes(dados.observacoes());
-
-        receita.setTempoPreparoMinutos(
-                dados.tempoPreparoMinutos());
-
-        receita.setRendimento(dados.rendimento());
-
-        receita.setDificuldade(dados.dificuldade());
-
-        receita.setOrigem(dados.origem());
-
-        receita.setStatus(dados.status());
-
-        receita.setPrivacidade(dados.privacidade());
-
-        receita.setFavorita(dados.favorita());
-
-        receita.setComentariosAtivos(
-                dados.comentariosAtivos());
-
-        atualizarImagens(
-                receita,
-                dados.imagensUrls());
-
-        Receita receitaAtualizada = receitaService.salvar(receita);
-
-        return ResponseEntity.ok(
-                ReceitaDetalheDTO.de(
-                        receitaAtualizada));
-    }
-
-    private ReceitaResumoDTO converterParaResumo(
-            Receita receita) {
-
-        return ReceitaResumoDTO.de(receita);
-    }
-
-    private void atualizarImagens(
-            Receita receita,
-            List<String> imagensUrls) {
-
-        receita.getImagens().clear();
-        receita.setImagemUrl(null);
-
-        if (imagensUrls == null ||
-                imagensUrls.isEmpty()) {
-            return;
+        public AdminReceitaController(
+                        ReceitaService receitaService) {
+                this.receitaService = receitaService;
         }
 
-        for (int indice = 0; indice < imagensUrls.size(); indice++) {
+        // Lista todas as receitas disponíveis para a área administrativa
+        @GetMapping
+        public ResponseEntity<List<ReceitaResumoDTO>> listarTodas() {
 
-            String url = imagensUrls.get(indice);
+                List<ReceitaResumoDTO> receitas = receitaService
+                                .listarTodas()
+                                .stream()
+                                .map(this::converterParaResumo)
+                                .toList();
 
-            if (url == null || url.isBlank()) {
-                continue;
-            }
-
-            String urlTratada = url.trim();
-
-            ImagemReceita imagem = new ImagemReceita();
-
-            imagem.setUrl(urlTratada);
-            imagem.setPrincipal(indice == 0);
-
-            receita.adicionarImagem(imagem);
-
-            if (indice == 0) {
-                receita.setImagemUrl(
-                        urlTratada);
-            }
+                return ResponseEntity.ok(receitas);
         }
-    }
+
+        // Busca os detalhes completos de uma receita pelo ID
+        @GetMapping("/{id}")
+        public ResponseEntity<ReceitaDetalheDTO> buscarPorId(
+                        @PathVariable Long id) {
+
+                Receita receita = receitaService.buscarPorId(id);
+
+                return ResponseEntity.ok(
+                                ReceitaDetalheDTO.de(receita));
+        }
+
+        // Exclui uma receita pelo ID
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> excluirReceita(
+                        @PathVariable Long id) {
+
+                receitaService.excluirPorId(id);
+
+                return ResponseEntity.noContent().build();
+        }
+
+        // Atualiza os dados de uma receita existente
+        @PutMapping("/{id}")
+        public ResponseEntity<ReceitaDetalheDTO> atualizarReceita(
+                        @PathVariable Long id,
+                        @Valid @RequestBody AtualizarReceitaRequest dados) {
+
+                Receita receita = receitaService.buscarPorId(id);
+
+                receita.setNome(dados.nome());
+                receita.setCategoria(dados.categoria());
+
+                receita.setIngredientes(dados.ingredientes());
+                receita.setModoPreparo(dados.modoPreparo());
+
+                receita.setIngredientesRecheio(
+                                dados.ingredientesRecheio());
+
+                receita.setModoPreparoRecheio(
+                                dados.modoPreparoRecheio());
+
+                receita.setIngredientesCobertura(
+                                dados.ingredientesCobertura());
+
+                receita.setModoPreparoCobertura(
+                                dados.modoPreparoCobertura());
+
+                receita.setObservacoes(dados.observacoes());
+
+                receita.setTempoPreparoMinutos(
+                                dados.tempoPreparoMinutos());
+
+                receita.setRendimento(dados.rendimento());
+
+                receita.setDificuldade(dados.dificuldade());
+
+                receita.setOrigem(dados.origem());
+
+                receita.setStatus(dados.status());
+
+                receita.setPrivacidade(dados.privacidade());
+
+                receita.setFavorita(dados.favorita());
+
+                receita.setComentariosAtivos(
+                                dados.comentariosAtivos());
+
+                atualizarImagens(
+                                receita,
+                                dados.imagensUrls());
+
+                Receita receitaAtualizada = receitaService.salvar(receita);
+
+                return ResponseEntity.ok(
+                                ReceitaDetalheDTO.de(
+                                                receitaAtualizada));
+        }
+
+        // Converte a entidade Receita para o DTO usado nas listagens
+        private ReceitaResumoDTO converterParaResumo(
+                        Receita receita) {
+
+                return ReceitaResumoDTO.de(receita);
+        }
+
+        // Substitui as imagens atuais da receita pelas URLs recebidas
+        // e define a primeira imagem válida como imagem principal
+        private void atualizarImagens(
+                        Receita receita,
+                        List<String> imagensUrls) {
+
+                receita.getImagens().clear();
+                receita.setImagemUrl(null);
+
+                if (imagensUrls == null ||
+                                imagensUrls.isEmpty()) {
+                        return;
+                }
+
+                for (int indice = 0; indice < imagensUrls.size(); indice++) {
+
+                        String url = imagensUrls.get(indice);
+
+                        if (url == null || url.isBlank()) {
+                                continue;
+                        }
+
+                        String urlTratada = url.trim();
+
+                        ImagemReceita imagem = new ImagemReceita();
+
+                        imagem.setUrl(urlTratada);
+                        imagem.setPrincipal(indice == 0);
+
+                        receita.adicionarImagem(imagem);
+
+                        if (indice == 0) {
+                                receita.setImagemUrl(
+                                                urlTratada);
+                        }
+                }
+        }
 }

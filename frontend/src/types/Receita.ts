@@ -1,6 +1,13 @@
-export type Categoria = 'DOCE' | 'SALGADO' | 'MISTO'
+// Tipos utilizados para representar os valores aceitos pelo backend
+export type Categoria =
+    | 'DOCE'
+    | 'SALGADO'
+    | 'MISTO'
 
-export type Dificuldade = 'FACIL' | 'MEDIA' | 'DIFICIL'
+export type Dificuldade =
+    | 'FACIL'
+    | 'MEDIA'
+    | 'DIFICIL'
 
 export type OrigemReceita =
     | 'AUTORAL'
@@ -22,6 +29,7 @@ export type PrivacidadeReceita =
     | 'PUBLICA'
     | 'PRIVADA'
 
+// Representa os dados resumidos de uma receita usados nas listagens
 export interface Receita {
     id: number
     nome: string
@@ -32,6 +40,7 @@ export interface Receita {
     imagemUrl: string | null
 }
 
+// Representa os dados completos exibidos na página de detalhes
 export interface ReceitaDetalhe extends Receita {
     ingredientes: string
     modoPreparo: string
@@ -41,7 +50,9 @@ export interface ReceitaDetalhe extends Receita {
 
     ingredientesCobertura: string | null
     modoPreparoCobertura: string | null
+
     imagens: string[]
+
     observacoes: string | null
     origem: OrigemReceita | null
     status: StatusReceita | null
@@ -50,16 +61,21 @@ export interface ReceitaDetalhe extends Receita {
     comentariosAtivos: boolean
 }
 
+// Representa os dados enviados ao backend no cadastro e edição de receitas
 export interface CriarReceitaDados {
     nome: string
     categoria: Categoria
     ingredientes: string
     modoPreparo: string
+
     ingredientesRecheio: string | null
     modoPreparoRecheio: string | null
+
     ingredientesCobertura: string | null
     modoPreparoCobertura: string | null
+
     imagensUrls: string[]
+
     observacoes: string | null
     tempoPreparoMinutos: number | null
     rendimento: string | null

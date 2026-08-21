@@ -1,5 +1,6 @@
 package com.andry.livrodigitalreceitas.model.enums;
 
+// Define as possíveis origens de uma receita
 public enum OrigemReceita {
 
     AUTORAL,

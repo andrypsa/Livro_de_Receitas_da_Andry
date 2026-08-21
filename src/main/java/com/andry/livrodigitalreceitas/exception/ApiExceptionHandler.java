@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+        // Trata erros de validação dos dados recebidos pela API
         @ExceptionHandler(MethodArgumentNotValidException.class)
         public ResponseEntity<ErroApiResponse> tratarErroDeValidacao(
                         MethodArgumentNotValidException exception) {
+
                 Map<String, String> campos = new LinkedHashMap<>();
 
                 exception.getBindingResult()
@@ -36,9 +38,11 @@ public class ApiExceptionHandler {
                                 .body(resposta);
         }
 
+        // Trata argumentos inválidos enviados para as regras de negócio
         @ExceptionHandler(IllegalArgumentException.class)
         public ResponseEntity<ErroApiResponse> tratarArgumentoInvalido(
                         IllegalArgumentException exception) {
+
                 ErroApiResponse resposta = new ErroApiResponse(
                                 HttpStatus.BAD_REQUEST.value(),
                                 exception.getMessage(),
@@ -50,9 +54,11 @@ public class ApiExceptionHandler {
                                 .body(resposta);
         }
 
+        // Trata operações que não podem ser executadas no estado atual do sistema
         @ExceptionHandler(IllegalStateException.class)
         public ResponseEntity<ErroApiResponse> tratarEstadoInvalido(
                         IllegalStateException exception) {
+
                 ErroApiResponse resposta = new ErroApiResponse(
                                 HttpStatus.CONFLICT.value(),
                                 exception.getMessage(),
@@ -64,16 +70,11 @@ public class ApiExceptionHandler {
                                 .body(resposta);
         }
 
-        private record ErroApiResponse(
-                        int status,
-                        String mensagem,
-                        Map<String, String> campos,
-                        LocalDateTime horario) {
-        }
-
+        // Trata falhas de autenticação do administrador
         @ExceptionHandler(AuthenticationException.class)
         public ResponseEntity<ErroApiResponse> tratarErroDeAutenticacao(
                         AuthenticationException exception) {
+
                 ErroApiResponse resposta = new ErroApiResponse(
                                 HttpStatus.UNAUTHORIZED.value(),
                                 "E-mail ou senha inválidos.",
@@ -83,5 +84,13 @@ public class ApiExceptionHandler {
                 return ResponseEntity
                                 .status(HttpStatus.UNAUTHORIZED)
                                 .body(resposta);
+        }
+
+        // Define o formato padrão das respostas de erro da API
+        private record ErroApiResponse(
+                        int status,
+                        String mensagem,
+                        Map<String, String> campos,
+                        LocalDateTime horario) {
         }
 }

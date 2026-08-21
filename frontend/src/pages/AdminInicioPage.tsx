@@ -17,10 +17,13 @@ export function AdminInicioPage() {
     const [erroLogout, setErroLogout] = useState('')
     const [saindo, setSaindo] = useState(false)
 
+    // Carrega todas as receitas disponíveis para a área administrativa
     useEffect(() => {
         async function carregarReceitas() {
             try {
-                const receitasCarregadas = await listarReceitasAdmin()
+                const receitasCarregadas =
+                    await listarReceitasAdmin()
+
                 setReceitas(receitasCarregadas)
             } catch {
                 setErroReceitas(
@@ -34,13 +37,18 @@ export function AdminInicioPage() {
         carregarReceitas()
     }, [])
 
+    // Encerra a sessão do administrador e retorna para a tela de login
     async function sair() {
         setErroLogout('')
         setSaindo(true)
 
         try {
             await logoutAdministrador()
-            navigate('/login-adm', { replace: true })
+
+            navigate(
+                '/login-adm',
+                { replace: true },
+            )
         } catch (erroRecebido) {
             const mensagem =
                 erroRecebido instanceof Error
@@ -55,9 +63,11 @@ export function AdminInicioPage() {
 
     return (
         <main
-            className={`pagina-receitas ${carregando || erroReceitas || receitas.length === 0
-                ? 'pagina-receitas--centralizada'
-                : ''
+            className={`pagina-receitas ${carregando ||
+                    erroReceitas ||
+                    receitas.length === 0
+                    ? 'pagina-receitas--centralizada'
+                    : ''
                 }`}
         >
             <section className="receitas-painel">
@@ -67,9 +77,7 @@ export function AdminInicioPage() {
                     <p>
                         Gerencie as receitas cadastradas no sistema.
                     </p>
-                    <p>
-                        Total de receitas carregadas: {receitas.length}
-                    </p>
+
                     <Link
                         className="login-botao"
                         to="/admin/receitas/nova"
@@ -87,6 +95,7 @@ export function AdminInicioPage() {
                     </button>
                 </header>
 
+                {/* Exibe mensagens e estados do carregamento da área administrativa */}
                 {erroLogout && (
                     <p className="mensagem-login mensagem-login--erro">
                         {erroLogout}

@@ -12,15 +12,20 @@ type CategoriaSelecionada = 'TODAS' | Categoria
 export function ListaReceitasPage() {
     const [receitas, setReceitas] = useState<Receita[]>([])
     const [busca, setBusca] = useState('')
+
     const [categoriaSelecionada, setCategoriaSelecionada] =
         useState<CategoriaSelecionada>('TODAS')
+
     const [carregando, setCarregando] = useState(true)
     const [erro, setErro] = useState(false)
 
+    // Carrega as receitas públicas ao abrir a página
     useEffect(() => {
         async function carregarReceitas() {
             try {
-                const receitasCarregadas = await listarReceitas()
+                const receitasCarregadas =
+                    await listarReceitas()
+
                 setReceitas(receitasCarregadas)
             } catch {
                 setErro(true)
@@ -32,97 +37,137 @@ export function ListaReceitasPage() {
         carregarReceitas()
     }, [])
 
+    // Filtra as receitas pelo nome pesquisado e pela categoria selecionada
     const receitasFiltradas = useMemo(() => {
-        const termoPesquisado = busca.trim().toLowerCase()
+        const termoPesquisado =
+            busca.trim().toLowerCase()
 
         return receitas.filter((receita) => {
-            const correspondeAoNome = receita.nome
-                .toLowerCase()
-                .includes(termoPesquisado)
+            const correspondeAoNome =
+                receita.nome
+                    .toLowerCase()
+                    .includes(termoPesquisado)
 
             const correspondeACategoria =
                 categoriaSelecionada === 'TODAS' ||
                 receita.categoria === categoriaSelecionada
 
-            return correspondeAoNome && correspondeACategoria
+            return (
+                correspondeAoNome &&
+                correspondeACategoria
+            )
         })
-    }, [busca, categoriaSelecionada, receitas])
+    }, [
+        busca,
+        categoriaSelecionada,
+        receitas,
+    ])
 
     const paginaSemReceitas =
-        carregando || erro || receitasFiltradas.length === 0
+        carregando ||
+        erro ||
+        receitasFiltradas.length === 0
 
     return (
         <main
-            className={`pagina-receitas ${paginaSemReceitas ? 'pagina-receitas--centralizada' : ''
+            className={`pagina-receitas ${paginaSemReceitas
+                    ? 'pagina-receitas--centralizada'
+                    : ''
                 }`}
         >
             <section className="receitas-painel">
-                <Link className="link-voltar" to="/">
+                <Link
+                    className="link-voltar"
+                    to="/"
+                >
                     ← Voltar ao início
                 </Link>
 
                 <header className="receitas-cabecalho">
                     <h1>Receitas</h1>
 
+                    {/* Busca receitas pelo nome */}
                     <input
                         className="campo-busca"
                         type="search"
                         value={busca}
-                        onChange={(evento) => setBusca(evento.target.value)}
+                        onChange={(evento) =>
+                            setBusca(
+                                evento.target.value,
+                            )
+                        }
                         placeholder="Qual receita gostaria de fazer hoje?"
                         aria-label="Pesquisar receitas pelo nome"
                     />
 
+                    {/* Filtra as receitas pela categoria selecionada */}
                     <nav
                         className="filtros-categoria"
                         aria-label="Filtrar receitas por categoria"
                     >
                         <button
                             className={`filtro-categoria ${categoriaSelecionada === 'TODAS'
-                                ? 'filtro-categoria--ativo'
-                                : ''
+                                    ? 'filtro-categoria--ativo'
+                                    : ''
                                 }`}
                             type="button"
-                            onClick={() => setCategoriaSelecionada('TODAS')}
+                            onClick={() =>
+                                setCategoriaSelecionada(
+                                    'TODAS',
+                                )
+                            }
                         >
                             Todas
                         </button>
 
                         <button
                             className={`filtro-categoria ${categoriaSelecionada === 'SALGADO'
-                                ? 'filtro-categoria--ativo'
-                                : ''
+                                    ? 'filtro-categoria--ativo'
+                                    : ''
                                 }`}
                             type="button"
-                            onClick={() => setCategoriaSelecionada('SALGADO')}
+                            onClick={() =>
+                                setCategoriaSelecionada(
+                                    'SALGADO',
+                                )
+                            }
                         >
                             Salgadas
                         </button>
 
                         <button
                             className={`filtro-categoria ${categoriaSelecionada === 'DOCE'
-                                ? 'filtro-categoria--ativo'
-                                : ''
+                                    ? 'filtro-categoria--ativo'
+                                    : ''
                                 }`}
                             type="button"
-                            onClick={() => setCategoriaSelecionada('DOCE')}
+                            onClick={() =>
+                                setCategoriaSelecionada(
+                                    'DOCE',
+                                )
+                            }
                         >
                             Doces
                         </button>
 
                         <button
                             className={`filtro-categoria ${categoriaSelecionada === 'MISTO'
-                                ? 'filtro-categoria--ativo'
-                                : ''
+                                    ? 'filtro-categoria--ativo'
+                                    : ''
                                 }`}
                             type="button"
-                            onClick={() => setCategoriaSelecionada('MISTO')}
+                            onClick={() =>
+                                setCategoriaSelecionada(
+                                    'MISTO',
+                                )
+                            }
                         >
                             Mistas
                         </button>
                     </nav>
                 </header>
 
+                {/* Exibe os estados de carregamento, erro e resultados da busca */}
                 {carregando && (
                     <p className="mensagem-centralizada">
                         Carregando receitas...
@@ -135,19 +180,28 @@ export function ListaReceitasPage() {
                     </p>
                 )}
 
-                {!carregando && !erro && receitasFiltradas.length === 0 && (
-                    <p className="mensagem-centralizada">
-                        Nenhuma receita encontrada.
-                    </p>
-                )}
+                {!carregando &&
+                    !erro &&
+                    receitasFiltradas.length === 0 && (
+                        <p className="mensagem-centralizada">
+                            Nenhuma receita encontrada.
+                        </p>
+                    )}
 
-                {!carregando && !erro && receitasFiltradas.length > 0 && (
-                    <div className="grade-receitas">
-                        {receitasFiltradas.map((receita) => (
-                            <ReceitaCard key={receita.id} receita={receita} />
-                        ))}
-                    </div>
-                )}
+                {!carregando &&
+                    !erro &&
+                    receitasFiltradas.length > 0 && (
+                        <div className="grade-receitas">
+                            {receitasFiltradas.map(
+                                (receita) => (
+                                    <ReceitaCard
+                                        key={receita.id}
+                                        receita={receita}
+                                    />
+                                ),
+                            )}
+                        </div>
+                    )}
             </section>
         </main>
     )

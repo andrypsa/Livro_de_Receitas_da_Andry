@@ -9,17 +9,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Override
-    public void addResourceHandlers(
-            ResourceHandlerRegistry registry) {
-        String pastaUploads = Paths.get("uploads")
-                .toAbsolutePath()
-                .normalize()
-                .toUri()
-                .toString();
+        // Expõe a pasta local de uploads para acesso pelas URLs /uploads/**
+        @Override
+        public void addResourceHandlers(
+                        ResourceHandlerRegistry registry) {
 
-        registry
-                .addResourceHandler("/uploads/**")
-                .addResourceLocations(pastaUploads);
-    }
+                String pastaUploads = Paths.get("uploads")
+                                .toAbsolutePath()
+                                .normalize()
+                                .toUri()
+                                .toString();
+
+                registry
+                                .addResourceHandler("/uploads/**")
+                                .addResourceLocations(pastaUploads);
+        }
 }
