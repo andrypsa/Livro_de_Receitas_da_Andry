@@ -23,10 +23,8 @@ body {
   min-height: 100vh;
   margin: 0;
   background-image:
-    linear-gradient(
-      rgba(255, 247, 250, 0.2),
-      rgba(255, 247, 250, 0.2)
-    ),
+    linear-gradient(rgba(255, 247, 250, 0.2),
+      rgba(255, 247, 250, 0.2)),
     url('/images/fundo_floral.png');
   background-attachment: fixed;
   background-position: center;
@@ -75,16 +73,14 @@ a {
   background: rgba(255, 251, 253, 0.86);
   box-shadow: 0 24px 70px rgba(127, 78, 102, 0.2);
   backdrop-filter: blur(13px);
-  clip-path: polygon(
-    28px 0,
-    calc(100% - 28px) 0,
-    100% 28px,
-    100% calc(100% - 28px),
-    calc(100% - 28px) 100%,
-    28px 100%,
-    0 calc(100% - 28px),
-    0 28px
-  );
+  clip-path: polygon(28px 0,
+      calc(100% - 28px) 0,
+      100% 28px,
+      100% calc(100% - 28px),
+      calc(100% - 28px) 100%,
+      28px 100%,
+      0 calc(100% - 28px),
+      0 28px);
 }
 
 .botao,
@@ -302,16 +298,14 @@ a {
   box-shadow: 0 24px 70px rgba(127, 78, 102, 0.2);
   text-align: center;
   backdrop-filter: blur(13px);
-  clip-path: polygon(
-    26px 0,
-    calc(100% - 26px) 0,
-    100% 26px,
-    100% calc(100% - 26px),
-    calc(100% - 26px) 100%,
-    26px 100%,
-    0 calc(100% - 26px),
-    0 26px
-  );
+  clip-path: polygon(26px 0,
+      calc(100% - 26px) 0,
+      100% 26px,
+      100% calc(100% - 26px),
+      calc(100% - 26px) 100%,
+      26px 100%,
+      0 calc(100% - 26px),
+      0 26px);
 }
 
 .login-adm-painel .link-voltar {
@@ -481,14 +475,12 @@ a {
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
-  clip-path: polygon(
-    18px 0,
-    100% 0,
-    100% calc(100% - 18px),
-    calc(100% - 18px) 100%,
-    0 100%,
-    0 18px
-  );
+  clip-path: polygon(18px 0,
+      100% 0,
+      100% calc(100% - 18px),
+      calc(100% - 18px) 100%,
+      0 100%,
+      0 18px);
 }
 
 .receita-card:hover {
@@ -653,14 +645,12 @@ a {
   background: rgba(255, 251, 253, 0.86);
   text-align: center;
   backdrop-filter: blur(13px);
-  clip-path: polygon(
-    28px 0,
-    calc(100% - 28px) 0,
-    100% 28px,
-    100% 100%,
-    0 100%,
-    0 28px
-  );
+  clip-path: polygon(28px 0,
+      calc(100% - 28px) 0,
+      100% 28px,
+      100% 100%,
+      0 100%,
+      0 28px);
 }
 
 .cabecalho h1 {
@@ -676,14 +666,12 @@ a {
   width: min(1000px, calc(100% - 48px));
   margin: 0 auto 40px;
   padding: 42px;
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - 28px),
-    calc(100% - 28px) 100%,
-    28px 100%,
-    0 calc(100% - 28px)
-  );
+  clip-path: polygon(0 0,
+      100% 0,
+      100% calc(100% - 28px),
+      calc(100% - 28px) 100%,
+      28px 100%,
+      0 calc(100% - 28px));
 }
 
 /* Carrossel da receita */
@@ -779,6 +767,15 @@ a {
   background: #f9edf2;
 }
 
+.informacoes-secundarias-receita {
+  margin-top: 24px;
+  font-size: 0.9rem;
+}
+
+.informacoes-secundarias-receita p {
+  margin: 4px 0;
+}
+
 .bloco-receita {
   margin-top: 34px;
   padding: 28px;
@@ -823,6 +820,7 @@ a {
 }
 
 @media (max-width: 720px) {
+
   .pagina-home,
   .pagina-login,
   .pagina-receitas,
