@@ -38,6 +38,22 @@ public class ApiExceptionHandler {
                                 .body(resposta);
         }
 
+        // Trata tentativas de acessar receitas que não foram encontradas
+        @ExceptionHandler(ReceitaNaoEncontradaException.class)
+        public ResponseEntity<ErroApiResponse> tratarReceitaNaoEncontrada(
+                        ReceitaNaoEncontradaException exception) {
+
+                ErroApiResponse resposta = new ErroApiResponse(
+                                HttpStatus.NOT_FOUND.value(),
+                                exception.getMessage(),
+                                Map.of(),
+                                LocalDateTime.now());
+
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(resposta);
+        }
+
         // Trata argumentos inválidos enviados para as regras de negócio
         @ExceptionHandler(IllegalArgumentException.class)
         public ResponseEntity<ErroApiResponse> tratarArgumentoInvalido(

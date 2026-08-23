@@ -61,8 +61,8 @@ export interface ReceitaDetalhe extends Receita {
     comentariosAtivos: boolean
 }
 
-// Representa os dados enviados ao backend no cadastro e edição de receitas
-export interface CriarReceitaDados {
+// Representa os dados enviados ao backend no cadastro e na edição de receitas
+export interface SalvarReceitaDados {
     nome: string
     categoria: Categoria
     ingredientes: string

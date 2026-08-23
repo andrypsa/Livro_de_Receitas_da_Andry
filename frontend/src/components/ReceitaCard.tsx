@@ -2,33 +2,13 @@ import { Link } from 'react-router-dom'
 
 import type { Receita } from '../types/Receita'
 
+import {
+    formatarEnum,
+    formatarTempoPreparo,
+} from '../utils/formatadores'
 interface ReceitaCardProps {
     receita: Receita
     modoAdmin?: boolean
-}
-
-// Formata valores de enum para exibição na interface
-function formatarEnum(valor: string): string {
-    return valor
-        .toLowerCase()
-        .replaceAll('_', ' ')
-        .replace(/\b\w/g, (letra) => letra.toUpperCase())
-}
-
-// Converte o tempo total em minutos para horas e minutos
-function formatarTempoPreparo(totalMinutos: number): string {
-    const horas = Math.floor(totalMinutos / 60)
-    const minutos = totalMinutos % 60
-
-    if (horas === 0) {
-        return `${minutos} min`
-    }
-
-    if (minutos === 0) {
-        return `${horas}h`
-    }
-
-    return `${horas}h ${minutos}min`
 }
 
 // Exibe o resumo da receita nas listagens pública e administrativa

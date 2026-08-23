@@ -104,9 +104,16 @@ public class AdministradorController {
         public ResponseEntity<SessaoAdministradorResponse> consultarSessao(
                         Authentication autenticacao) {
 
+                boolean principal = autenticacao
+                                .getAuthorities()
+                                .stream()
+                                .anyMatch(autoridade -> autoridade.getAuthority()
+                                                .equals("ROLE_ADMIN_PRINCIPAL"));
+
                 SessaoAdministradorResponse resposta = new SessaoAdministradorResponse(
                                 true,
-                                autenticacao.getName());
+                                autenticacao.getName(),
+                                principal);
 
                 return ResponseEntity.ok(resposta);
         }
@@ -154,7 +161,8 @@ public class AdministradorController {
 
         private record SessaoAdministradorResponse(
                         boolean autenticado,
-                        String email) {
+                        String email,
+                        boolean principal) {
         }
 
         private record MensagemResponse(

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
@@ -96,6 +96,22 @@ function FormularioEdicao({
     const [previewsImagem, setPreviewsImagem] =
         useState<string[]>([])
 
+    const previewsImagemRef = useRef<string[]>([])
+
+    // Mantém a referência das prévias atualizada para limpeza ao sair da página
+    useEffect(() => {
+        previewsImagemRef.current = previewsImagem
+    }, [previewsImagem])
+
+    // Libera as URLs temporárias das novas imagens ao desmontar o formulário
+    useEffect(() => {
+        return () => {
+            previewsImagemRef.current.forEach((preview) => {
+                URL.revokeObjectURL(preview)
+            })
+        }
+    }, [])
+
     // Converte o tempo armazenado em minutos para horas e minutos no formulário
     const [tempoPreparoHoras, setTempoPreparoHoras] =
         useState(
@@ -156,6 +172,92 @@ function FormularioEdicao({
 
     const [salvando, setSalvando] =
         useState(false)
+
+    // Valida novas imagens selecionadas e cria suas prévias
+    function selecionarImagens(
+        evento: ChangeEvent<HTMLInputElement>,
+    ) {
+        const arquivos = Array.from(
+            evento.target.files ?? [],
+        )
+
+        if (arquivos.length === 0) {
+            return
+        }
+
+        const tipoInvalido = arquivos.find(
+            (arquivo) =>
+                ![
+                    'image/jpeg',
+                    'image/png',
+                    'image/webp',
+                ].includes(arquivo.type),
+        )
+
+        if (tipoInvalido) {
+            setErroSalvar(
+                'Selecione apenas imagens JPG, PNG ou WebP.',
+            )
+
+            evento.target.value = ''
+            return
+        }
+
+        const arquivoMaiorQuePermitido =
+            arquivos.find(
+                (arquivo) =>
+                    arquivo.size > 5 * 1024 * 1024,
+            )
+
+        if (arquivoMaiorQuePermitido) {
+            setErroSalvar(
+                'Cada imagem deve ter no máximo 5 MB.',
+            )
+
+            evento.target.value = ''
+            return
+        }
+
+        setErroSalvar('')
+
+        setArquivosImagem((arquivosAtuais) => [
+            ...arquivosAtuais,
+            ...arquivos,
+        ])
+
+        setPreviewsImagem((previewsAtuais) => [
+            ...previewsAtuais,
+            ...arquivos.map((arquivo) =>
+                URL.createObjectURL(arquivo),
+            ),
+        ])
+
+        evento.target.value = ''
+    }
+
+    // Remove uma nova imagem antes de salvar as alterações
+    function removerNovaImagem(indice: number) {
+        const previewRemovido =
+            previewsImagem[indice]
+
+        if (previewRemovido) {
+            URL.revokeObjectURL(previewRemovido)
+        }
+
+        setArquivosImagem((arquivosAtuais) =>
+            arquivosAtuais.filter(
+                (_, indiceAtual) =>
+                    indiceAtual !== indice,
+            ),
+        )
+
+        setPreviewsImagem((previewsAtuais) =>
+            previewsAtuais.filter(
+                (_, indiceAtual) =>
+                    indiceAtual !== indice,
+            ),
+        )
+    }
 
     // Envia novas imagens, reúne os dados do formulário e atualiza a receita
     async function salvarAlteracoes(
@@ -458,21 +560,7 @@ function FormularioEdicao({
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
                     multiple
-                    onChange={(
-                        evento: ChangeEvent<HTMLInputElement>,
-                    ) => {
-                        const arquivos = Array.from(
-                            evento.target.files ?? [],
-                        )
-
-                        setArquivosImagem(arquivos)
-
-                        setPreviewsImagem(
-                            arquivos.map((arquivo) =>
-                                URL.createObjectURL(arquivo),
-                            ),
-                        )
-                    }}
+                    onChange={selecionarImagens}
                 />
             </label>
 
@@ -502,6 +590,8 @@ function FormularioEdicao({
                                                 ),
                                         )
                                     }
+                                    aria-label={`Remover foto atual ${indice + 1}`}
+                                    title="Remover foto"
                                 >
                                     ×
                                 </button>
@@ -529,6 +619,18 @@ function FormularioEdicao({
                                     src={preview}
                                     alt={`Nova foto ${indice + 1}`}
                                 />
+
+                                <button
+                                    className="botao-remover-imagem"
+                                    type="button"
+                                    onClick={() =>
+                                        removerNovaImagem(indice)
+                                    }
+                                    aria-label={`Remover nova foto ${indice + 1}`}
+                                    title="Remover foto"
+                                >
+                                    ×
+                                </button>
 
                                 <span>
                                     Nova foto

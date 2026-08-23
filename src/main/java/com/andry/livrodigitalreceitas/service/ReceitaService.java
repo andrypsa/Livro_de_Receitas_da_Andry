@@ -51,8 +51,7 @@ public class ReceitaService {
                         id,
                         PrivacidadeReceita.PUBLICA)
                 .orElseThrow(
-                        () -> new IllegalArgumentException(
-                                "Receita pública não encontrada."));
+                        ReceitaNaoEncontradaException::new);
     }
 
     // Exclui uma receita após confirmar sua existência

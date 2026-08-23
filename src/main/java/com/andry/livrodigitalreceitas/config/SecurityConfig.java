@@ -40,11 +40,19 @@ public class SecurityConfig {
                                                         () -> new UsernameNotFoundException(
                                                                         "Administrador não encontrado."));
 
-                        return User
+                        var usuario = User
                                         .withUsername(administrador.getEmail())
                                         .password(administrador.getSenhaHash())
+                                        .disabled(!administrador.isAtivo());
+
+                        if (administrador.isPrimeiroAdministrador()) {
+                                return usuario
+                                                .roles("ADMIN", "ADMIN_PRINCIPAL")
+                                                .build();
+                        }
+
+                        return usuario
                                         .roles("ADMIN")
-                                        .disabled(!administrador.isAtivo())
                                         .build();
                 };
         }
@@ -94,6 +102,17 @@ public class SecurityConfig {
                                                 .requestMatchers("/error")
                                                 .permitAll()
 
+                                                // Permite consultar e concluir um convite sem autenticação prévia
+                                                .requestMatchers(
+                                                                "/api/convites-administrador/**")
+                                                .permitAll()
+
+                                                // Restringe o gerenciamento de administradores ao administrador
+                                                // principal
+                                                .requestMatchers(
+                                                                "/api/admin/administradores/**")
+                                                .hasRole("ADMIN_PRINCIPAL")
+
                                                 // Todas as demais rotas exigem autenticação
                                                 .anyRequest()
                                                 .authenticated())
@@ -114,7 +133,8 @@ public class SecurityConfig {
                                                 .ignoringRequestMatchers(
                                                                 "/api/auth/admin/primeiro-acesso",
                                                                 "/api/auth/admin/login",
-                                                                "/api/auth/admin/logout"))
+                                                                "/api/auth/admin/logout",
+                                                                "/api/convites-administrador/**"))
 
                                 // O login é realizado pela API, sem formulário padrão do Spring
                                 .formLogin(formulario -> formulario.disable());

@@ -1,3 +1,5 @@
+import { obterMensagemErro } from '../utils/api'
+
 interface LoginAdministradorDados {
     email: string
     senha: string
@@ -27,29 +29,7 @@ interface MensagemResposta {
 export interface SessaoAdministradorResposta {
     autenticado: boolean
     email: string
-}
-
-interface ErroApi {
-    mensagem?: string
-    campos?: Record<string, string>
-}
-
-// Extrai a mensagem de erro retornada pela API e prioriza erros de validação de campos
-async function obterMensagemErro(
-    resposta: Response,
-    mensagemPadrao: string,
-): Promise<string> {
-    const erro = (await resposta
-        .json()
-        .catch(() => ({}))) as ErroApi
-
-    const primeiroErroDeCampo = erro.campos
-        ? Object.values(erro.campos)[0]
-        : undefined
-
-    return primeiroErroDeCampo ??
-        erro.mensagem ??
-        mensagemPadrao
+    principal: boolean
 }
 
 // Cria o primeiro administrador do sistema
@@ -137,18 +117,4 @@ export async function logoutAdministrador():
     }
 
     return resposta.json() as Promise<MensagemResposta>
-}
-
-// Prepara o token CSRF usado pelas requisições protegidas
-export async function carregarCsrf(): Promise<void> {
-    const resposta = await fetch('/api/auth/admin/csrf', {
-        method: 'GET',
-        credentials: 'include',
-    })
-
-    if (!resposta.ok) {
-        throw new Error(
-            'Não foi possível preparar a sessão segura.',
-        )
-    }
 }

@@ -1,5 +1,6 @@
 package com.andry.livrodigitalreceitas.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,12 @@ public interface AdministradorRepository
     // Conta quantos administradores estão ativos no sistema
     long countByAtivoTrue();
 
-    // Busca o administrador marcado como primeiro administrador do sistema
+    // Busca o administrador principal do sistema
     Optional<Administrador> findByPrimeiroAdministradorTrue();
+
+    // Busca o segundo administrador que está ativo atualmente
+    Optional<Administrador> findByPrimeiroAdministradorFalseAndAtivoTrue();
+
+    // Lista todos os administradores secundários, ativos ou desativados
+    List<Administrador> findByPrimeiroAdministradorFalseOrderByNomeAsc();
 }

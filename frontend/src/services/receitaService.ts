@@ -1,54 +1,14 @@
+import { obterMensagemErro } from '../utils/api'
+import { carregarCsrf } from '../utils/csrf'
+
 import type {
-    CriarReceitaDados,
     Receita,
     ReceitaDetalhe,
+    SalvarReceitaDados,
 } from '../types/Receita'
 
 interface ImagemReceitaResposta {
     imagemUrl: string
-}
-
-interface ErroApi {
-    mensagem?: string
-}
-
-// Lê um cookie pelo nome para recuperar o token CSRF
-function lerCookie(nome: string): string | null {
-    const prefixo = `${nome}=`
-
-    const cookie = document.cookie
-        .split('; ')
-        .find((item) => item.startsWith(prefixo))
-
-    return cookie
-        ? decodeURIComponent(
-            cookie.substring(prefixo.length),
-        )
-        : null
-}
-
-// Prepara e recupera o token CSRF usado nas requisições protegidas
-async function carregarCsrf(): Promise<string> {
-    const resposta = await fetch('/api/auth/admin/csrf', {
-        method: 'GET',
-        credentials: 'include',
-    })
-
-    if (!resposta.ok) {
-        throw new Error(
-            `Não foi possível preparar a sessão segura. Status: ${resposta.status}`,
-        )
-    }
-
-    const token = lerCookie('XSRF-TOKEN')
-
-    if (!token) {
-        throw new Error(
-            'O token de segurança não foi encontrado.',
-        )
-    }
-
-    return token
 }
 
 // Lista as receitas públicas disponíveis para visitantes
@@ -61,7 +21,10 @@ export async function listarReceitas(): Promise<Receita[]> {
 
     if (!resposta.ok) {
         throw new Error(
-            `Não foi possível carregar as receitas. Status: ${resposta.status}`,
+            await obterMensagemErro(
+                resposta,
+                'Não foi possível carregar as receitas.',
+            ),
         )
     }
 
@@ -80,7 +43,10 @@ export async function listarReceitasAdmin(): Promise<Receita[]> {
 
     if (!resposta.ok) {
         throw new Error(
-            `Não foi possível carregar as receitas administrativas. Status: ${resposta.status}`,
+            await obterMensagemErro(
+                resposta,
+                'Não foi possível carregar as receitas administrativas.',
+            ),
         )
     }
 
@@ -99,7 +65,10 @@ export async function buscarReceitaPorId(
 
     if (!resposta.ok) {
         throw new Error(
-            `Não foi possível carregar a receita. Status: ${resposta.status}`,
+            await obterMensagemErro(
+                resposta,
+                'Não foi possível carregar a receita.',
+            ),
         )
     }
 
@@ -123,7 +92,10 @@ export async function buscarReceitaAdminPorId(
 
     if (!resposta.ok) {
         throw new Error(
-            `Não foi possível carregar a receita administrativa. Status: ${resposta.status}`,
+            await obterMensagemErro(
+                resposta,
+                'Não foi possível carregar a receita administrativa.',
+            ),
         )
     }
 
@@ -149,13 +121,11 @@ export async function enviarImagemReceita(
     })
 
     if (!resposta.ok) {
-        const erro = (await resposta
-            .json()
-            .catch(() => ({}))) as ErroApi
-
         throw new Error(
-            erro.mensagem ??
-            `Não foi possível enviar a imagem. Status: ${resposta.status}`,
+            await obterMensagemErro(
+                resposta,
+                'Não foi possível enviar a imagem.',
+            ),
         )
     }
 
@@ -167,7 +137,7 @@ export async function enviarImagemReceita(
 
 // Cadastra uma nova receita
 export async function criarReceita(
-    dados: CriarReceitaDados,
+    dados: SalvarReceitaDados,
 ): Promise<ReceitaDetalhe> {
     const csrfToken = await carregarCsrf()
 
@@ -183,13 +153,11 @@ export async function criarReceita(
     })
 
     if (!resposta.ok) {
-        const erro = (await resposta
-            .json()
-            .catch(() => ({}))) as ErroApi
-
         throw new Error(
-            erro.mensagem ??
-            `Não foi possível cadastrar a receita. Status: ${resposta.status}`,
+            await obterMensagemErro(
+                resposta,
+                'Não foi possível cadastrar a receita.',
+            ),
         )
     }
 
@@ -199,7 +167,7 @@ export async function criarReceita(
 // Atualiza uma receita existente na área administrativa
 export async function atualizarReceita(
     id: number,
-    dados: CriarReceitaDados,
+    dados: SalvarReceitaDados,
 ): Promise<ReceitaDetalhe> {
     const csrfToken = await carregarCsrf()
 
@@ -218,13 +186,11 @@ export async function atualizarReceita(
     )
 
     if (!resposta.ok) {
-        const erro = (await resposta
-            .json()
-            .catch(() => ({}))) as ErroApi
-
         throw new Error(
-            erro.mensagem ??
-            `Não foi possível atualizar a receita. Status: ${resposta.status}`,
+            await obterMensagemErro(
+                resposta,
+                'Não foi possível atualizar a receita.',
+            ),
         )
     }
 
@@ -249,13 +215,11 @@ export async function excluirReceita(
     )
 
     if (!resposta.ok) {
-        const erro = (await resposta
-            .json()
-            .catch(() => ({}))) as ErroApi
-
         throw new Error(
-            erro.mensagem ??
-            `Não foi possível excluir a receita. Status: ${resposta.status}`,
+            await obterMensagemErro(
+                resposta,
+                'Não foi possível excluir a receita.',
+            ),
         )
     }
 }

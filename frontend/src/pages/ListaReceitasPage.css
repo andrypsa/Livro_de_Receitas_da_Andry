@@ -11,13 +11,18 @@
 .filtro-categoria {
     min-height: 38px;
     padding: 8px 18px;
+
     border: 1px solid rgba(185, 112, 145, 0.38);
     border-radius: 999px;
+
     color: #925c75;
     background: rgba(255, 250, 252, 0.76);
+
     font-size: 0.8rem;
     font-weight: 600;
+
     cursor: pointer;
+
     transition:
         color 0.2s ease,
         background 0.2s ease,
@@ -29,16 +34,108 @@
 /* Destaca o filtro ao passar o mouse */
 .filtro-categoria:hover {
     color: #ffffff;
+
     border-color: #8f4f6d;
     background: #8f4f6d;
+
     box-shadow: 0 8px 18px rgba(143, 79, 109, 0.22);
+
     transform: translateY(-2px);
 }
 
 /* Indica visualmente qual categoria está selecionada */
 .filtro-categoria--ativo {
     color: #ffffff;
+
     border-color: #9e5d7a;
     background: linear-gradient(135deg, #b66f8e, #8f4f6d);
+
     box-shadow: 0 8px 18px rgba(143, 79, 109, 0.22);
+}
+
+/* Organiza as ações administrativas */
+.acoes-admin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Permite posicionar o botão de sair no canto superior direito */
+.receitas-cabecalho {
+    position: relative;
+}
+
+/* Mantém o botão de sair no canto superior direito */
+.botao-sair-admin {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    padding: 0.45rem 0.9rem;
+
+    border: none;
+    border-radius: 8px;
+
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+/* Mantém as ações administrativas no mesmo padrão visual dos filtros */
+.botao-admin-menor,
+.botao-nova-receita {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 38px;
+    padding: 8px 18px;
+
+    border: 1px solid rgba(185, 112, 145, 0.38);
+    border-radius: 999px;
+
+    color: #925c75;
+    background: rgba(255, 250, 252, 0.76);
+
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Destaca as ações administrativas ao passar o mouse */
+.botao-admin-menor:hover,
+.botao-nova-receita:hover {
+    color: #ffffff;
+
+    border-color: #8f4f6d;
+    background: #8f4f6d;
+
+    box-shadow: 0 8px 18px rgba(143, 79, 109, 0.22);
+
+    transform: translateY(-2px);
+}
+
+/* Mantém o botão de gerenciamento ajustado ao conteúdo */
+.botao-admin-menor {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+/* Evita quebra de linha no botão de nova receita */
+.botao-nova-receita {
+    white-space: nowrap;
 }

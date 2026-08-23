@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type {
     ChangeEvent,
     FormEvent,
@@ -142,6 +142,8 @@ export function NovaReceitaPage() {
     const [previewsImagem, setPreviewsImagem] =
         useState<string[]>([])
 
+    const previewsImagemRef = useRef<string[]>([])
+
     const [observacoes, setObservacoes] =
         useState(
             rascunhoInicial?.observacoes ?? '',
@@ -265,14 +267,19 @@ export function NovaReceitaPage() {
         comentariosAtivos,
     ])
 
-    // Libera as URLs temporárias usadas nas prévias das imagens
+    // Mantém a referência atualizada das prévias para limpeza ao sair da página
+    useEffect(() => {
+        previewsImagemRef.current = previewsImagem
+    }, [previewsImagem])
+
+    // Libera as URLs temporárias quando a página é desmontada
     useEffect(() => {
         return () => {
-            previewsImagem.forEach((preview) => {
+            previewsImagemRef.current.forEach((preview) => {
                 URL.revokeObjectURL(preview)
             })
         }
-    }, [previewsImagem])
+    }, [])
 
     // Valida os arquivos selecionados e cria suas prévias
     function selecionarImagens(
