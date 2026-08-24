@@ -195,9 +195,6 @@ cd frontend
 npm install
 npm run dev
 ```
-
-> ⚠️ Senhas, tokens e credenciais não devem ser publicados no repositório.
-
 ---
 
 ## ✅ Status
@@ -233,4 +230,28 @@ Atualmente já estão funcionais:
 
 ## 👩‍💻 Autoria
 
-Desenvolvido por **Andry** como projeto pessoal e aplicação prática de desenvolvimento full stack.
+Desenvolvido por **Andrielly Patrícia** como projeto pessoal e aplicação prática de desenvolvimento full stack.
+
+---
+
+## ⚖️ Licença e direitos autorais
+
+© 2026 Andrielly Patrícia Silva Araújo. Todos os direitos reservados.
+
+Este projeto, incluindo seu código-fonte, estrutura, documentação e demais materiais autorais, é de titularidade de sua autora e foi disponibilizado publicamente para fins de **portfólio, demonstração e avaliação técnica**.
+
+A disponibilização deste repositório não concede autorização para exploração comercial do projeto.
+
+É proibida, sem autorização prévia e expressa da autora, a utilização deste projeto, total ou parcialmente, para:
+
+- comercialização ou revenda;
+- utilização em produtos ou serviços comerciais;
+- redistribuição como produto próprio;
+- sublicenciamento;
+- apropriação ou apresentação do projeto como sendo de autoria de terceiros.
+
+A visualização pública do código e as funcionalidades disponibilizadas pela própria plataforma GitHub não representam transferência de titularidade ou concessão automática de licença comercial.
+Caso exista interesse em utilizar, adaptar, licenciar ou comercializar este projeto, entre em contato com a autora para avaliação e negociação de uma autorização ou licença específica.
+O uso não autorizado poderá estar sujeito às medidas cabíveis previstas na legislação aplicável de proteção de software e direitos autorais.
+
+**Para propostas de licenciamento, autorização de uso ou exploração comercial*, entre em contato com a autora pelo Linkedin: https://www.linkedin.com/in/andrielly-patricia/.
