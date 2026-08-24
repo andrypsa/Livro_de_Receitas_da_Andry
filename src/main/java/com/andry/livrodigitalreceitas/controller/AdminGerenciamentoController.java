@@ -17,82 +17,82 @@ import com.andry.livrodigitalreceitas.service.AdministradorService;
 @RequestMapping("/api/admin/administradores")
 public class AdminGerenciamentoController {
 
-    private final AdministradorService administradorService;
+        private final AdministradorService administradorService;
 
-    public AdminGerenciamentoController(
-            AdministradorService administradorService) {
-        this.administradorService = administradorService;
-    }
+        public AdminGerenciamentoController(
+                        AdministradorService administradorService) {
+                this.administradorService = administradorService;
+        }
 
-    // Retorna o administrador principal e os administradores secundários
-    @GetMapping
-    public ResponseEntity<AdministradoresResponse> listarAdministradores() {
-        Administrador principal = administradorService.buscarAdministradorPrincipal();
+        // Retorna o administrador principal e os administradores secundários
+        @GetMapping
+        public ResponseEntity<AdministradoresResponse> listarAdministradores() {
+                Administrador principal = administradorService.buscarAdministradorPrincipal();
 
-        List<AdministradorResumoResponse> secundarios = administradorService
-                .listarAdministradoresSecundarios()
-                .stream()
-                .map(this::converterResumo)
-                .toList();
+                List<AdministradorResumoResponse> secundarios = administradorService
+                                .listarAdministradoresSecundarios()
+                                .stream()
+                                .map(this::converterResumo)
+                                .toList();
 
-        AdministradoresResponse resposta = new AdministradoresResponse(
-                converterResumo(principal),
-                secundarios);
+                AdministradoresResponse resposta = new AdministradoresResponse(
+                                converterResumo(principal),
+                                secundarios);
 
-        return ResponseEntity.ok(resposta);
-    }
+                return ResponseEntity.ok(resposta);
+        }
 
-    // Desativa o acesso de um administrador secundário
-    @PatchMapping("/{id}/desativar")
-    public ResponseEntity<AdministradorResumoResponse> desativarAdministrador(
-            @PathVariable Long id,
-            Authentication autenticacao) {
+        // Desativa o acesso de um administrador secundário
+        @PatchMapping("/{id}/desativar")
+        public ResponseEntity<AdministradorResumoResponse> desativarAdministrador(
+                        @PathVariable Long id,
+                        Authentication autenticacao) {
 
-        Administrador administrador = administradorService
-                .desativarAdministradorSecundario(
-                        id,
-                        autenticacao.getName());
+                Administrador administrador = administradorService
+                                .desativarAdministradorSecundario(
+                                                id,
+                                                autenticacao.getName());
 
-        return ResponseEntity.ok(
-                converterResumo(administrador));
-    }
+                return ResponseEntity.ok(
+                                converterResumo(administrador));
+        }
 
-    // Reativa o acesso de um administrador secundário
-    @PatchMapping("/{id}/reativar")
-    public ResponseEntity<AdministradorResumoResponse> reativarAdministrador(
-            @PathVariable Long id,
-            Authentication autenticacao) {
+        // Reativa o acesso de um administrador secundário
+        @PatchMapping("/{id}/reativar")
+        public ResponseEntity<AdministradorResumoResponse> reativarAdministrador(
+                        @PathVariable Long id,
+                        Authentication autenticacao) {
 
-        Administrador administrador = administradorService
-                .reativarAdministradorSecundario(
-                        id,
-                        autenticacao.getName());
+                Administrador administrador = administradorService
+                                .reativarAdministradorSecundario(
+                                                id,
+                                                autenticacao.getName());
 
-        return ResponseEntity.ok(
-                converterResumo(administrador));
-    }
+                return ResponseEntity.ok(
+                                converterResumo(administrador));
+        }
 
-    private AdministradorResumoResponse converterResumo(
-            Administrador administrador) {
+        private AdministradorResumoResponse converterResumo(
+                        Administrador administrador) {
 
-        return new AdministradorResumoResponse(
-                administrador.getId(),
-                administrador.getNome(),
-                administrador.getEmail(),
-                administrador.isAtivo(),
-                administrador.isPrimeiroAdministrador());
-    }
+                return new AdministradorResumoResponse(
+                                administrador.getId(),
+                                administrador.getNome(),
+                                administrador.getEmail(),
+                                administrador.isAtivo(),
+                                administrador.isPrimeiroAdministrador());
+        }
 
-    private record AdministradoresResponse(
-            AdministradorResumoResponse principal,
-            List<AdministradorResumoResponse> secundarios) {
-    }
+        private record AdministradoresResponse(
+                        AdministradorResumoResponse principal,
+                        List<AdministradorResumoResponse> secundarios) {
+        }
 
-    private record AdministradorResumoResponse(
-            Long id,
-            String nome,
-            String email,
-            boolean ativo,
-            boolean primeiroAdministrador) {
-    }
+        private record AdministradorResumoResponse(
+                        Long id,
+                        String nome,
+                        String email,
+                        boolean ativo,
+                        boolean primeiroAdministrador) {
+        }
 }
